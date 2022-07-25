@@ -8,7 +8,10 @@ import javax.persistence.Table;
 
 import com.restaurant.entity.common.Address;
 
+import lombok.Getter;
+
 @Entity
+@Getter
 @Table(name = "users")
 public class User {
     

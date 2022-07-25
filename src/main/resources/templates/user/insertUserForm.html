@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head>
+</head>
+<body>
+	<div>
+        <th:block th:if="${user.id == null}">
+            <form role="form" action="/users/new" method="post">
+            </th:block>
+        <th:block th:if="${user.id != null}">
+            <form role="form" th:action="@{/users/} + ${user.id} + @{/edit}" method="post">
+        </th:block>
+        
+            <table>
+                <tr>
+                    <th scope="row" align="left">아이디</th>
+                    <td><input type="text" name="hmpgId" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">비밀번호</th>
+                    <td><input type="text" name="password" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">이름</th>
+                    <td><input type="text" name="userName" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">휴대폰번호</th>
+                    <td><input type="text" name="phoneNum" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">주소</th>
+                    <td><input type="text" name="address" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">주민등록번호</th>
+                    <td><input type="text" name="registNum" th:value="" /></td>
+                </tr>
+                <tr>
+                    <th scope="row" align="left">회원 유형</th>
+                    <td><input type="radio" name="userType" th:value="" /></td>
+                    <td><input type="radio" name="userType" th:value="" /></td>
+                </Tr>
+            </table>
+            <button type="submit">등록/수정</button>
+        </form>
+	</div>
+</body>
+</html>
