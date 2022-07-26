@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+            <h4 class="mb-3">예약하기</h4>
+            <form class="validation-form" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name">날짜선택</label>
+                        <input type="date" class="form-control" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            날짜를 선택해주세요.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="root">시간선택</label>
+                        <select class="custom-select d-block w-100" id="root" required>
+                            <option value="">선택해주세요.</option>
+                            <option value="basic">9:00</option>
+                            <option value="owner">10:00</option>
+                            <option value="owner">11:00</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            시간을 선택해주세요.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name">인원</label>
+                    <input type="text" class="form-control" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                        인원을 선택해주세요.
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () => {
+        const forms = document.getElementsByClassName('validation-form');
+
+        Array.prototype.filter.call(forms, (form) => {
+        form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+        });
+    }, false);
+</script>

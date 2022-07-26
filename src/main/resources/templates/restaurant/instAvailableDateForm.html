@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+            <h4 class="mb-3">예약 가능일자 등록</h4>
+            <form class="validation-form" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name">시작날짜</label>
+                        <input type="date" class="form-control" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            시작날짜를 입력해주세요.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="name">종료날짜</label>
+                        <input type="date" class="form-control" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            종료날짜를 입력해주세요.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="name">휴일선택</label>
+                    <input type="date" class="form-control" placeholder="" value="">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="" value="">
+                </div>
+
+                <div class="mb-4"></div>
+                <button class="btn btn-primary btn-lg btn-block" type="submit">식당 등록</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () => {
+        const forms = document.getElementsByClassName('validation-form');
+
+        Array.prototype.filter.call(forms, (form) => {
+        form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+        });
+    }, false);
+</script>
