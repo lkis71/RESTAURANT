@@ -9,11 +9,18 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class RestaurantController {
+
+    @GetMapping("/restaurants")
+    public String restaurantList(Model model) {
+
+        model.addAttribute("contents", "restaurant/restaurantList");
+        return "common/subLayout";
+    }
     
     @GetMapping("/restaurants/new")
     public String restaurantForm(Model model) {
         
-        model.addAttribute("contents", "restaurant/insertRestaurantForm");
-        return "common/layout";
+        model.addAttribute("contents", "restaurant/instRestaurantForm");
+        return "common/subLayout";
     }
 }

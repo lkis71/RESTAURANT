@@ -23,9 +23,9 @@ public class UserController {
     public String userForm(Model model) {
 
         model.addAttribute("user", new UserDto());
-        model.addAttribute("contents", "user/insertUserForm");
+        model.addAttribute("contents", "user/instUserForm");
 
-        return "common/layout";
+        return "common/subLayout";
     }
 
     @PostMapping("/users/new")
