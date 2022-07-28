@@ -3,7 +3,9 @@ package com.restaurant.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.restaurant.controller.dto.UserDto;
 import com.restaurant.controller.request.UserRequest;
@@ -29,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/users/join")
-    public void joinUser(UserRequest userReq) {
+    public String joinUser(UserRequest userReq) {
 
         Address address = new Address(userReq.getZipcode(), userReq.getStreetNm(), userReq.getDetailAddress());
 
@@ -37,6 +39,8 @@ public class UserController {
             userReq.getPhoneNum(), address, userReq.getRegistNum(), userReq.getUserType());
 
         userService.join(user);
+
+        return "redirect:/restaurants";
     }
     
     @GetMapping("/mypage")
