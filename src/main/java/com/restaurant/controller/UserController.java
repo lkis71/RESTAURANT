@@ -19,16 +19,16 @@ public class UserController {
 
     private final UserService userService;
     
-    @GetMapping("/users/new")
-    public String userForm(Model model) {
+    @GetMapping("/users/join")
+    public String joinUserForm(Model model) {
 
         model.addAttribute("user", new UserDto());
-        model.addAttribute("contents", "user/instUserForm");
+        model.addAttribute("contents", "user/joinUserForm");
 
         return "common/subLayout";
     }
 
-    @PostMapping("/users/new")
+    @PostMapping("/users/join")
     public void joinUser(UserRequest userReq) {
 
         Address address = new Address(userReq.getZipcode(), userReq.getStreetNm(), userReq.getDetailAddress());
@@ -37,5 +37,19 @@ public class UserController {
             userReq.getPhoneNum(), address, userReq.getRegistNum(), userReq.getUserType());
 
         userService.join(user);
+    }
+    
+    @GetMapping("/mypage")
+    public String mypage(Model model) {
+
+        model.addAttribute("contents", "user/mypage");
+        return "common/subLayout";
+    }
+
+    @GetMapping("/users/reserve")
+    public String myReserve(Model model) {
+
+        model.addAttribute("contents", "user/reserve/myReserveList");
+        return "common/subLayout";
     }
 }

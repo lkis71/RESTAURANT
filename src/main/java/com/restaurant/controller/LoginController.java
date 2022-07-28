@@ -8,11 +8,12 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class ReserveController {
+public class LoginController {
     
-    @GetMapping("/reserve")
-    public String reserveForm(Model model) {
+    @GetMapping("/login")
+    public String login(Model model) {
 
-        return "user/reserve/reserveForm";
+        model.addAttribute("contents", "login/login");
+        return "common/subLayout";
     }
 }
