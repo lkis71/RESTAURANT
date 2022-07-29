@@ -1,5 +1,8 @@
 package com.restaurant.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +25,17 @@ public class UserService {
         return user.getId();
     }
 
-    public void checkUser(LoginRequest loginRequest) {
-        User user = userRepository.ckeckUser(loginRequest);
-        System.out.println();
+    public boolean checkJoinUser(LoginRequest loginRequest) {
+        List<User> user = userRepository.findByHmpgId(loginRequest.getHmpgId());
+
+        if(user.size() == 0){
+            return false;
+        }else {
+            if(loginRequest.getPassword().equals(user.get(0).getPassword())){
+                return true;
+            }else {
+                return false;
+            }
+        }
     }
-    
 }
