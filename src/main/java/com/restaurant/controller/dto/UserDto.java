@@ -2,11 +2,12 @@ package com.restaurant.controller.dto;
 
 import com.restaurant.entity.common.Address;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class UserDto {
     
+    private Long id;
     private String hmpgId;
     private String password;
     private String userNm;
@@ -14,4 +15,5 @@ public class UserDto {
     private Address address;
     private String registNum;
     private String userType;
+
 }

@@ -1,7 +1,5 @@
 package com.restaurant.repository;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -23,9 +21,18 @@ public class UserRepository {
     }
 
     //홈페이지 아이디로 회원 조회
-    public List<User> findByHmpgId(String hmpgId) {
-        return em.createQuery("select u from User u where u.hmpgId = :hmpgId", User.class)
-            .setParameter("hmpgId", hmpgId)
-            .getResultList();
+    public User findByHmpgId(String hmpgId) {
+        try {
+            return em.createQuery("select u from User u where u.hmpgId = :hmpgId", User.class)
+                .setParameter("hmpgId", hmpgId)
+                .getSingleResult();
+        } catch(NoResultException e) {
+            return null;
+        }
+    }
+    
+    //회원 시퀀스로 회원 조회
+    public User findOne(Long id) {
+        return em.find(User.class, id);
     }
 }

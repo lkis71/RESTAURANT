@@ -4,49 +4,47 @@
             <h4 class="mb-3">식당 등록</h4>
             <form class="validation-form" novalidate>
                 <div class="mb-3">
-                    <label for="name">식당명</label>
-                    <input type="text" class="form-control" placeholder="식당명을 입력해주세요." value="" required>
+                    <label for="restaurantNm">식당명</label>
+                    <input type="text" class="form-control" id="restaurantNm" name="restaurantNm" placeholder="식당명을 입력 해 주세요." required>
                     <div class="invalid-feedback">
-                        식당명을 입력해주세요.
+                        식당명을 입력 해 주세요.
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="address">우편번호</label>
-                        <input type="text" class="form-control" placeholder="" required>
+                        <label for="zipcode">우편번호</label>
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="우편번호를 입력 해 주세요." required>
                         <div class="invalid-feedback">
-                            우편번호를 입력해주세요.
+                            우편번호를 입력 해 주세요.
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="address">주소</label>
-                        <input type="text" class="form-control" placeholder="" required>
+                        <label for="streetNm">주소</label>
+                        <input type="text" class="form-control" id="streetNm" name="streetNm" placeholder="주소를 입력 해 주세요." required>
                         <div class="invalid-feedback">
-                            주소를 입력해주세요.
+                            주소를 입력 해 주세요.
                         </div>
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="address2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                    <input type="text" class="form-control" placeholder="상세주소를 입력해주세요.">
+                    <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
+                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소를 입력 해 주세요.">
                 </div>
                 
                 <div class="mb-3">
-                    <label for="registNum1">연락처</label>
-                    <input type="registNum1" class="form-control" placeholder="연락처를 입력해주세요." required>
+                    <label for="contact">연락처</label>
+                    <input type="registNum1" class="form-control" id="contact" name="contact" placeholder="연락처를 입력 해 주세요." required>
                     <div class="invalid-feedback">
-                        연락처를 입력해주세요.
+                        연락처를 입력 해 주세요.
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="root">식당 유형</label>
-                    <select class="custom-select d-block w-100" id="root" required>
+                    <label for="category">식당 유형</label>
+                    <select class="custom-select d-block w-100" id="category" name="category" required>
                         <option value="">선택해주세요.</option>
-                        <option value="basic">중식</option>
-                        <option value="owner">한식</option>
                     </select>
                     <div class="invalid-feedback">
                         식당 유형을 선택해주세요.
@@ -54,24 +52,24 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="registNum1">간략소개</label>
-                    <input type="registNum1" class="form-control" placeholder="간략소개를 입력해주세요.">
+                    <label for="simpleContents">간략소개</label>
+                    <input type="registNum1" class="form-control" id="simpleContents" name="simpleContents" placeholder="간략소개를 입력 해 주세요.">
                     <div class="invalid-feedback">
-                        간략소개를 입력해주세요.
+                        간략소개를 입력 해 주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="registNum1">상세소개</label>
-                    <input type="registNum1" class="form-control" placeholder="상세소개를 입력해주세요.">
+                    <label for="detailContents">상세소개</label>
+                    <input type="registNum1" class="form-control" id="detailContents" name="detailContents" placeholder="상세소개를 입력 해 주세요.">
                     <div class="invalid-feedback">
-                        상세소개를 입력해주세요.
+                        상세소개를 입력 해 주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="registNum1">대표이미지</label>
-                    <input type="file" class="form-control" required>
+                    <label for="file">대표이미지</label>
+                    <input type="file" class="form-control" id="file" name="file" required>
                     <div class="invalid-feedback">
                         대표이미지를 등록해주세요.
                     </div>
@@ -84,18 +82,4 @@
     </div>
 </div>
 <script>
-    window.addEventListener('load', () => {
-        const forms = document.getElementsByClassName('validation-form');
-
-        Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-        });
-    }, false);
 </script>

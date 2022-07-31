@@ -2,85 +2,121 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">마이페이지</h4>
-            <form class="validation-form" novalidate>
+            <form class="validation-form" id="userForm" novalidate>
+
                 <div class="mb-3">
-                    <label for="name">아이디</label>
-                    <input type="text" class="form-control" name="hmpgId" value="" readonly>
+                    <label for="userNm">이름</label>
+                    <input type="text" class="form-control" id="userNm" name="userNm" th:value="${user.userNm}" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="name">비밀번호</label>
-                    <input type="text" class="form-control" name="" value="" readonly>
+                    <label for="registNum">주민등록번호</label>
+                    <input type="registNum1" class="form-control" id="registNum" name="registNum" th:value="${user.registNum}" maxlength="14" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="name">비밀번호 확인</label>
-                    <input type="text" class="form-control" value="" readonly>
+                    <label for="phoneNum">휴대폰번호</label>
+                    <input type="registNum1" class="form-control" id="phoneNum" name="phoneNum" th:value="${user.phoneNum}" maxlength="13" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="registNum1">주민등록번호</label>
-                    <input type="registNum1" class="form-control" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="registNum1">휴대폰번호</label>
-                    <input type="registNum1" class="form-control" readonly>
+                    <label for="hmpgId">아이디</label>
+                    <input type="text" class="form-control" id="hmpgId" name="hmpgId" th:value="${user.hmpgId}" readonly>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label for="address">우편번호</label>
-                        <input type="text" class="form-control" readonly>
+                        <label for="zipcode">우편번호</label>
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${user.address.zipcode}" readonly>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="address">주소</label>
-                        <input type="text" class="form-control" readonly>
+                        <label for="streetNm">주소</label>
+                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${user.address.streetNm}" readonly>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="address2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                    <input type="text" class="form-control" readonly>
+                    <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
+                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${user.address.detailAddress}" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="root">회원 유형</label>
-                    <select class="custom-select d-block w-100">
+                    <label for="userType">회원 유형</label>
+                    <select class="custom-select d-block w-100" id="userType" name="userType">
                         <option value="">선택해주세요.</option>
-                        <option value="basic">일반회원</option>
-                        <option value="owner">업주</option>
+                        <option value="b" th:selected="${user.userType} == b">일반회원</option>
+                        <option value="o" th:selected="${user.userType} == o">업주</option>
                     </select>
                 </div>
 
             </form>
             <div class="row">
-                <div class="col-md-4 mb-3">
-                    <button class="btn btn-primary btn-lg btn-block">수정</button>
+                <div class="col-md-4 mb-3" id="updatePage">
+                    <button class="btn btn-primary btn-lg btn-block" onclick="updateUserPage()">수정하기</button>
+                </div>
+                <div class="col-md-4 mb-3" id="update" style="display:none">
+                    <button class="btn btn-primary btn-lg btn-block" th:onclick="'updateUserInfo('+${user.id}+')'">수정완료</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants/new'">식당 등록</button>
+                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants/new'">식당 등록</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants'">내 식당</button>
+                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants'">내 식당</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
-    window.addEventListener('load', () => {
-        const forms = document.getElementsByClassName('validation-form');
+    $(document).ready(function(){
 
-        Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
+        /* setting auto hyphen */
+        const registNum = $("#registNum");
+        registNum.on("keydown", function(e){
+            const keycode = e.keyCode;
+            if(keycode !== 8 && keycode !== 46){
+                if(registNum.val().length === 6) {
+                    registNum.val(registNum.val()+"-");
+                }
             }
+        })
 
-            form.classList.add('was-validated');
-        }, false);
-        });
-    }, false);
+        const phoneNum = $("#phoneNum");
+        phoneNum.on("keydown", function(e){
+            const keycode = e.keyCode;
+            if(keycode !== 8 && keycode !== 46){
+                if(phoneNum.val().length === 3 || phoneNum.val().length === 8) {
+                    phoneNum.val(phoneNum.val()+"-");
+                }
+            }
+        })
+        /* setting auto hyphen */
+
+    });
+
+    //회원수정 페이지
+    function updateUserPage() {
+        $("#updatePage").css("display", "none");
+        $("#update").css("display", "block");
+        $("input").prop("readonly", false);
+    }
+
+    //회원수정
+    function updateUserInfo(id) {
+        $.ajax({
+            url : "/users/"+id+"/update",
+            type : "post",
+            data :  $("#userForm").serialize(),
+            dataType : "json",
+            success : function(data) {
+                if(confirm("회원 수정이 완료되었습니다.")) {
+                    location.reload();
+                }
+            },
+            error : function(data) {
+                console.log("error", data);
+            }
+        })
+        $("#userForm").submit;
+    }
 </script>
