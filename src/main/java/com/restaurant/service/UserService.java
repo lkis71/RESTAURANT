@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional (readOnly = true)
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -48,6 +48,7 @@ public class UserService {
         user.setAddress(address);
         user.setUserType(userRequest.getUserType());
 
+        //세션정보 변경
         CommonSession.setSessionUserInfo(request, user);
     }
 }

@@ -1,16 +1,9 @@
 package com.restaurant.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Controller;
 
-import com.restaurant.controller.request.UserRequest;
-import com.restaurant.entity.User;
-import com.restaurant.entity.common.Address;
 import com.restaurant.service.UserService;
 
 @SpringBootTest

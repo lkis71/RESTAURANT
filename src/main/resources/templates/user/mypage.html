@@ -58,7 +58,7 @@
                     <button class="btn btn-primary btn-lg btn-block" th:onclick="'updateUserInfo('+${user.id}+')'">수정완료</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants/new'">식당 등록</button>
+                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="'instRestaurantPage('+${user.id}+')'">식당 등록</button>
                 </div>
                 <div class="col-md-4 mb-3">
                     <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants'">내 식당</button>
@@ -118,5 +118,9 @@
             }
         })
         $("#userForm").submit;
+    }
+
+    function instRestaurantPage(id) {
+        location.href="restaurants/"+id+"/new";
     }
 </script>

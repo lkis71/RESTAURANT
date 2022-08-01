@@ -11,9 +11,10 @@ import com.restaurant.entity.common.IntroContent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class Restaurant {
     
@@ -33,17 +34,20 @@ public class Restaurant {
     private IntroContent content;
 
     //생성메서드
-    public void createRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
+    public static Restaurant createRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
             String contact, String category, String simpleContents, String detailContents) {
 
-        this.restaurantNm = restaurantNm;
-        this.contact = contact;
-        this.category = category;
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantNm(restaurantNm);
+        restaurant.setContact(contact);
+        restaurant.setCategory(category);
 
         Address address = new Address(zipcode, streetNm, detailAddress);
-        this.address = address;
+        restaurant.setAddress(address);
 
         IntroContent content = new IntroContent(simpleContents, detailContents);
-        this.content = content;
+        restaurant.setContent(content);
+
+        return restaurant;
     }
 }

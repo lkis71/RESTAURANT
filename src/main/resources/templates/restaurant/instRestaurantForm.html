@@ -2,7 +2,7 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">식당 등록</h4>
-            <form class="validation-form" novalidate>
+            <form class="validation-form" th:action="'/restaurants/'+${userSeq}+'/new'" method="post" enctype="multipart/form-data" novalidate>
                 <div class="mb-3">
                     <label for="restaurantNm">식당명</label>
                     <input type="text" class="form-control" id="restaurantNm" name="restaurantNm" placeholder="식당명을 입력 해 주세요." required>
@@ -45,6 +45,7 @@
                     <label for="category">식당 유형</label>
                     <select class="custom-select d-block w-100" id="category" name="category" required>
                         <option value="">선택해주세요.</option>
+                        <option value="1">test</option>
                     </select>
                     <div class="invalid-feedback">
                         식당 유형을 선택해주세요.
