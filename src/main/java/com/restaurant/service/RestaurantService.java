@@ -21,4 +21,8 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
         return restaurant.getId();
     }
+
+    public Restaurant getRestaurantById(Long restId) {
+        return restaurantRepository.findOne(restId);
+    }
 }

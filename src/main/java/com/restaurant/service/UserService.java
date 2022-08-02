@@ -1,11 +1,14 @@
 package com.restaurant.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.restaurant.controller.request.UserRequest;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.User;
 import com.restaurant.entity.common.Address;
 import com.restaurant.repository.UserRepository;
@@ -31,7 +34,7 @@ public class UserService {
     }
 
     //회원 시퀀스로 회원정보 조회
-    public User getUserInfoBySeq(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findOne(id);
     }
 
@@ -50,5 +53,10 @@ public class UserService {
 
         //세션정보 변경
         CommonSession.setSessionUserInfo(request, user);
+    }
+
+    //내 식당 조회
+    public List<Restaurant> getMyRestaurantById(Long userId) {
+        return userRepository.findRestaurantById(userId);
     }
 }

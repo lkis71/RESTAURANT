@@ -1,5 +1,7 @@
 package com.restaurant.entity;
 
+import java.util.Map;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +18,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@Table(name = "file")
 public class FileEntity {
     
     @Id @GeneratedValue
@@ -40,14 +44,14 @@ public class FileEntity {
     private Menu menu;
 
     //생성메서드
-    public static FileEntity createFile(String fileNm, String path, Long size, String extension, String fileType, Restaurant restaurant, Menu menu) {
+    public static FileEntity createFile(Map<String, Object> fileMap, Restaurant restaurant, Menu menu) {
 
         FileEntity file = new FileEntity();
-        file.setFileNm(fileNm);
-        file.setPath(path);
-        file.setSize(size);
-        file.setExtension(extension);
-        file.setFileType(fileType);
+        file.setFileNm(String.valueOf(fileMap.get("fileNm")));
+        file.setPath(String.valueOf(fileMap.get("path")));
+        file.setSize(Long.parseLong(String.valueOf(fileMap.get("size"))));
+        file.setExtension(String.valueOf(fileMap.get("extension")));
+        file.setFileType(String.valueOf(fileMap.get("fileType")));
         file.setRestaurant(restaurant);
         file.setMenu(menu);
 

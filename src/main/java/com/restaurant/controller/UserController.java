@@ -1,5 +1,8 @@
 package com.restaurant.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.request.UserRequest;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.User;
 import com.restaurant.service.UserService;
 
@@ -66,13 +71,26 @@ public class UserController {
 
     @PostMapping("/users/{id}/update")
     @ResponseBody
-    public String updateUserInfo(HttpServletRequest request, @PathVariable("id") Long id, UserRequest userRequest) {
+    public String updateUserInfo(HttpServletRequest request, @PathVariable("id") Long userId, UserRequest userRequest) {
 
-        userService.updateUserInfo(request, id, userRequest);
+        userService.updateUserInfo(request, userId, userRequest);
 
         JsonObject obj = new JsonObject(); 
         obj.addProperty("result", "Y");
 
         return new Gson().toJson(obj);
+    }
+
+    @GetMapping("/users/{id}/restaurant")
+    public String myRestaurants(Model model, @PathVariable("id") Long userId) {
+
+        List<Restaurant> restaurants = userService.getMyRestaurantById(userId);
+        List<RestaurantDto> restaurantDtos = restaurants.stream()
+            .map(o -> new RestaurantDto(o))
+            .collect(Collectors.toList());
+
+        model.addAttribute("restaurants", restaurantDtos);
+        model.addAttribute("contents", "user/myRestaurant");
+        return "common/subLayout";
     }
 }

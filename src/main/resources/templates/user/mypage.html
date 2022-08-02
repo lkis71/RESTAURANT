@@ -61,7 +61,7 @@
                     <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="'instRestaurantPage('+${user.id}+')'">식당 등록</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" onclick="location.href='restaurants'">내 식당</button>
+                    <button th:if="${user.userType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="'myRestaurantsPage('+${user.id}+')'">내 식당</button>
                 </div>
             </div>
         </div>
@@ -122,5 +122,9 @@
 
     function instRestaurantPage(id) {
         location.href="restaurants/"+id+"/new";
+    }
+
+    function myRestaurantsPage(id) {
+        location.href="users/"+id+"/restaurant";
     }
 </script>
