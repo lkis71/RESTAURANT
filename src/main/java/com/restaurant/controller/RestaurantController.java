@@ -29,13 +29,16 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final FileService fileService;
 
+    //목록
     @GetMapping("/restaurants")
     public String restaurantList(Model model) {
 
+        restaurantService.getRestaurantList();
         model.addAttribute("contents", "restaurant/restaurantList");
         return "common/subLayout";
     }
     
+    //등록페이지
     @GetMapping("/restaurants/{id}/new")
     public String restaurantForm(Model model, @PathVariable("id") Long userId) {
         
@@ -45,6 +48,7 @@ public class RestaurantController {
         return "common/subLayout";
     }
 
+    //등록
     @PostMapping("/restaurants/{id}/new")
     @ResponseBody
     public String restaurantForm(Model model, @PathVariable("id") Long userId, RestaurantRequest restReq, @RequestParam("file") MultipartFile file) {
@@ -67,16 +71,18 @@ public class RestaurantController {
         return new Gson().toJson(jsonObject);
     }
 
+    //수정페이지
     @GetMapping("/restaurants/{id}/update")
     public String updateRestaurantForm(Model model, @PathVariable("id") Long restId) {
 
-        Restaurant restaurant = restaurantService.getRestaurantById(restId);
+        Restaurant restaurant = restaurantService.getRestaurant(restId);
 
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";
     }
 
+    //수정
     @PostMapping("/restaurants/{id}/update")
     @ResponseBody
     public String updateRestaurant(Model model, @PathVariable("id") Long restId, RestaurantRequest restReq, @RequestParam("file") MultipartFile file) {
@@ -84,5 +90,17 @@ public class RestaurantController {
         restaurantService.updateRestaurant(restId, restReq, file);
 
         return new Gson().toJson("");
+    }
+
+    //삭제
+    @PostMapping("/restaurants/{id}/delete")
+    @ResponseBody
+    public String deleteRestaurant(Model model, @PathVariable("id") Long restId) {
+
+        restaurantService.deleteRestaurant(restId);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("result", "Y");
+        return new Gson().toJson(jsonObject);
     }
 }

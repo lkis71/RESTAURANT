@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.restaurant.entity.FileEntity;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.repository.FileRepository;
 
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class FileService {
         }
 
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setFile(fileNm, path, size, extension, fileType);
+        fileEntity.setFile(fileNm, path, size, extension, fileType, new Restaurant(), null);
 
         return fileEntity;
     }

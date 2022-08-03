@@ -20,7 +20,10 @@
                     <tr th:each="restaurant : ${restaurants}">
                         <td th:text="${restaurant.restaurantNm}"></td>
                         <td th:text="${restaurant.contact}"></td>                        
-                        <td><button type="button" class="btn btn-primary" th:onclick="'updateRestaurantPage('+${restaurant.id}+')'">수정</button></td>                        
+                        <td>
+                            <button type="button" class="btn btn-primary" th:onclick="|updateRestaurantPage(${restaurant.id})|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|deleteRestaurant(${restaurant.id})|">삭제</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -30,5 +33,23 @@
 <script>
     function updateRestaurantPage(id) {
         location.href="/restaurants/"+id+"/update";
+    }
+    
+    function deleteRestaurant(id){
+        if(confirm("삭제하시겠습니까?")) {
+            $.ajax({
+                type : "post",
+                url : "/restaurants/"+id+"/delete",
+                data : "",
+                dataType : "json",
+                success : function(data) {
+                    alert("삭제되었습니다.");
+                    location.reload();
+                },
+                error : function(data) {
+                    alert("에러가 발생했습니다.");
+                }
+            })
+        }
     }
 </script>

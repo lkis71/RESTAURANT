@@ -41,29 +41,21 @@ public class FileEntity {
     private Menu menu;
 
     //생성메서드
-    public static FileEntity createFile(FileEntity fileInfo) {
+    public static FileEntity createFile(FileEntity fileInfo, Restaurant restaurant, Menu menu) {
 
         FileEntity file = new FileEntity();
-        file.setFile(fileInfo.getFileNm(), fileInfo.getPath(), fileInfo.getSize(), fileInfo.getExtension(), fileInfo.getFileType());
+        file.setFile(fileInfo.getFileNm(), fileInfo.getPath(), fileInfo.getSize(), fileInfo.getExtension(), fileInfo.getFileType(), restaurant, menu);
 
         return file;
     }
 
-    private void setFile(String fileNm, String path, Long size, String extension, String fileType) {
+    public void setFile(String fileNm, String path, Long size, String extension, String fileType, Restaurant restaurant, Menu menu) {
         this.fileNm = fileNm;
         this.path = path;
         this.size = size;
         this.extension = extension;
         this.fileType = fileType;
+        this.restaurant = restaurant;
+        this.menu = menu;
     }
-
-    // public void setFile(FileEntity fileInfo, Restaurant restaurant, Menu menu) {
-    //     this.fileNm = fileInfo.getFileNm();
-    //     this.path = fileInfo.getPath();
-    //     this.size = fileInfo.getSize();
-    //     this.extension = fileInfo.getExtension();
-    //     this.fileType = fileInfo.getFileType();
-    //     this.restaurant = restaurant;
-    //     this.menu = menu;
-    // }
 }
