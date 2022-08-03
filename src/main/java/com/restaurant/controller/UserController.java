@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.restaurant.controller.dto.RestaurantDto;
+import com.restaurant.controller.dto.MyRestaurantDto;
 import com.restaurant.controller.request.UserRequest;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.User;
@@ -85,8 +85,8 @@ public class UserController {
     public String myRestaurants(Model model, @PathVariable("id") Long userId) {
 
         List<Restaurant> restaurants = userService.getMyRestaurantById(userId);
-        List<RestaurantDto> restaurantDtos = restaurants.stream()
-            .map(o -> new RestaurantDto(o))
+        List<MyRestaurantDto> restaurantDtos = restaurants.stream()
+            .map(o -> new MyRestaurantDto(o))
             .collect(Collectors.toList());
 
         model.addAttribute("restaurants", restaurantDtos);

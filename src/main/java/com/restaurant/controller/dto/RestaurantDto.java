@@ -1,19 +1,20 @@
 package com.restaurant.controller.dto;
 
-import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.FileEntity;
+import com.restaurant.entity.common.Address;
+import com.restaurant.entity.common.IntroContent;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class RestaurantDto {
     
-    private Long id;
     private String restaurantNm;
+    private Address address;
     private String contact;
-
-    public RestaurantDto(Restaurant restaurant) {
-        this.id = restaurant.getId();
-        this.restaurantNm = restaurant.getRestaurantNm();
-        this.contact = restaurant.getContact();
-    }
+    private String category;
+    private IntroContent content;
+    private FileEntity file;
 }

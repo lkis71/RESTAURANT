@@ -2,8 +2,6 @@ package com.restaurant.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ public class FileService {
 
     private final FileRepository FileRepository;
     
-    public static Map<String, Object> uploadFile(MultipartFile file, String fileType) {
+    public static FileEntity uploadFile(MultipartFile file, String fileType) {
 
         String fileNm = file.getOriginalFilename();
         String path = "C:\\VisualStudioCode\\Restaurant\\src\\main\\resources\\static\\upload\\";
@@ -41,14 +39,10 @@ public class FileService {
             e.printStackTrace();
         }
 
-        Map<String, Object> fileMap = new HashMap<>();
-        fileMap.put("fileNm", fileNm);
-        fileMap.put("path", path);
-        fileMap.put("size", size);
-        fileMap.put("extension", extension);
-        fileMap.put("fileType", fileType);
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setFile(fileNm, path, size, extension, fileType);
 
-        return fileMap;
+        return fileEntity;
     }
 
     @Transactional

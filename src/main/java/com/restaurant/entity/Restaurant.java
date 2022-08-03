@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
@@ -39,6 +40,9 @@ public class Restaurant {
     @JoinColumn(name = "userId")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @OneToOne(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private FileEntity file;
 
     //생성메서드
     public static Restaurant createRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 

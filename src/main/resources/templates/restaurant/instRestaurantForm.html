@@ -1,8 +1,9 @@
 <div class="container">
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
-            <h4 class="mb-3">식당 등록</h4>
-            <form class="validation-form" th:action="'/restaurants/'+${userId}+'/new'" method="post" enctype="multipart/form-data" novalidate>
+            <h4 class="mb-3" th:if="${restaurant?.id} == null">식당 등록</h4>
+            <h4 class="mb-3" th:if="${restaurant?.id} != null">식당 수정</h4>
+            <form class="validation-form" id="restaurantForm" novalidate>
                 <div class="mb-3">
                     <label for="restaurantNm">식당명</label>
                     <input type="text" class="form-control" id="restaurantNm" name="restaurantNm" th:value="${restaurant.restaurantNm}" placeholder="식당명을 입력 해 주세요." required>
@@ -14,14 +15,14 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="zipcode">우편번호</label>
-                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${restaurant.address.zipcode}" placeholder="우편번호를 입력 해 주세요." required>
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${restaurant?.address?.zipcode}" placeholder="우편번호를 입력 해 주세요." required>
                         <div class="invalid-feedback">
                             우편번호를 입력 해 주세요.
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label for="streetNm">주소</label>
-                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${restaurant.address.streetNm}" placeholder="주소를 입력 해 주세요." required>
+                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${restaurant?.address?.streetNm}" placeholder="주소를 입력 해 주세요." required>
                         <div class="invalid-feedback">
                             주소를 입력 해 주세요.
                         </div>
@@ -30,12 +31,12 @@
                 
                 <div class="mb-3">
                     <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${restaurant.address.detailAddress}" placeholder="상세주소를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${restaurant?.address?.detailAddress}" placeholder="상세주소를 입력 해 주세요.">
                 </div>
                 
                 <div class="mb-3">
                     <label for="contact">연락처</label>
-                    <input type="registNum1" class="form-control" id="contact" name="contact" th:value="${restaurant.contact}" placeholder="연락처를 입력 해 주세요." required>
+                    <input type="text" class="form-control" id="contact" name="contact" th:value="${restaurant.contact}" placeholder="연락처를 입력 해 주세요." required>
                     <div class="invalid-feedback">
                         연락처를 입력 해 주세요.
                     </div>
@@ -54,7 +55,7 @@
                 
                 <div class="mb-3">
                     <label for="simpleContents">간략소개</label>
-                    <input type="registNum1" class="form-control" id="simpleContents" name="simpleContents" th:value="${restaurant.content.simpleContents}" placeholder="간략소개를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="simpleContents" name="simpleContents" th:value="${restaurant?.content?.simpleContents}" placeholder="간략소개를 입력 해 주세요.">
                     <div class="invalid-feedback">
                         간략소개를 입력 해 주세요.
                     </div>
@@ -62,26 +63,64 @@
 
                 <div class="mb-3">
                     <label for="detailContents">상세소개</label>
-                    <input type="registNum1" class="form-control" id="detailContents" name="detailContents" th:value="${restaurant.content.detailContents}" placeholder="상세소개를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="detailContents" name="detailContents" th:value="${restaurant?.content?.detailContents}" placeholder="상세소개를 입력 해 주세요.">
                     <div class="invalid-feedback">
                         상세소개를 입력 해 주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="file">대표이미지</label>
-                    <input type="file" class="form-control" id="file" name="file" required>
-                    <div class="invalid-feedback">
-                        대표이미지를 등록해주세요.
-                    </div>
+                    <label for="file">대표이미지</label><br/>
+                    <input type="file" id="file" name="file" style="display: none;" />
+                    <table>
+                        <tr>
+                            <td><input type="button" class="form-control" value="파일선택" onclick="javascript:$('#file').click();" /></td>
+                            <td><input type="text" class="form-control" id="fileNm" th:value="${restaurant?.file?.fileNm}" readonly/></td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="submit" th:if="${restaurant == null}">식당 등록</button>
-                <button class="btn btn-primary btn-lg btn-block" type="submit" th:if="${restaurant != null}">식당 수정</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${userId}, 'insert')|">식당 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} != null" th:onclick="|submitRestaurant(${restaurant.id}, 'update')|">식당 수정</button>
             </form>
         </div>
     </div>
 </div>
 <script>
+    $(document).ready(function(){
+
+        const fileUpload = $("#file");
+        $("#file").change(function() {
+            changeFile();
+        });
+    });
+
+    function submitRestaurant(id, btnType) {
+        const form = $("#restaurantForm")[0];
+        const formData = new FormData(form);
+        $.ajax({
+            type : "post",
+            url : btnType=="insert"?"/restaurants/"+id+"/new":"/restaurants/"+id+"/update",
+            enctype : "multipart/form-data",
+            data : formData,
+            dataType : "json",
+            processData : false,
+            contentType : false,
+            success : function(data) {
+                alert("성공");
+                location.href="/mypage";
+            },
+            error : function(data) {
+                alert("실패");
+            }
+        })
+    }
+
+    function changeFile() {
+        const fileUpload = $("#file");
+        const file = fileUpload.val();
+        const fileNm = file.substring(file.lastIndexOf("\\")+1);
+        $("#fileNm").val(fileNm);
+    }
 </script>
