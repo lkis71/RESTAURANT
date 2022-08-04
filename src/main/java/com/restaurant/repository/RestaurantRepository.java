@@ -25,12 +25,25 @@ public class RestaurantRepository {
 
     //단건조회
     public Restaurant findOne(Long restId) {
-        return em.find(Restaurant.class, restId);
+        try {
+            return em.createQuery("select r from Restaurant r join fetch r.file f where r.id = :restId", Restaurant.class)
+                .setParameter("restId", restId)
+                .getSingleResult();
+        }catch (NoResultException e) {
+            return new Restaurant();
+        }
     }
 
-    //전체조회
     public List<Restaurant> findAll() {
-        return em.createQuery("select r from Restaurant r", Restaurant.class)
+        return em.createQuery("select r from Restaurant r join fetch r.file f", Restaurant.class)
+        .getResultList();
+    }
+
+    //페이징 조회
+    public List<Restaurant> paging(int cursor, int limit) {
+        return em.createQuery("select r from Restaurant r join fetch r.file f where r.id > :cursor order by r.id", Restaurant.class)
+            .setParameter("cursor", Long.parseLong(String.valueOf(cursor)))
+            .setMaxResults(limit)
             .getResultList();
     }
 

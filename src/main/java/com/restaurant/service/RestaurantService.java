@@ -1,13 +1,11 @@
 package com.restaurant.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.request.RestaurantRequest;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Restaurant;
@@ -27,21 +25,16 @@ public class RestaurantService {
     //단건조회
     public Restaurant getRestaurant(Long restId) {
         Restaurant restaurant = restaurantRepository.findOne(restId);
-        FileEntity file = restaurantRepository.findFileById(restId);
-        restaurant.setFile(file);
         return restaurant;
     }
 
-    //전체조회
-    public List<Restaurant> getRestaurantList() {
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-        for(Restaurant restaurant : restaurants) {
-            FileEntity file = restaurantRepository.findFileById(restaurant.getId());
-            restaurant.setFile(file);
-        }
+    public List<Restaurant> getRestaurants() {
+        return restaurantRepository.findAll();
+    }
 
-
-        return new ArrayList<>();
+    //페이징조회
+    public List<Restaurant> getPagingRestaurant(int cursor, int limit) {
+        return restaurantRepository.paging(cursor, limit);
     }
 
     //등록
@@ -68,8 +61,7 @@ public class RestaurantService {
         //파일수정
         if(!file.isEmpty()) {
             FileEntity fileInfo = FileService.uploadFile(file, "r");
-            FileEntity findFile = restaurantRepository.findFileById(restId);
-            findFile.setFile(fileInfo.getFileNm(), fileInfo.getPath(), fileInfo.getSize(), fileInfo.getExtension(), fileInfo.getFileType(), restaurant, null);
+            fileInfo.setFileJoinEntity(restaurant, null);
         }
     }
 

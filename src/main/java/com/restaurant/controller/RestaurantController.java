@@ -1,5 +1,10 @@
 package com.restaurant.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.request.RestaurantRequest;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Restaurant;
@@ -31,9 +37,26 @@ public class RestaurantController {
 
     //목록
     @GetMapping("/restaurants")
-    public String restaurantList(Model model) {
+    public String restaurantList(Model model,
+        @RequestParam(value = "cursor", defaultValue = "1") int cursor,
+        @RequestParam(value = "limit", defaultValue = "8") int limit) {
 
-        restaurantService.getRestaurantList();
+        List<Restaurant> restaurants = restaurantService.getPagingRestaurant(cursor, limit);
+        List<RestaurantDto> restaurantDtos = restaurants.stream()
+            .map(o -> new RestaurantDto(o))
+            .collect(Collectors.toList());
+
+        Map<String, Object> pagingInfo = new HashMap<>();
+        int maxCnt = restaurantService.getRestaurants().size();
+        pagingInfo.put("maxCnt", maxCnt);
+
+        int startIdx = (limit/cursor);
+        int maxPage = (maxCnt/limit)+1;
+        pagingInfo.put("startIdx", startIdx);
+        pagingInfo.put("maxPage", maxPage);
+        
+        model.addAttribute("pagingInfo", pagingInfo);
+        model.addAttribute("restaurants", restaurantDtos);
         model.addAttribute("contents", "restaurant/restaurantList");
         return "common/subLayout";
     }

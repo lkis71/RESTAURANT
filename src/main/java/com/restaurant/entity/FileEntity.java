@@ -44,17 +44,21 @@ public class FileEntity {
     public static FileEntity createFile(FileEntity fileInfo, Restaurant restaurant, Menu menu) {
 
         FileEntity file = new FileEntity();
-        file.setFile(fileInfo.getFileNm(), fileInfo.getPath(), fileInfo.getSize(), fileInfo.getExtension(), fileInfo.getFileType(), restaurant, menu);
+        file.setFile(fileInfo.getFileNm(), fileInfo.getPath(), fileInfo.getSize(), fileInfo.getExtension(), fileInfo.getFileType());
+        file.setFileJoinEntity(restaurant, menu);
 
         return file;
     }
 
-    public void setFile(String fileNm, String path, Long size, String extension, String fileType, Restaurant restaurant, Menu menu) {
+    public void setFile(String fileNm, String path, Long size, String extension, String fileType) {
         this.fileNm = fileNm;
         this.path = path;
         this.size = size;
         this.extension = extension;
         this.fileType = fileType;
+    }
+    
+    public void setFileJoinEntity(Restaurant restaurant, Menu menu) {
         this.restaurant = restaurant;
         this.menu = menu;
     }

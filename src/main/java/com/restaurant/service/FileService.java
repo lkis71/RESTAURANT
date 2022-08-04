@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Restaurant;
 import com.restaurant.repository.FileRepository;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +22,8 @@ public class FileService {
     public static FileEntity uploadFile(MultipartFile file, String fileType) {
 
         String fileNm = file.getOriginalFilename();
-        String path = "C:\\VisualStudioCode\\Restaurant\\src\\main\\resources\\static\\upload\\";
+        String savePath = "C:\\VisualStudioCode\\Restaurant\\src\\main\\resources\\static\\upload\\";
+        String path = "upload\\";
         Long size = file.getSize();
         String extension = fileNm.substring(fileNm.indexOf(".")+1);
 
@@ -34,14 +34,14 @@ public class FileService {
         }
 
         try {
-            File uploadFile = new File(path+fileNm);
+            File uploadFile = new File(savePath+fileNm);
             file.transferTo(uploadFile);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
 
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setFile(fileNm, path, size, extension, fileType, new Restaurant(), null);
+        fileEntity.setFile(fileNm, path, size, extension, fileType);
 
         return fileEntity;
     }
