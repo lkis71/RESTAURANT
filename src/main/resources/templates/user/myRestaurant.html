@@ -4,9 +4,9 @@
             <h4 class="mb-3">내 식당</h4>
             <table class="table">
                 <colgroup>
-                    <col style="width: 60%">
+                    <col style="width: 40%">
                     <col style="width: 20%">
-                    <col style="width: 20%">
+                    <col style="width: 40%">
                 </colgroup>
                 <thead>
                     <tr>
@@ -21,8 +21,9 @@
                         <td th:text="${restaurant.restaurantNm}"></td>
                         <td th:text="${restaurant.contact}"></td>                        
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|updateRestaurantPage(${restaurant.id})|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurants/${restaurant.id}/update'|">수정</button>
                             <button type="button" class="btn btn-primary" th:onclick="|deleteRestaurant(${restaurant.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurants/${restaurant.id}/menu/new'|">메뉴등록</button>
                         </td>
                     </tr>
                 </tbody>
@@ -31,10 +32,6 @@
     </div>
 </div>
 <script>
-    function updateRestaurantPage(id) {
-        location.href="/restaurants/"+id+"/update";
-    }
-    
     function deleteRestaurant(id){
         if(confirm("삭제하시겠습니까?")) {
             $.ajax({

@@ -28,44 +28,75 @@
                 </div>
             </th:block>
         </div>
-        <nav aria-label="Pagination">
-            <hr class="my-0" />
-            <ul class="pagination justify-content-center my-4" id="pageIndex">
-                <!-- <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true"><<</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true"><</a></li>
-                <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                <li class="page-item"><a class="page-link" href="#!">4</a></li>
-                <li class="page-item"><a class="page-link" href="#!">5</a></li>
-                <li class="page-item"><a class="page-link" href="#!">></a></li>
-                <li class="page-item"><a class="page-link" href="#!">>></a></li> -->
-            </ul>
+        <nav aria-label="Pagination" id="navPageIdx">
         </nav>
     </div>
 </section>
 <script th:inline="javascript">
     $(document).ready(function(){
 
-        const pagingInfo = [[${pagingInfo}]]; //페이지 정보
+        const pagingInfo = "[[${pagingInfo}]]"; //페이지 정보
+        
         const showPageCnt = 5; //화면에 출력 될 페이지 수
-        
-        const maxPage = pagingInfo.maxPage; //마지막 페이지
-        const currPage = pagingInfo.startIdx == showPageCnt ? pagingInfo.startIdx-1 : pagingInfo.startIdx; //현재 페이지
-        
-        const startPage = (parseInt(currPage/showPageCnt) * showPageCnt) + 1; //화면에 출력 될 시작 페이지
-        const endPage = (maxPage-startPage) > (showPageCnt-1) ? startPage + (showPageCnt-1) : maxPage; // 화면에 출력 될 종료 페이지
+        const maxCnt = pagingInfo.maxCnt; //전체 개수
+        const limit = pagingInfo.limit; //화면에 출력되는 목록 수
 
-        let page = "<li class='page-item disabled'><a class='page-link' href='#' tabindex='-1' aria-disabled='true'><<</a></li>";
-        page += "<li class='page-item disabled'><a class='page-link' href='#' tabindex='-1' aria-disabled='true'><</a></li>";
-        for(let i=startPage; i<=endPage; i++){
-            page += "<li class='page-item'><a class='page-link' href='/restaurants?cursor=6&limit=8'>"+i+"</a></li>";
+        let currPage = pagingInfo.currPageIdx; //현재 페이지 번호
+        let maxPage = parseInt((maxCnt-1)/limit)+1; //마지막 페이지 번호
+        
+        let startPage = (parseInt(currPage/showPageCnt) * showPageCnt) + 1; //화면에 출력 될 시작 페이지
+        let endPage = (maxPage-startPage) > 4 ? startPage + 4 : maxPage; // 화면에 출력 될 마지막 페이지
+
+        if(maxCnt > 0) {
+            let page = "<hr class='my-0' />";
+            page += "<ul class='pagination justify-content-center my-4'>";
+
+                //이전 페이지인덱서
+                if(startPage !== 1) {
+                    page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(startPage-5)+")'><<</a></li>";
+                }
+                //이전페이지
+                if(currPage !== 1) {
+                    page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(currPage-1)+")'><</a></li>";
+                }
+
+                //페이지
+                for(let i=startPage; i<=endPage; i++){
+                    if(currPage === i) {
+                        page += "<li class='page-item active'><a class='page-link' onclick='pageMove("+i+")'>"+i+"</a></li>";
+                    }else {
+                        page += "<li class='page-item'><a class='page-link' onclick='pageMove("+i+")'>"+i+"</a></li>";
+                    }
+                }
+
+                //다음페이지
+                if(currPage !== maxPage) {
+                    page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(currPage+1)+")'>></a></li>";
+                }
+                //다음 페이지인덱서
+                if(maxPage !== endPage) {
+                    page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(startPage+5)+")'>>></a></li>";
+                }
+            page += "</ul>";
+    
+            $("#navPageIdx").append(page);
         }
-        page += "<li class='page-item'><a class='page-link' href='#'>></a></li>";
-        page += "<li class='page-item'><a class='page-link' href='#'>>></a></li>";
-
-        $("#pageIndex").append(page);
     });
+
+    function pageMove(currPageIdx) {
+
+        const cursor = (currPageIdx-1) * 8
+
+        let form = document.createElement('form');
+        form.action = "/restaurants";
+        form.method = "get";
+        form.innerHTML = "<input name='cursor' value="+cursor+" />";
+        form.innerHTML += "<input name='limit' value='8' />";
+        form.innerHTML += "<input name='currPageIdx' value="+currPageIdx+" />";
+
+        document.body.append(form);
+        form.submit();
+    }
     
     function openReservePopup() {
         const x = (document.body.offsetWidth / 2) - (600 / 2);

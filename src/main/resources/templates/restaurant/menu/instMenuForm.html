@@ -5,7 +5,7 @@
             <form class="validation-form" novalidate>
                 <div class="mb-3">
                     <label for="name">메뉴명</label>
-                    <input type="text" class="form-control" placeholder="메뉴명을 입력해주세요." value="" required>
+                    <input type="text" class="form-control" placeholder="메뉴명을 입력해주세요." required>
                     <div class="invalid-feedback">
                         메뉴명을 입력해주세요.
                     </div>
@@ -61,19 +61,3 @@
         </div>
     </div>
 </div>
-<script>
-    window.addEventListener('load', () => {
-        const forms = document.getElementsByClassName('validation-form');
-
-        Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-            if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-        });
-    }, false);
-</script>

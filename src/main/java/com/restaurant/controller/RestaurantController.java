@@ -38,8 +38,9 @@ public class RestaurantController {
     //목록
     @GetMapping("/restaurants")
     public String restaurantList(Model model,
-        @RequestParam(value = "cursor", defaultValue = "1") int cursor,
-        @RequestParam(value = "limit", defaultValue = "8") int limit) {
+        @RequestParam(value = "cursor", defaultValue = "0") int cursor,
+        @RequestParam(value = "limit", defaultValue = "8") int limit,
+        @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
         List<Restaurant> restaurants = restaurantService.getPagingRestaurant(cursor, limit);
         List<RestaurantDto> restaurantDtos = restaurants.stream()
@@ -49,11 +50,8 @@ public class RestaurantController {
         Map<String, Object> pagingInfo = new HashMap<>();
         int maxCnt = restaurantService.getRestaurants().size();
         pagingInfo.put("maxCnt", maxCnt);
-
-        int startIdx = (limit/cursor);
-        int maxPage = (maxCnt/limit)+1;
-        pagingInfo.put("startIdx", startIdx);
-        pagingInfo.put("maxPage", maxPage);
+        pagingInfo.put("limit", limit);
+        pagingInfo.put("currPageIdx", currPageIdx);
         
         model.addAttribute("pagingInfo", pagingInfo);
         model.addAttribute("restaurants", restaurantDtos);
@@ -63,7 +61,7 @@ public class RestaurantController {
     
     //등록페이지
     @GetMapping("/restaurants/{id}/new")
-    public String restaurantForm(Model model, @PathVariable("id") Long userId) {
+    public String restaurantPage(Model model, @PathVariable("id") Long userId) {
         
         model.addAttribute("userId", userId);
         model.addAttribute("restaurant", new Restaurant());
@@ -96,7 +94,7 @@ public class RestaurantController {
 
     //수정페이지
     @GetMapping("/restaurants/{id}/update")
-    public String updateRestaurantForm(Model model, @PathVariable("id") Long restId) {
+    public String updateRestaurantPage(Model model, @PathVariable("id") Long restId) {
 
         Restaurant restaurant = restaurantService.getRestaurant(restId);
 
@@ -125,5 +123,12 @@ public class RestaurantController {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
         return new Gson().toJson(jsonObject);
+    }
+
+    @GetMapping("/restaurants/{id}/menu/new")
+    public String insertMenuPage(Model model, @PathVariable("id") Long restId) {
+
+        model.addAttribute("contents", "restaurant/menu/instMenuForm");
+        return "common/subLayout";
     }
 }

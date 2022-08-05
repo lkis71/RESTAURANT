@@ -46,7 +46,10 @@
                     <label for="category">식당 유형</label>
                     <select class="custom-select d-block w-100" id="category" name="category" required>
                         <option value="">선택해주세요.</option>
-                        <option value="1" th:selected="${restaurant.category} == 1">test</option>
+                        <option value="k" th:selected="${restaurant.category} == k">한식</option>
+                        <option value="c" th:selected="${restaurant.category} == c">중식</option>
+                        <option value="j" th:selected="${restaurant.category} == j">일식</option>
+                        <option value="i" th:selected="${restaurant.category} == i">양식</option>
                     </select>
                     <div class="invalid-feedback">
                         식당 유형을 선택해주세요.
