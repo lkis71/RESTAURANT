@@ -112,8 +112,10 @@
     });
 
     function submitRestaurant(id, btnType) {
+
         const form = $("#restaurantForm")[0];
         const formData = new FormData(form);
+        
         $.ajax({
             type : "post",
             url : btnType=="insert"?"/restaurants/"+id+"/new":"/restaurants/"+id+"/update",

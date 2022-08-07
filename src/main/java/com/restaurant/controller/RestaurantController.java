@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.RestaurantDto;
+import com.restaurant.controller.request.MenuRequest;
 import com.restaurant.controller.request.RestaurantRequest;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Restaurant;
@@ -72,7 +73,7 @@ public class RestaurantController {
     //등록
     @PostMapping("/restaurants/{id}/new")
     @ResponseBody
-    public String restaurantForm(Model model, @PathVariable("id") Long userId, RestaurantRequest restReq, @RequestParam("file") MultipartFile file) {
+    public String restaurantForm(Model model, @PathVariable("id") Long userId, RestaurantRequest restReq) {
 
         User user = userService.getUserById(userId);
 
@@ -81,7 +82,7 @@ public class RestaurantController {
 
         restaurantService.insertRestaurant(restaurant);
 
-        FileEntity fileInfo = FileService.uploadFile(file, "r");
+        FileEntity fileInfo = FileService.uploadFile(restReq.getFile(), "r");
         FileEntity fileEntity = FileEntity.createFile(fileInfo, restaurant, null);
 
         fileService.insertFile(fileEntity);
@@ -106,9 +107,9 @@ public class RestaurantController {
     //수정
     @PostMapping("/restaurants/{id}/update")
     @ResponseBody
-    public String updateRestaurant(Model model, @PathVariable("id") Long restId, RestaurantRequest restReq, @RequestParam("file") MultipartFile file) {
+    public String updateRestaurant(Model model, @PathVariable("id") Long restId, RestaurantRequest restReq) {
 
-        restaurantService.updateRestaurant(restId, restReq, file);
+        restaurantService.updateRestaurant(restId, restReq, restReq.getFile());
 
         return new Gson().toJson("");
     }
@@ -125,10 +126,20 @@ public class RestaurantController {
         return new Gson().toJson(jsonObject);
     }
 
+    //메뉴 등록페이지
     @GetMapping("/restaurants/{id}/menu/new")
     public String insertMenuPage(Model model, @PathVariable("id") Long restId) {
 
+        model.addAttribute("restaurantId", restId);
         model.addAttribute("contents", "restaurant/menu/instMenuForm");
         return "common/subLayout";
+    }
+
+    @PostMapping("/restaurants/{id}/menu/new")
+    public String insertMenu(Model model, @PathVariable("id") Long restId, MenuRequest menuRequest) {
+
+
+
+        return "";
     }
 }

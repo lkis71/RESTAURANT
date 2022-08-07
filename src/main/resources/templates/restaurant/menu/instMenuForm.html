@@ -2,10 +2,10 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">메뉴 등록</h4>
-            <form class="validation-form" novalidate>
+            <form class="validation-form" id="menuForm" novalidate>
                 <div class="mb-3">
                     <label for="name">메뉴명</label>
-                    <input type="text" class="form-control" placeholder="메뉴명을 입력해주세요." required>
+                    <input type="text" class="form-control" name="menuNm" placeholder="메뉴명을 입력해주세요." required>
                     <div class="invalid-feedback">
                         메뉴명을 입력해주세요.
                     </div>
@@ -13,7 +13,7 @@
                 
                 <div class="mb-3">
                     <label for="registNum1">가격</label>
-                    <input type="registNum1" class="form-control" placeholder="가격을 입력해주세요." required>
+                    <input type="registNum1" class="form-control" name="price" placeholder="가격을 입력해주세요." required>
                     <div class="invalid-feedback">
                         가격을 입력해주세요.
                     </div>
@@ -21,7 +21,7 @@
                 
                 <div class="mb-3">
                     <label for="root">메뉴 유형</label>
-                    <select class="custom-select d-block w-100" id="root" required>
+                    <select class="custom-select d-block w-100" name="category" id="root" required>
                         <option value="">선택해주세요.</option>
                         <option value="basic">면</option>
                         <option value="owner">밥</option>
@@ -33,7 +33,7 @@
                 
                 <div class="mb-3">
                     <label for="registNum1">간략소개</label>
-                    <input type="registNum1" class="form-control" placeholder="간략소개를 입력해주세요.">
+                    <input type="registNum1" class="form-control" name="simpleContents" placeholder="간략소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         간략소개를 입력해주세요.
                     </div>
@@ -41,23 +41,66 @@
 
                 <div class="mb-3">
                     <label for="registNum1">상세소개</label>
-                    <input type="registNum1" class="form-control" placeholder="상세소개를 입력해주세요.">
+                    <input type="registNum1" class="form-control" name="detailContents" placeholder="상세소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         상세소개를 입력해주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="registNum1">대표이미지</label>
-                    <input type="file" class="form-control" required>
-                    <div class="invalid-feedback">
-                        대표이미지를 등록해주세요.
-                    </div>
+                    <label for="file">대표이미지</label><br/>
+                    <input type="file" id="file" name="file" style="display: none;" />
+                    <table>
+                        <tr>
+                            <td><input type="button" class="form-control" value="파일선택" onclick="javascript:$('#file').click();" /></td>
+                            <td><input type="text" class="form-control" id="fileNm" readonly/></td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="submit">메뉴 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:onclick="|submitMenu(${restaurantId})|">메뉴 등록</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+
+        const fileUpload = $("#file");
+        $("#file").change(function() {
+            changeFile();
+        });
+
+    });
+
+    function submitMenu(restId) {
+
+        const form = $("#menuForm")[0];
+        const formData = new FormData(form);
+
+        $.ajax({
+            type : "post",
+            url : "/restaurants/"+restId+"/menu/new",
+            enctype : "multipart/form-data",
+            data : formData,
+            dataType : "json",
+            processData : false,
+            contentType : false,
+            success : function(data) {
+                alert("성공");
+            },
+            error : function(data) {
+                alert("실패");
+            }
+        })
+    }
+
+    function changeFile() {
+        const fileUpload = $("#file");
+        const file = fileUpload.val();
+        const fileNm = file.substring(file.lastIndexOf("\\")+1);
+        $("#fileNm").val(fileNm);
+    }
+</script>

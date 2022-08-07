@@ -1,5 +1,7 @@
 package com.restaurant.controller.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,4 +17,5 @@ public class RestaurantRequest {
     private String category;
     private String simpleContents;
     private String detailContents;
+    private MultipartFile file;
 }
