@@ -1,6 +1,5 @@
 package com.restaurant.controller.request;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;

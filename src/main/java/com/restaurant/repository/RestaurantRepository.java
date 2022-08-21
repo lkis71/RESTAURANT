@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
 
 import com.restaurant.entity.FileEntity;
+import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,9 @@ public class RestaurantRepository {
     //단건조회
     public Restaurant findOne(Long restId) {
         try {
-            return em.createQuery("select r from Restaurant r join fetch r.file f where r.id = :restId", Restaurant.class)
+            return em.createQuery("select r from Restaurant r" +
+            " join fetch r.file f" +
+            " where r.id = :restId", Restaurant.class)
                 .setParameter("restId", restId)
                 .getSingleResult();
         }catch (NoResultException e) {
@@ -35,13 +38,17 @@ public class RestaurantRepository {
     }
 
     public List<Restaurant> findAll() {
-        return em.createQuery("select r from Restaurant r join fetch r.file f", Restaurant.class)
+        return em.createQuery("select r from Restaurant r"+
+        " join fetch r.file f", Restaurant.class)
         .getResultList();
     }
 
     //페이징 조회
     public List<Restaurant> paging(int cursor, int limit) {
-        return em.createQuery("select r from Restaurant r join fetch r.file f where r.id > :cursor order by r.id", Restaurant.class)
+        return em.createQuery("select r from Restaurant r" +
+        " join fetch r.file f" +
+        " where r.id > :cursor" +
+        " order by r.id", Restaurant.class)
             .setParameter("cursor", Long.parseLong(String.valueOf(cursor)))
             .setMaxResults(limit)
             .getResultList();
@@ -50,7 +57,9 @@ public class RestaurantRepository {
     //썸네일 단건조회
     public FileEntity findFileById(Long restId) {
         try{
-            return em.createQuery("select f from FileEntity f join fetch f.restaurant r where r.id = :restId", FileEntity.class)
+            return em.createQuery("select f from FileEntity f" +
+            " join fetch f.restaurant r" +
+            " where r.id = :restId", FileEntity.class)
                 .setParameter("restId", restId)
                 .getSingleResult();
         }catch (NoResultException e) {
@@ -62,6 +71,15 @@ public class RestaurantRepository {
     public void deleteById(Long restId) {
         Restaurant restaurant = findOne(restId);
         em.remove(restaurant);
+    }
+
+    public List<Menu> findMenusById(Long restId) {
+        return em.createQuery("select m from Menu m" +
+            " join fetch m.restaurant r" +
+            " join fetch m.file f" +
+            " where r.id = :restId", Menu.class)
+            .setParameter("restId", restId)
+            .getResultList();
     }
 
 }

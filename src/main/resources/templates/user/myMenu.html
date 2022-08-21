@@ -10,22 +10,19 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>식당명</th>
-                        <th>메뉴관리</th>
+                        <th>메뉴명</th>
+                        <th>금액</th>
                         <th>비고</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr th:each="restaurant : ${restaurants}">
-                        <td th:text="${restaurant.restaurantNm}"></td>
+                    <tr th:each="menu : ${menus}">
+                        <td th:text="${menu.menuNm}"></td>
+                        <td th:text="${menu.price}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/menu/${restaurant.id}/new'|">메뉴등록</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userId}/restaurants/${restaurant.id}/menus'|">메뉴목록</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurants/${restaurant.id}/update'|">수정</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|deleteRestaurant(${restaurant.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userId}/restaurants/menus/${menu.id}'|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|deleteMenu(${userId}, ${menu.id})|">삭제</button>
                         </td>
                     </tr>
                 </tbody>
@@ -34,11 +31,11 @@
     </div>
 </div>
 <script>
-    function deleteRestaurant(id){
+    function deleteMenu(userId, menuId){
         if(confirm("삭제하시겠습니까?")) {
             $.ajax({
-                type : "post",
-                url : "/restaurants/"+id+"/delete",
+                type : "delete",
+                url : "/users/"+userId+"/restaurants/menus/"+menuId,
                 data : "",
                 dataType : "json",
                 success : function(data) {

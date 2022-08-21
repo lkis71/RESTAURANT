@@ -65,4 +65,19 @@ public class Restaurant {
 
         return restaurant;
     }
+
+    public void setRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
+            String contact, String category, String simpleContents, String detailContents, User user) {
+
+        this.restaurantNm = restaurantNm;
+        this.contact = contact;
+        this.category = category;
+        this.user = user;
+
+        Address address = new Address(zipcode, streetNm, detailAddress);
+        this.address = address;
+
+        IntroContent content = new IntroContent(simpleContents, detailContents);
+        this.content = content;
+    }
 }

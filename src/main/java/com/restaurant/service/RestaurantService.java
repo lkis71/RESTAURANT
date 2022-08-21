@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.restaurant.controller.request.RestaurantRequest;
 import com.restaurant.entity.FileEntity;
+import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
 import com.restaurant.repository.RestaurantRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -46,22 +44,17 @@ public class RestaurantService {
 
     //수정
     @Transactional
-    public void updateRestaurant(Long restId, RestaurantRequest restReq, MultipartFile file) {
+    public void updateRestaurant(Long restId, RestaurantRequest restReq) {
+        
         Restaurant restaurant = restaurantRepository.findOne(restId);
-        restaurant.setRestaurantNm(restReq.getRestaurantNm());
-        restaurant.setContact(restReq.getContact());
-        restaurant.setCategory(restReq.getCategory());
-
-        Address address = new Address(restReq.getZipcode(), restReq.getStreetNm(), restReq.getDetailAddress());
-        restaurant.setAddress(address);
-
-        IntroContent content = new IntroContent(restReq.getSimpleContents(), restReq.getDetailContents());
-        restaurant.setContent(content);
+        restaurant.setRestaurant(restReq.getRestaurantNm(), restReq.getZipcode(), restReq.getStreetNm(), restReq.getDetailAddress(), restReq.getContact(), 
+                restReq.getCategory(), restReq.getSimpleContents(), restReq.getDetailContents(), restaurant.getUser());
 
         //파일수정
-        if(!file.isEmpty()) {
-            FileEntity fileInfo = FileService.uploadFile(file, "r");
-            fileInfo.setFileJoinEntity(restaurant, null);
+        if(!restReq.getFile().isEmpty()) {
+            FileEntity fileEntity = FileService.uploadFile(restReq.getFile(), "r");
+            restaurant.getFile().setFile(fileEntity.getFileNm(), fileEntity.getPath(), fileEntity.getSize(), fileEntity.getExtension(), fileEntity.getFileType());
+            restaurant.getFile().setFileJoinEntity(restaurant, null);
         }
     }
 
@@ -69,5 +62,9 @@ public class RestaurantService {
     @Transactional
     public void deleteRestaurant(Long restId) {
         restaurantRepository.deleteById(restId);
+    }
+
+    public List<Menu> getMenus(Long restId) {
+        return restaurantRepository.findMenusById(restId);
     }
 }

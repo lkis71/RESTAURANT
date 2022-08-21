@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class RestaurantDto {
     
+    private Long id;
     private String restaurantNm;
     private Address address;
     private String contact;
@@ -18,6 +19,7 @@ public class RestaurantDto {
     private FileEntity file;
 
     public RestaurantDto(Restaurant restaurant) {
+        this.id = restaurant.getId();
         this.restaurantNm = restaurant.getRestaurantNm();
         this.address = restaurant.getAddress();
         this.contact = restaurant.getContact();

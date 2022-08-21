@@ -1,66 +1,93 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">메뉴1</h5>
-                            금액 </br>
-                            간략설명
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+            <th:block th:each="menu : ${menus}">
+                <div class="mb-5">
+                    <div class="card h-100">
+                        <img class="card-img-top" th:src="|${menu?.file?.path}${menu?.file?.fileNm}|" alt="..." />
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder" th:text="${menu?.menuNm}"></h5>
+                                <p th:text="${menu?.price}"></p>
+                                <p th:text="${menu?.content?.simpleContents}"></p>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" >메뉴상세</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/menus/info">메뉴 상세</a></div>
-                    </div>
                 </div>
-            </div>
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">메뉴1</h5>
-                            금액 </br>
-                            간략설명
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/menus/info">메뉴 상세</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">메뉴1</h5>
-                            금액 </br>
-                            간략설명
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/menus/info">메뉴 상세</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">메뉴1</h5>
-                            금액 </br>
-                            간략설명
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/menus/info">메뉴 상세</a></div>
-                    </div>
-                </div>
-            </div>
+            </th:block>
         </div>
+        <nav aria-label="Pagination" id="navPageIdx">
+        </nav>
     </div>
 </section>
+<script th:inline="javascript">
+    // $(document).ready(function(){
+
+    //     const pagingInfo = [[${pagingInfo}]]; //페이지 정보
+    //     const showPageCnt = 5; //화면에 출력 될 페이지 수
+    //     const maxCnt = pagingInfo.maxCnt; //전체 개수
+    //     const limit = pagingInfo.limit; //화면에 출력되는 목록 수
+
+    //     let currPage = pagingInfo.currPageIdx; //현재 페이지 번호
+    //     let maxPage = parseInt((maxCnt-1)/limit)+1; //마지막 페이지 번호
+        
+    //     let startPage = (parseInt(currPage/showPageCnt) * showPageCnt) + 1; //화면에 출력 될 시작 페이지
+    //     let endPage = (maxPage-startPage) > 4 ? startPage + 4 : maxPage; // 화면에 출력 될 마지막 페이지
+
+    //     if(maxCnt > 0) {
+    //         let page = "<hr class='my-0' />";
+    //         page += "<ul class='pagination justify-content-center my-4'>";
+
+    //             //이전페이지 <<
+    //             if(startPage !== 1) {
+    //                 page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(startPage-5)+")'><<</a></li>";
+    //             }
+    //             //이전페이지 <
+    //             if(currPage !== 1) {
+    //                 page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(currPage-1)+")'><</a></li>";
+    //             }
+
+    //             //페이지인덱서
+    //             for(let i=startPage; i<=endPage; i++){
+    //                 if(currPage === i) {
+    //                     page += "<li class='page-item active'><a class='page-link' onclick='pageMove("+i+")'>"+i+"</a></li>";
+    //                 }else {
+    //                     page += "<li class='page-item'><a class='page-link' onclick='pageMove("+i+")'>"+i+"</a></li>";
+    //                 }
+    //             }
+
+    //             //다음페이지 >
+    //             if(currPage !== maxPage) {
+    //                 page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(currPage+1)+")'>></a></li>";
+    //             }
+    //             //다음페이지 >>
+    //             if(maxPage !== endPage) {
+    //                 page += "<li class='page-item'><a class='page-link' onclick='pageMove("+(startPage+5)+")'>>></a></li>";
+    //             }
+    //         page += "</ul>";
+    
+    //         $("#navPageIdx").append(page);
+    //     }
+    // });
+
+    // function pageMove(currPageIdx) {
+
+    //     const cursor = (currPageIdx-1) * 8
+
+    //     let form = document.createElement('form');
+    //     form.action = "/restaurants";
+    //     form.method = "get";
+    //     form.innerHTML = "<input name='cursor' value="+cursor+" />";
+    //     form.innerHTML += "<input name='limit' value='8' />";
+    //     form.innerHTML += "<input name='currPageIdx' value="+currPageIdx+" />";
+
+    //     document.body.append(form);
+    //     form.submit();
+    // }
+
+</script>
