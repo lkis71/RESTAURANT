@@ -25,7 +25,6 @@ import com.restaurant.entity.User;
 import com.restaurant.service.FileService;
 import com.restaurant.service.RestaurantService;
 import com.restaurant.service.UserService;
-import com.restaurant.trace.hellotrace.HelloTraceV1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +35,6 @@ public class RestaurantController {
     private final UserService userService;
     private final RestaurantService restaurantService;
     private final FileService fileService;
-    private HelloTraceV1 trace;
 
     //목록
     @GetMapping("/restaurants")
