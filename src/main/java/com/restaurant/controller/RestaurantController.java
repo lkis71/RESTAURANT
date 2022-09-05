@@ -57,6 +57,7 @@ public class RestaurantController {
         model.addAttribute("pagingInfo", pagingInfo);
         model.addAttribute("restaurants", restaurantDtos);
         model.addAttribute("contents", "restaurant/restaurantList");
+
         return "common/subLayout";
     }
     
