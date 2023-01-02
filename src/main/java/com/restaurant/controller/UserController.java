@@ -32,8 +32,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private static final String SESSION_INFO = "SESSION_INFO";
-
     private final UserService userService;
     private final MenuService menuService;
     
@@ -61,7 +59,7 @@ public class UserController {
     public String mypage(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SESSION_INFO);
+        User user = (User) session.getAttribute("SESSION_INFO");
 
         model.addAttribute("user", user);
         model.addAttribute("contents", "user/mypage");

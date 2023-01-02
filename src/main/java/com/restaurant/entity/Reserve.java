@@ -1,5 +1,6 @@
 package com.restaurant.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -10,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.restaurant.controller.request.UserRequest;
+import com.restaurant.controller.request.reserveRequest;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +30,8 @@ public class Reserve {
     private LocalDateTime reserveDate;
 
     private LocalDateTime reserveTime;
+
+    private Integer reserveUserCnt;
 
     private String reserveStatus;
 

@@ -4,7 +4,7 @@
             <th:block th:each="menu : ${menus}">
                 <div class="mb-5">
                     <div class="card h-100">
-                        <img class="card-img-top" th:src="|${menu?.file?.path}${menu?.file?.fileNm}|" alt="..." />
+                        <img class="card-img-top" th:src="|\${menu?.file?.path}${menu?.file?.fileNm}|" alt="..." />
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h5 class="fw-bolder" th:text="${menu?.menuNm}"></h5>

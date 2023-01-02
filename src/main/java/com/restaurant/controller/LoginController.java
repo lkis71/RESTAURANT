@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.restaurant.controller.request.LoginRequest;
 import com.restaurant.entity.User;
 import com.restaurant.service.LoginService;
+import com.restaurant.util.CommonSession;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +34,13 @@ public class LoginController {
     @PostMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, LoginRequest loginRequest, Model model) throws IOException {
 
-        User user = loginService.login(request, loginRequest.getHmpgId());
+        User user = loginService.login(request, loginRequest);
 
         if(user != null) {
+            CommonSession.setSessionUserInfo(request, user);
             return "redirect:/restaurants";
         }else {
-            return "redirect:/users/join";
+            return "redirect:/users/register";
         }
     }
 

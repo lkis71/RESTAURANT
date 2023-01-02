@@ -24,10 +24,11 @@ public class UserRepository {
     }
 
     //홈페이지 아이디로 회원 조회
-    public User findByHmpgId(String hmpgId) {
+    public User findByLoginInfo(String hmpgId, String password) {
         try {
-            return em.createQuery("select u from User u where u.hmpgId = :hmpgId", User.class)
+            return em.createQuery("select u from User u where u.hmpgId = :hmpgId and u.password = :password", User.class)
                 .setParameter("hmpgId", hmpgId)
+                .setParameter("password", password)
                 .getSingleResult();
         } catch(NoResultException e) {
             return null;

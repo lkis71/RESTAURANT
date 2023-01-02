@@ -18,22 +18,22 @@
             <div class="input-form-backgroud row">
                 <div class="input-form col-md-12 mx-auto">
                     <h4 class="mb-3">예약하기</h4>
-                    <form class="validation-form" novalidate>
+                    <form class="validation-form" id="reserveForm" method="post" novalidate>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name">날짜선택</label>
-                                <input type="date" class="form-control" placeholder="" value="" required>
+                                <input type="date" name="reserveDate" class="form-control" required>
                                 <div class="invalid-feedback">
                                     날짜를 선택해주세요.
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="root">시간선택</label>
-                                <select class="custom-select d-block w-100" id="root" required>
+                                <select class="custom-select d-block w-100" name="reserveTime" required>
                                     <option value="">선택해주세요.</option>
-                                    <option value="basic">9:00</option>
-                                    <option value="owner">10:00</option>
-                                    <option value="owner">11:00</option>
+                                    <option value="">9:00</option>
+                                    <option value="">10:00</option>
+                                    <option value="">11:00</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     시간을 선택해주세요.
@@ -43,12 +43,15 @@
         
                         <div class="mb-3">
                             <label for="name">인원</label>
-                            <input type="text" class="form-control" placeholder="" value="" required>
+                            <input type="text" name="reserveUserCnt" class="form-control" required>
                             <div class="invalid-feedback">
                                 인원을 선택해주세요.
                             </div>
                         </div>
                     </form>
+
+                    <a class="btn btn-outline-dark mt-auto" href="#" onclick="insertReserve()">예약</a>
+                    <a class="btn btn-outline-dark mt-auto" href="#" onclick="cancelReserve()">취소</a>
                 </div>
             </div>
         </div>
@@ -67,6 +70,14 @@
                 }, false);
                 });
             }, false);
+
+            function insertReserve() {
+                $('#reserveForm').attr('action', '').submit();
+            }
+
+            function cancelReserve() {
+                this.close();
+            }
         </script>
     </body>
 </html>

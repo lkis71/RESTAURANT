@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
 @Table(name = "users")
 @NoArgsConstructor
 public class User {
@@ -27,29 +27,36 @@ public class User {
     
     private String password;
     
+    @Setter
     private String userNm;
     
+    @Setter
     private String phoneNum;
     
+    @Setter
     private Address address;
     
+    @Setter
     private String registNum;
     
+    @Setter
     private String userType;
     
     // 생성메서드
     public static User createUser(String hmpgId, String password, String userNm, String phoneNum, 
         String zipcode, String streetNm, String detailAddress, String registNum, String userType) {
-
-        User user = new User();
-        user.setHmpgId(hmpgId);
-        user.setPassword(password);
-        user.setUserNm(userNm);
-        user.setPhoneNum(phoneNum);
-        user.setAddress(new Address(zipcode, streetNm, detailAddress));
-        user.setRegistNum(registNum);
-        user.setUserType(userType);
         
+        User user = new User();
+
+        user.hmpgId = hmpgId;
+        user.password = password;
+        user.userNm = userNm;
+        user.phoneNum = phoneNum;
+        Address address = new Address(zipcode, streetNm, detailAddress);
+        user.address = address;
+        user.registNum = registNum;
+        user.userType = userType;
+
         return user;
     }
 }
