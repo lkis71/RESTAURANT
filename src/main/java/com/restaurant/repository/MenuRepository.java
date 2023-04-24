@@ -21,9 +21,9 @@ public class MenuRepository {
         em.persist(menu);
     }
 
-    public List<Menu> findMenuByRestId(Long restaurantId) {
-        return em.createQuery("select m from Menu m join fetch m.restaurant r join fetch m.file join fetch r.file where r.id = :restId", Menu.class)
-            .setParameter("restId", restaurantId)
+    public List<Menu> findMenuByrestaurantId(Long restaurantId) {
+        return em.createQuery("select m from Menu m join fetch m.restaurant r join fetch m.file join fetch r.file where r.id = :restaurantId", Menu.class)
+            .setParameter("restaurantId", restaurantId)
             .getResultList();
     }
 

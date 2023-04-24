@@ -18,7 +18,7 @@
 
                 <tbody>
                     <tr th:each="menu : ${menus}">
-                        <td th:text="${menu.menuNm}"></td>
+                        <td th:text="${menu.menuName}"></td>
                         <td th:text="${menu.price}"></td>
                         <td>
                             <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/menus/${menu.id}'|">수정</button>

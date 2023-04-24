@@ -1,11 +1,10 @@
-package com.restaurant.controller.request;
+package com.restaurant.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class LoginRequest {
+public class LoginDto {
 
     private String memberId;
     private String password;

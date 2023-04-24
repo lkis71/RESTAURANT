@@ -1,5 +1,6 @@
 package com.restaurant.service;
 
+import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.controller.dto.MemberUpdateDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Restaurant;
@@ -18,30 +19,42 @@ public class MemberService {
 
     private final MemberRepository userRepository;
 
-    //회원가입
     @Transactional
-    public Long join(Member member) {
+    public Long join(MemberDto memberDto) {
+
+        Address address = new Address(memberDto.getZipcode(), memberDto.getStreetName(), memberDto.getDetailAddress());
+
+        Member member = Member.builder()
+                .memberName(memberDto.getMemberName())
+                .memberId(memberDto.getMemberId())
+                .password(memberDto.getPassword())
+                .phoneNum(memberDto.getPhoneNum())
+                .memberType(memberDto.getMemberType())
+                .address(address)
+                .build();
 
         userRepository.save(member);
 
         return member.getId();
     }
 
-    //회원 시퀀스로 회원정보 조회
     public Member findById(Long id) {
         return userRepository.findOne(id);
     }
 
-    //회원수정
+    public Member findByMemberInfo(String memberId, String password) {
+        return userRepository.findByMemeberInfo(memberId, password);
+    }
+
     @Transactional
-    public Member update(MemberUpdateDto userUpdateDto) {
+    public Member update(MemberUpdateDto memberUpdateDto) {
 
-        Address address = Address.createAddress(
-                userUpdateDto.getZipcode(),
-                userUpdateDto.getStreetName(),
-                userUpdateDto.getDetailAddress());
+        Address address = new Address(
+                memberUpdateDto.getZipcode(),
+                memberUpdateDto.getStreetName(),
+                memberUpdateDto.getDetailAddress());
 
-        Member findMember = userRepository.findOne(userUpdateDto.getId());
+        Member findMember = userRepository.findOne(memberUpdateDto.getId());
         findMember.setMemberName(findMember.getMemberName());
         findMember.setPhoneNum(findMember.getPhoneNum());
         findMember.setAddress(address);

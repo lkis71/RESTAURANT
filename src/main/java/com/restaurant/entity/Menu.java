@@ -26,38 +26,34 @@ public class Menu {
     @Column(name = "menuId")
     private Long id;
 
-    private String menuNm;
+    private String menuName;
 
     private Integer price;
 
     private IntroContent content;
 
-    private String category;
+    private MenuType menuType;
 
-    @JoinColumn(name = "restaurantId")
+    @JoinColumn(name = "restaurant_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
-    @OneToOne(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "file_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;
 
     @Builder
-    public Menu(String menuNm, Integer price, IntroContent content, String category, Restaurant restaurant, FileEntity file) {
-        this.menuNm = menuNm;
+    public Menu(Long id, String menuName, Integer price, IntroContent content, MenuType menuType, Restaurant restaurant, FileEntity file) {
+        this.id = id;
+        this.menuName = menuName;
         this.price = price;
         this.content = content;
-        this.category = category;
+        this.menuType = menuType;
         this.restaurant = restaurant;
         this.file = file;
     }
 
-    public void setMenu(String menuNm, Integer price, String simpleContents, String detailContents, String category, Restaurant restaurant) {
-        this.menuNm = menuNm;
-        this.price = price;
-        this.category = category;
-        this.restaurant = restaurant;
+    public void update(String menuName, Integer price, String simpleContext, String detailContent, MenuType menuType) {
 
-        IntroContent content = new IntroContent(simpleContents, detailContents);
-        this.content = content;
     }
 }

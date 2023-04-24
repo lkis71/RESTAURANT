@@ -1,15 +1,11 @@
 package com.restaurant.service;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.restaurant.controller.dto.LoginDto;
 import com.restaurant.entity.Member;
+import com.restaurant.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.restaurant.controller.request.LoginRequest;
-import com.restaurant.repository.MemberRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +15,7 @@ public class LoginService {
     private final MemberRepository userRepository;
 
     //로그인
-    public Member login(HttpServletRequest request, LoginRequest loginRequest) {
-        String memberId = loginRequest.getMemberId();
-        String password = loginRequest.getPassword();
-        Member user = userRepository.findByMemeberInfo(memberId, password);
-
-        return user;
+    public Member login(LoginDto loginDto) {
+        return userRepository.findByMemeberInfo(loginDto.getMemberId(), loginDto.getPassword());
     }
 }

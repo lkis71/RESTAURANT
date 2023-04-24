@@ -3,7 +3,6 @@ package com.restaurant.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.exception.AlreadyExistMemberIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

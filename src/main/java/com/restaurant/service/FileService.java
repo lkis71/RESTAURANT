@@ -19,10 +19,10 @@ public class FileService {
 
     private final FileRepository FileRepository;
     
-    public static FileEntity uploadFile(MultipartFile file, String fileType) {
+    public FileEntity uploadFile(MultipartFile file) {
 
         String fileNm = file.getOriginalFilename();
-        String savePath = "C:\\VisualStudioCode\\Restaurant\\src\\main\\resources\\static\\upload\\";
+        String savePath = "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\";
         String path = "upload\\";
         Long size = file.getSize();
         String extension = fileNm.substring(fileNm.indexOf(".")+1);
@@ -41,13 +41,13 @@ public class FileService {
         }
 
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setFile(fileNm, path, size, extension, fileType);
+        fileEntity.setFile(fileNm, path, size, extension);
 
         return fileEntity;
     }
 
     @Transactional
-    public Long insertFile(FileEntity fileEntity) {
+    public Long save(FileEntity fileEntity) {
 
         FileRepository.save(fileEntity);
         return fileEntity.getId();

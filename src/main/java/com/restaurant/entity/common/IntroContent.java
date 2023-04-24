@@ -1,6 +1,7 @@
 package com.restaurant.entity.common;
 
 import javax.persistence.Embeddable;
+import javax.persistence.criteria.CriteriaBuilder;
 
 import lombok.*;
 

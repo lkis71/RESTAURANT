@@ -5,8 +5,8 @@
             <h4 class="mb-3" th:if="${restaurant?.id} != null">식당 수정</h4>
             <form class="validation-form" id="restaurantForm" novalidate>
                 <div class="mb-3">
-                    <label for="restaurantNm">식당명</label>
-                    <input type="text" class="form-control" id="restaurantNm" name="restaurantNm" th:value="${restaurant.restaurantNm}" placeholder="식당명을 입력 해 주세요." required>
+                    <label for="restaurantName">식당명</label>
+                    <input type="text" class="form-control" id="restaurantName" name="restaurantName" th:value="${restaurant.restaurantName}" placeholder="식당명을 입력 해 주세요." required>
                     <div class="invalid-feedback">
                         식당명을 입력 해 주세요.
                     </div>

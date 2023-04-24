@@ -8,12 +8,12 @@ import lombok.Getter;
 public class MyRestaurantDto {
     
     private Long id;
-    private String restaurantNm;
+    private String restaurantName;
     private String contact;
 
     public MyRestaurantDto(Restaurant restaurant) {
         this.id = restaurant.getId();
-        this.restaurantNm = restaurant.getRestaurantNm();
+        this.restaurantName = restaurant.getRestaurantName();
         this.contact = restaurant.getContact();
     }
 }

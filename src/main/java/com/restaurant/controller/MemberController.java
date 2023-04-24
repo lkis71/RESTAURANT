@@ -2,15 +2,10 @@ package com.restaurant.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.restaurant.controller.dto.MyMenuDto;
-import com.restaurant.controller.dto.MyRestaurantDto;
-import com.restaurant.controller.dto.MemberDto;
-import com.restaurant.controller.dto.MemberUpdateDto;
-import com.restaurant.controller.request.MenuRequest;
+import com.restaurant.controller.dto.*;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.common.Address;
 import com.restaurant.exception.AlreadyExistMemberIdException;
 import com.restaurant.service.MemberService;
 import com.restaurant.service.MenuService;
@@ -29,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService userService;
+    private final MemberService memberService;
     private final MenuService menuService;
     
     @GetMapping("/users/register")
@@ -42,20 +37,9 @@ public class MemberController {
     }
 
     @PostMapping("/users/register")
-    public String joinUser(@RequestBody MemberDto userDto) throws AlreadyExistMemberIdException {
+    public String joinUser(@RequestBody MemberDto memberDto) throws AlreadyExistMemberIdException {
 
-        Address address = Address.createAddress(userDto.getZipcode(), userDto.getStreetName(), userDto.getDetailAddress());
-
-        Member member = Member.builder()
-                .memberName(userDto.getMemberName())
-                .memberId(userDto.getMemberId())
-                .password(userDto.getPassword())
-                .phoneNum(userDto.getPhoneNum())
-                .memberType(userDto.getMemberType())
-                .address(address)
-                .build();
-
-        userService.join(member);
+        memberService.join(memberDto);
 
         return "redirect:/restaurants";
     }
@@ -80,9 +64,9 @@ public class MemberController {
 
     @PostMapping("/users/{id}/update")
     @ResponseBody
-    public String updateUserInfo(HttpServletRequest request, @PathVariable("id") Long userSeq, @RequestBody MemberUpdateDto userUpdateDto) {
+    public String updateUserInfo(HttpServletRequest request, @RequestBody MemberUpdateDto memberUpdateDto) {
 
-        Member updateMember = userService.update(userUpdateDto);
+        Member updateMember = memberService.update(memberUpdateDto);
         CommonSession.setSessionUserInfo(request, updateMember);
 
         JsonObject obj = new JsonObject(); 
@@ -94,7 +78,7 @@ public class MemberController {
     @GetMapping("/users/{id}/restaurant")
     public String myRestaurants(Model model, @PathVariable("id") Long userSeq) {
 
-        List<Restaurant> restaurants = userService.getMyRestaurantById(userSeq);
+        List<Restaurant> restaurants = memberService.getMyRestaurantById(userSeq);
         List<MyRestaurantDto> restaurantDtos = restaurants.stream()
             .map(o -> new MyRestaurantDto(o))
             .collect(Collectors.toList());
@@ -105,10 +89,10 @@ public class MemberController {
         return "common/subLayout";
     }
 
-    @GetMapping("/users/{userSeq}/restaurants/{restId}/menus")
-    public String myRestaurantMenu(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restId") Long restId) {
+    @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/menus")
+    public String myRestaurantMenu(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
 
-        List<Menu> menus = menuService.getMenusByRestId(restId);
+        List<Menu> menus = menuService.getMenusByrestaurantId(restaurantId);
         List<MyMenuDto> menuDtos = menus.stream()
             .map(o -> new MyMenuDto(o))
             .collect(Collectors.toList());
@@ -132,9 +116,9 @@ public class MemberController {
 
     @PostMapping("/users/{userSeq}/restaurants/menus/{menuId}")
     @ResponseBody
-    public String updateMenu(Model model, @PathVariable("menuId") Long menuId, MenuRequest menuReq) {
+    public String updateMenu(Model model, @PathVariable("menuId") Long menuId, @RequestBody MenuDto menuDto) {
 
-        menuService.updateMenu(menuId, menuReq);
+        menuService.updateMenu(menuId, menuDto);
 
         return new Gson().toJson("");
     }

@@ -1,12 +1,11 @@
 package com.restaurant.service;
 
+import com.restaurant.controller.dto.ReserveDto;
+import com.restaurant.entity.Reserve;
+import com.restaurant.repository.ReserveRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.restaurant.controller.request.reserveRequest;
-import com.restaurant.repository.ReserveRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +14,11 @@ public class ReserveService {
     
     private final ReserveRepository reserveRepository;
 
-    public void reserve(reserveRequest reserveReq) {
-        reserveRepository.save(reserveReq);
+    @Transactional
+    public void reserve(ReserveDto reserveDto) {
+
+        Reserve reserve = new Reserve();
+
+        reserveRepository.save(reserve);
     }
 }

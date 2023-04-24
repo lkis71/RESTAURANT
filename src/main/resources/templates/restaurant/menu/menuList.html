@@ -7,7 +7,7 @@
                         <img class="card-img-top" th:src="|\${menu?.file?.path}${menu?.file?.fileNm}|" alt="..." />
                         <div class="card-body p-4">
                             <div class="text-center">
-                                <h5 class="fw-bolder" th:text="${menu?.menuNm}"></h5>
+                                <h5 class="fw-bolder" th:text="${menu?.menuName}"></h5>
                                 <p th:text="${menu?.price}"></p>
                                 <p th:text="${menu?.content?.simpleContents}"></p>
                             </div>

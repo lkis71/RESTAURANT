@@ -7,8 +7,8 @@ import com.restaurant.entity.common.Address;
 import lombok.*;
 
 @Entity
+@Table(name = "members")
 @Getter
-@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     
@@ -29,6 +29,7 @@ public class Member {
     private String phoneNum;
     
     @Setter
+    @Embedded
     private Address address;
     
     @Setter

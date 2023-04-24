@@ -1,42 +1,28 @@
 package com.restaurant.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.restaurant.controller.dto.MenuDto;
+import com.restaurant.controller.dto.RestaurantDto;
+import com.restaurant.controller.response.MenuResponse;
+import com.restaurant.controller.response.RestaurantResponse;
+import com.restaurant.entity.Menu;
+import com.restaurant.entity.Restaurant;
+import com.restaurant.service.RestaurantService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.restaurant.entity.Member;
-import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.restaurant.controller.dto.MenuDto;
-import com.restaurant.controller.dto.RestaurantDto;
-import com.restaurant.controller.request.RestaurantRequest;
-import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Menu;
-import com.restaurant.entity.Restaurant;
-import com.restaurant.service.FileService;
-import com.restaurant.service.RestaurantService;
-import com.restaurant.service.MemberService;
-
-import lombok.RequiredArgsConstructor;
-
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class RestaurantController {
 
-    private final MemberService userService;
     private final RestaurantService restaurantService;
-    private final FileService fileService;
 
     //목록
     @GetMapping("/restaurants")
@@ -46,8 +32,8 @@ public class RestaurantController {
         @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
         List<Restaurant> restaurants = restaurantService.getPagingRestaurant(cursor, limit);
-        List<RestaurantDto> restaurantDtos = restaurants.stream()
-            .map(o -> new RestaurantDto(o))
+        List<RestaurantResponse> restaurantResponses = restaurants.stream()
+            .map(o -> new RestaurantResponse(o))
             .collect(Collectors.toList());
 
         Map<String, Object> pagingInfo = new HashMap<>();
@@ -57,7 +43,7 @@ public class RestaurantController {
         pagingInfo.put("currPageIdx", currPageIdx);
         
         model.addAttribute("pagingInfo", pagingInfo);
-        model.addAttribute("restaurants", restaurantDtos);
+        model.addAttribute("restaurants", restaurantResponses);
         model.addAttribute("contents", "restaurant/restaurantList");
 
         return "common/subLayout";
@@ -75,27 +61,9 @@ public class RestaurantController {
 
     //등록
     @PostMapping("/restaurants/{id}/new")
-    @ResponseBody
-    public String restaurantForm(Model model, @PathVariable("id") Long userSeq, RestaurantRequest restReq) {
+    public String restaurantForm(Model model, @PathVariable("id") Long userSeq, @RequestBody RestaurantDto restaurantDto) {
 
-        Member user = userService.findById(userSeq);
-
-        Address address = Address.createAddress(restReq.getZipcode(), restReq.getStreetNm(), restReq.getDetailAddress());
-        IntroContent introContent = new IntroContent(restReq.getSimpleContents(), restReq.getDetailContents());
-
-        Restaurant restaurant = Restaurant.builder()
-                .restaurantNm(restReq.getRestaurantNm())
-                .address(address)
-                .contact(restReq.getContact())
-                .category(restReq.getCategory())
-                .content(introContent)
-                .build();
-
-        restaurantService.insertRestaurant(restaurant);
-
-        FileEntity file = FileService.uploadFile(restReq.getFile(), "r");
-        FileEntity fileEntity = FileEntity.createFile(file, restaurant, null);
-        fileService.insertFile(fileEntity);
+        Long restaurantId = restaurantService.save(restaurantDto);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
@@ -105,9 +73,9 @@ public class RestaurantController {
 
     //수정페이지
     @GetMapping("/restaurants/{id}/update")
-    public String updateRestaurantPage(Model model, @PathVariable("id") Long restId) {
+    public String updatePage(Model model, @PathVariable("id") Long restaurantId) {
 
-        Restaurant restaurant = restaurantService.getRestaurant(restId);
+        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
 
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("contents", "restaurant/instRestaurantForm");
@@ -116,20 +84,18 @@ public class RestaurantController {
 
     //수정
     @PostMapping("/restaurants/{id}/update")
-    @ResponseBody
-    public String updateRestaurant(Model model, @PathVariable("id") Long restId, RestaurantRequest restReq) {
+    public String update(Model model, @PathVariable("id") Long restaurantId, @RequestBody RestaurantDto restaurantDto) {
 
-        restaurantService.updateRestaurant(restId, restReq);
+        restaurantService.update(restaurantId, restaurantDto);
 
         return new Gson().toJson("");
     }
 
     //삭제
     @PostMapping("/restaurants/{id}/delete")
-    @ResponseBody
-    public String deleteRestaurant(Model model, @PathVariable("id") Long restId) {
+    public String delete(Model model, @PathVariable("id") Long restaurantId) {
 
-        restaurantService.deleteRestaurant(restId);
+        restaurantService.delete(restaurantId);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
@@ -137,14 +103,14 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants/{id}/menus")
-    public String menuList(Model model, @PathVariable("id") Long restId) {
+    public String menuList(Model model, @PathVariable("id") Long restaurantId) {
         
-        List<Menu> menus = restaurantService.getMenus(restId);
-        List<MenuDto> menuDtos = menus.stream()
-            .map(o -> new MenuDto(o))
+        List<Menu> menus = restaurantService.getMenus(restaurantId);
+        List<MenuResponse> MenuResponses = menus.stream()
+            .map(o -> new MenuResponse(o))
             .collect(Collectors.toList());
 
-        model.addAttribute("menus", menuDtos);
+        model.addAttribute("menus", MenuResponses);
         model.addAttribute("contents", "restaurant/menu/menuList");
         return "common/subLayout";
     }

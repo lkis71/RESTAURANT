@@ -1,28 +1,29 @@
 package com.restaurant.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.restaurant.controller.request.RestaurantRequest;
+import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.common.Address;
+import com.restaurant.entity.common.IntroContent;
 import com.restaurant.repository.RestaurantRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RestaurantService {
-    
+
+    private final FileService fileService;
     private final RestaurantRepository restaurantRepository;
     
     //단건조회
-    public Restaurant getRestaurant(Long restId) {
-        Restaurant restaurant = restaurantRepository.findOne(restId);
+    public Restaurant getRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findOne(restaurantId);
         return restaurant;
     }
 
@@ -37,34 +38,54 @@ public class RestaurantService {
 
     //등록
     @Transactional
-    public Long insertRestaurant(Restaurant restaurant) {
+    public Long save(RestaurantDto restaurantDto) {
+
+        Address address = new Address(restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress());
+        IntroContent introContent = new IntroContent(restaurantDto.getSimpleContents(), restaurantDto.getDetailContents());
+
+        Restaurant restaurant = Restaurant.builder()
+                .restaurantName(restaurantDto.getRestaurantName())
+                .address(address)
+                .contact(restaurantDto.getContact())
+                .restaurantType(restaurantDto.getRestaurantType())
+                .content(introContent)
+                .member(restaurantDto.getMember())
+                .build();
+
+        if (restaurantDto.getFile() != null) {
+            FileEntity fileEntity = fileService.uploadFile(restaurantDto.getFile());
+            fileService.save(fileEntity);
+
+            restaurant.setFile(fileEntity);
+        }
+
         restaurantRepository.save(restaurant);
+
         return restaurant.getId();
     }
 
     //수정
     @Transactional
-    public void updateRestaurant(Long restId, RestaurantRequest restReq) {
+    public void update(Long restaurantId, RestaurantDto restaurantDto) {
         
-        Restaurant restaurant = restaurantRepository.findOne(restId);
-        restaurant.setRestaurant(restReq.getRestaurantNm(), restReq.getZipcode(), restReq.getStreetNm(), restReq.getDetailAddress(), restReq.getContact(), 
-                restReq.getCategory(), restReq.getSimpleContents(), restReq.getDetailContents(), restaurant.getUser());
+        Restaurant restaurant = restaurantRepository.findOne(restaurantId);
+        restaurant.setRestaurant(restaurantDto.getRestaurantName(), restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress(), restaurantDto.getContact(),
+                restaurantDto.getRestaurantType(), restaurantDto.getSimpleContents(), restaurantDto.getDetailContents(), restaurant.getMember());
 
         //파일수정
-        if(!restReq.getFile().isEmpty()) {
-            FileEntity fileEntity = FileService.uploadFile(restReq.getFile(), "r");
-            restaurant.getFile().setFile(fileEntity.getFileNm(), fileEntity.getPath(), fileEntity.getSize(), fileEntity.getExtension(), fileEntity.getFileType());
-            restaurant.getFile().setFileJoinEntity(restaurant, null);
+        if(!restaurantDto.getFile().isEmpty()) {
+            FileEntity fileEntity = fileService.uploadFile(restaurantDto.getFile());
+            restaurant.getFile().setFile(fileEntity.getFileNm(), fileEntity.getPath(), fileEntity.getSize(), fileEntity.getExtension());
         }
     }
 
     //삭제
     @Transactional
-    public void deleteRestaurant(Long restId) {
-        restaurantRepository.deleteById(restId);
+    public void delete(Long restaurantId) {
+        restaurantRepository.deleteById(restaurantId);
     }
 
-    public List<Menu> getMenus(Long restId) {
-        return restaurantRepository.findMenusById(restId);
+    public List<Menu> getMenus(Long restaurantId) {
+        return restaurantRepository.findMenusById(restaurantId);
     }
 }

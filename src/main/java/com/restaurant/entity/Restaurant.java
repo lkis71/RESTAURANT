@@ -1,16 +1,6 @@
 package com.restaurant.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
@@ -29,44 +19,46 @@ public class Restaurant {
     @Column(name = "restaurantId")
     private Long id;
 
-    private String restaurantNm;
+    private String restaurantName;
 
     @Embedded
     private Address address;
 
     private String contact;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private RestaurantType restaurantType;
 
     private IntroContent content;
 
-    @JoinColumn(name = "userSeq")
+    @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member user;
+    private Member member;
 
-    @OneToOne(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "file_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;
 
     @Builder
-    public Restaurant(String restaurantNm, Address address, String contact, String category, IntroContent content, Member user, FileEntity file) {
-        this.restaurantNm = restaurantNm;
+    public Restaurant(String restaurantName, Address address, String contact, RestaurantType restaurantType, IntroContent content, Member member, FileEntity file) {
+        this.restaurantName = restaurantName;
         this.address = address;
         this.contact = contact;
-        this.category = category;
+        this.restaurantType = restaurantType;
         this.content = content;
-        this.user = user;
+        this.member = member;
         this.file = file;
     }
 
-    public void setRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
-            String contact, String category, String simpleContents, String detailContents, Member user) {
+    public void setRestaurant(String restaurantName, String zipcode, String streetNm, String detailAddress, 
+            String contact, RestaurantType restaurantType, String simpleContents, String detailContents, Member member) {
 
-        this.restaurantNm = restaurantNm;
+        this.restaurantName = restaurantName;
         this.contact = contact;
-        this.category = category;
-        this.user = user;
+        this.restaurantType = restaurantType;
+        this.member = member;
 
-        Address address = Address.createAddress(zipcode, streetNm, detailAddress);
+        Address address = new Address(zipcode, streetNm, detailAddress);
         this.address = address;
 
         IntroContent content = new IntroContent(simpleContents, detailContents);
