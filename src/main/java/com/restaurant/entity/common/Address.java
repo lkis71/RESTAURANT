@@ -2,19 +2,27 @@ package com.restaurant.entity.common;
 
 import javax.persistence.Embeddable;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
     
     private String zipcode;
-    private String streetNm;
+    private String streetName;
     private String detailAddress;
 
-    protected Address() {
-        
+    public static Address createAddress(String zipcode, String streetName, String detailAddress) {
+
+        Address address = new Address();
+        address.zipcode = zipcode;
+        address.streetName = streetName;
+        address.detailAddress = detailAddress;
+
+        return address;
     }
 }

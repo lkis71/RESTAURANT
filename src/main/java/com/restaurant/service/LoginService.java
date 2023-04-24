@@ -2,13 +2,12 @@ package com.restaurant.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.restaurant.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.restaurant.controller.request.LoginRequest;
-import com.restaurant.entity.User;
-import com.restaurant.repository.UserRepository;
-import com.restaurant.util.CommonSession;
+import com.restaurant.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 @Transactional (readOnly = true)
 public class LoginService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository userRepository;
 
     //로그인
-    public User login(HttpServletRequest request, LoginRequest loginRequest) {
-        String hmpgId = loginRequest.getHmpgId();
+    public Member login(HttpServletRequest request, LoginRequest loginRequest) {
+        String memberId = loginRequest.getMemberId();
         String password = loginRequest.getPassword();
-        User user = userRepository.findByLoginInfo(hmpgId, password);
+        Member user = userRepository.findByMemeberInfo(memberId, password);
 
         return user;
     }

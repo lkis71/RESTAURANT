@@ -21,8 +21,8 @@
                         <td th:text="${menu.menuNm}"></td>
                         <td th:text="${menu.price}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userId}/restaurants/menus/${menu.id}'|">수정</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|deleteMenu(${userId}, ${menu.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/menus/${menu.id}'|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|deleteMenu(${userSeq}, ${menu.id})|">삭제</button>
                         </td>
                     </tr>
                 </tbody>
@@ -31,11 +31,11 @@
     </div>
 </div>
 <script>
-    function deleteMenu(userId, menuId){
+    function deleteMenu(userSeq, menuId){
         if(confirm("삭제하시겠습니까?")) {
             $.ajax({
                 type : "delete",
-                url : "/users/"+userId+"/restaurants/menus/"+menuId,
+                url : "/users/"+userSeq+"/restaurants/menus/"+menuId,
                 data : "",
                 dataType : "json",
                 success : function(data) {

@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,42 +40,33 @@ public class Restaurant {
 
     private IntroContent content;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userSeq")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member user;
 
     @OneToOne(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;
 
-    //생성메서드
-    public static Restaurant createRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
-            String contact, String category, String simpleContents, String detailContents, User user) {
-
-        Restaurant restaurant = new Restaurant();
-        restaurant.setRestaurantNm(restaurantNm);
-        restaurant.setContact(contact);
-        restaurant.setCategory(category);
-        
-        Address address = new Address(zipcode, streetNm, detailAddress);
-        restaurant.setAddress(address);
-        
-        IntroContent content = new IntroContent(simpleContents, detailContents);
-        restaurant.setContent(content);
-        
-        restaurant.setUser(user);
-
-        return restaurant;
+    @Builder
+    public Restaurant(String restaurantNm, Address address, String contact, String category, IntroContent content, Member user, FileEntity file) {
+        this.restaurantNm = restaurantNm;
+        this.address = address;
+        this.contact = contact;
+        this.category = category;
+        this.content = content;
+        this.user = user;
+        this.file = file;
     }
 
     public void setRestaurant(String restaurantNm, String zipcode, String streetNm, String detailAddress, 
-            String contact, String category, String simpleContents, String detailContents, User user) {
+            String contact, String category, String simpleContents, String detailContents, Member user) {
 
         this.restaurantNm = restaurantNm;
         this.contact = contact;
         this.category = category;
         this.user = user;
 
-        Address address = new Address(zipcode, streetNm, detailAddress);
+        Address address = Address.createAddress(zipcode, streetNm, detailAddress);
         this.address = address;
 
         IntroContent content = new IntroContent(simpleContents, detailContents);

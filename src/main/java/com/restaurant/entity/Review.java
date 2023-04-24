@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,11 @@ public class Review {
     @JoinColumn(name = "reserveId")
     @OneToOne(fetch = FetchType.LAZY)
     private Reserve reserve;
+
+    @Builder
+    public Review(String reviewContents, Integer grade, Reserve reserve) {
+        this.reviewContents = reviewContents;
+        this.grade = grade;
+        this.reserve = reserve;
+    }
 }

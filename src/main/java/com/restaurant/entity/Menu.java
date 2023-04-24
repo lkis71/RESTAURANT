@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 
 import com.restaurant.entity.common.IntroContent;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,12 +41,14 @@ public class Menu {
     @OneToOne(mappedBy = "menu", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;
 
-    public static Menu createMenu(String menuNm, Integer price, String simpleContents, String detailContents, String category, Restaurant restaurant) {
-
-        Menu menu = new Menu();
-        menu.setMenu(menuNm, price, simpleContents, detailContents, category, restaurant);
-
-        return menu;
+    @Builder
+    public Menu(String menuNm, Integer price, IntroContent content, String category, Restaurant restaurant, FileEntity file) {
+        this.menuNm = menuNm;
+        this.price = price;
+        this.content = content;
+        this.category = category;
+        this.restaurant = restaurant;
+        this.file = file;
     }
 
     public void setMenu(String menuNm, Integer price, String simpleContents, String detailContents, String category, Restaurant restaurant) {

@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${userId}, 'insert')|">식당 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${userSeq}, 'insert')|">식당 등록</button>
                 <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} != null" th:onclick="|submitRestaurant(${restaurant.id}, 'update')|">식당 수정</button>
             </form>
         </div>

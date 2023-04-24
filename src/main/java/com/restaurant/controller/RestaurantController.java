@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.restaurant.entity.Member;
+import com.restaurant.entity.common.Address;
+import com.restaurant.entity.common.IntroContent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +24,9 @@ import com.restaurant.controller.request.RestaurantRequest;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.User;
 import com.restaurant.service.FileService;
 import com.restaurant.service.RestaurantService;
-import com.restaurant.service.UserService;
+import com.restaurant.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RestaurantController {
 
-    private final UserService userService;
+    private final MemberService userService;
     private final RestaurantService restaurantService;
     private final FileService fileService;
 
@@ -63,9 +65,9 @@ public class RestaurantController {
     
     //등록페이지
     @GetMapping("/restaurants/{id}/new")
-    public String restaurantPage(Model model, @PathVariable("id") Long userId) {
+    public String restaurantPage(Model model, @PathVariable("id") Long userSeq) {
         
-        model.addAttribute("userId", userId);
+        model.addAttribute("userSeq", userSeq);
         model.addAttribute("restaurant", new Restaurant());
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";
@@ -74,12 +76,20 @@ public class RestaurantController {
     //등록
     @PostMapping("/restaurants/{id}/new")
     @ResponseBody
-    public String restaurantForm(Model model, @PathVariable("id") Long userId, RestaurantRequest restReq) {
+    public String restaurantForm(Model model, @PathVariable("id") Long userSeq, RestaurantRequest restReq) {
 
-        User user = userService.getUserById(userId);
+        Member user = userService.findById(userSeq);
 
-        Restaurant restaurant = Restaurant.createRestaurant(restReq.getRestaurantNm(), restReq.getZipcode(), restReq.getStreetNm(), 
-                restReq.getDetailAddress(), restReq.getContact(), restReq.getCategory(), restReq.getSimpleContents(), restReq.getDetailContents(), user);
+        Address address = Address.createAddress(restReq.getZipcode(), restReq.getStreetNm(), restReq.getDetailAddress());
+        IntroContent introContent = new IntroContent(restReq.getSimpleContents(), restReq.getDetailContents());
+
+        Restaurant restaurant = Restaurant.builder()
+                .restaurantNm(restReq.getRestaurantNm())
+                .address(address)
+                .contact(restReq.getContact())
+                .category(restReq.getCategory())
+                .content(introContent)
+                .build();
 
         restaurantService.insertRestaurant(restaurant);
 

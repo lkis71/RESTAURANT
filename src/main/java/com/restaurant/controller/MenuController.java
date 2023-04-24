@@ -1,5 +1,6 @@
 package com.restaurant.controller;
 
+import com.restaurant.entity.common.IntroContent;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +57,16 @@ public class MenuController {
 
         Restaurant restaurant = restaurantService.getRestaurant(restId);
 
-        Menu menu = Menu.createMenu(menuReq.getMenuNm(), menuReq.getPrice(), menuReq.getSimpleContents(), menuReq.getDetailContents(), menuReq.getCategory(), restaurant);
+        IntroContent introContent = new IntroContent(menuReq.getSimpleContents(), menuReq.getDetailContents());
+
+        Menu menu = Menu.builder()
+                .menuNm(menuReq.getMenuNm())
+                .price(menuReq.getPrice())
+                .content(introContent)
+                .category(menuReq.getCategory())
+                .restaurant(restaurant)
+                .build();
+
         menuService.insertMenu(menu);
 
         FileEntity file = FileService.uploadFile(menuReq.getFile(), "m");

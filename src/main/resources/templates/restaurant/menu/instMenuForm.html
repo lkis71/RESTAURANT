@@ -79,14 +79,14 @@
 
     function submitMenu(id, btnType) {
 
-        const userId = [[${userId}]];
+        const userSeq = [[${userSeq}]];
 
         const form = $("#menuForm")[0];
         const formData = new FormData(form);
 
         $.ajax({
             type : "post",
-            url : btnType == "insert" ? "/menu/"+id+"/new" : "/users/"+userId+"/restaurants/menus/"+id,
+            url : btnType == "insert" ? "/menu/"+id+"/new" : "/users/"+userSeq+"/restaurants/menus/"+id,
             enctype : "multipart/form-data",
             data : formData,
             dataType : "json",
@@ -97,7 +97,7 @@
                 if(btnType === "insert"){
                     location.href = "/users/"+id+"/restaurant";
                 }else if(btnType === "update") {
-                    location.href = "/users/"+userId+"/restaurant";
+                    location.href = "/users/"+userSeq+"/restaurant";
                 }
             },
             error : function(data) {

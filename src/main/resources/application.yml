@@ -3,14 +3,14 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mysql?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.56.1:3306/mysql?serverTimezone=Asia/Seoul
     username: kslee
     password: 9156
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
+
   jpa:
     hibernate:
-      ddl: update
+      ddl-auto: create
     properties:
       hibernate:
       
@@ -29,6 +29,12 @@ spring:
     #true: 영속성 컨텍스트가 트랜잭션 범위를 넘어선다.
     #false: 트랜잭션을 종료할 때 영속성 컨텍스트 또한 닫힌다.
     open-in-view: false
+
+#  batch:
+#    jdbc:
+#      initialize-schema: always
+#    job:
+#      enabled: true
 
 logging:
   level:
