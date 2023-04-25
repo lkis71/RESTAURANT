@@ -4,6 +4,7 @@ import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.UseType;
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
 import com.restaurant.repository.RestaurantRepository;
@@ -21,22 +22,19 @@ public class RestaurantService {
     private final FileService fileService;
     private final RestaurantRepository restaurantRepository;
     
-    //단건조회
-    public Restaurant getRestaurant(Long restaurantId) {
+    public Restaurant findOne(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
         return restaurant;
     }
 
-    public List<Restaurant> getRestaurants() {
-        return restaurantRepository.findAll();
+    public int count() {
+        return restaurantRepository.count();
     }
 
-    //페이징조회
-    public List<Restaurant> getPagingRestaurant(int cursor, int limit) {
-        return restaurantRepository.paging(cursor, limit);
+    public List<Restaurant> findByPaging(Long cursor, int limit) {
+        return restaurantRepository.findByPaging(cursor, limit);
     }
 
-    //등록
     @Transactional
     public Long save(RestaurantDto restaurantDto) {
 
@@ -64,7 +62,6 @@ public class RestaurantService {
         return restaurant.getId();
     }
 
-    //수정
     @Transactional
     public void update(Long restaurantId, RestaurantDto restaurantDto) {
         
@@ -79,10 +76,10 @@ public class RestaurantService {
         }
     }
 
-    //삭제
     @Transactional
     public void delete(Long restaurantId) {
-        restaurantRepository.deleteById(restaurantId);
+        Restaurant findRestaurant = restaurantRepository.findOne(restaurantId);
+        findRestaurant.delete();
     }
 
     public List<Menu> getMenus(Long restaurantId) {

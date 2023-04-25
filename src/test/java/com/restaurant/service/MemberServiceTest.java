@@ -20,7 +20,7 @@ class MemberServiceTest {
     MemberService memberService;
 
     @Test
-    public void join() throws Exception {
+    public void join_member() throws Exception {
         //given
         MemberDto member = setMember();
 
@@ -35,7 +35,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void update_member() throws Exception {
         //given
         MemberDto member = setMember();
 
@@ -56,7 +56,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void findByLoginInfo() throws Exception {
+    public void login() throws Exception {
         //given
         MemberDto member = setMember();
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Restaurant {
     
@@ -19,25 +19,36 @@ public class Restaurant {
     @Column(name = "restaurantId")
     private Long id;
 
+    @Setter
     private String restaurantName;
 
+    @Setter
     @Embedded
     private Address address;
 
+    @Setter
     private String contact;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private RestaurantType restaurantType;
 
+    @Setter
     private IntroContent content;
 
+    @Setter
     @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @Setter
     @JoinColumn(name = "file_id")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private UseType useType;
 
     @Builder
     public Restaurant(String restaurantName, Address address, String contact, RestaurantType restaurantType, IntroContent content, Member member, FileEntity file) {
@@ -48,6 +59,7 @@ public class Restaurant {
         this.content = content;
         this.member = member;
         this.file = file;
+        this.useType = UseType.USE;
     }
 
     public void setRestaurant(String restaurantName, String zipcode, String streetNm, String detailAddress, 
@@ -63,5 +75,10 @@ public class Restaurant {
 
         IntroContent content = new IntroContent(simpleContents, detailContents);
         this.content = content;
+    }
+
+    public void delete() {
+        this.useType = UseType.REMOVE;
+        this.file.setUseType(UseType.REMOVE);
     }
 }

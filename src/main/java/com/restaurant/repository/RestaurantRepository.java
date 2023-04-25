@@ -5,8 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.restaurant.entity.QRestaurant;
 import org.springframework.stereotype.Repository;
 
 import com.restaurant.entity.FileEntity;
@@ -34,24 +34,26 @@ public class RestaurantRepository {
         return jpaQueryFactory.selectFrom(restaurant)
                 .leftJoin(restaurant.file)
                 .where(restaurant.id.eq(restaurantId))
-                .fetchJoin().fetchOne();
+                .fetchOne();
     }
 
-    public List<Restaurant> findAll() {
-        return em.createQuery("select r from Restaurant r"+
-        " join fetch r.file f", Restaurant.class)
-        .getResultList();
+    public int count() {
+        return jpaQueryFactory.selectFrom(restaurant)
+                .fetch().size();
     }
 
     //페이징 조회
-    public List<Restaurant> paging(int cursor, int limit) {
-        return em.createQuery("select r from Restaurant r" +
-        " join fetch r.file f" +
-        " where r.id > :cursor" +
-        " order by r.id", Restaurant.class)
-            .setParameter("cursor", Long.parseLong(String.valueOf(cursor)))
-            .setMaxResults(limit)
-            .getResultList();
+    public List<Restaurant> findByPaging(Long cursor, int limit) {
+        return jpaQueryFactory.selectFrom(restaurant)
+                .leftJoin(restaurant.file)
+                .where(cursorId(cursor))
+                .orderBy(restaurant.id.asc())
+                .limit(limit)
+                .fetch();
+    }
+
+    private BooleanExpression cursorId(Long cursorId){
+        return cursorId == null ? null : restaurant.id.gt(cursorId);
     }
 
     //썸네일 단건조회
@@ -65,12 +67,6 @@ public class RestaurantRepository {
         }catch (NoResultException e) {
             return null;
         }
-    }
-
-    //삭제
-    public void deleteById(Long restaurantId) {
-        Restaurant restaurant = findOne(restaurantId);
-        em.remove(restaurant);
     }
 
     public List<Menu> findMenusById(Long restaurantId) {

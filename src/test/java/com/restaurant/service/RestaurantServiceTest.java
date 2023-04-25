@@ -2,20 +2,18 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.controller.dto.RestaurantDto;
-import com.restaurant.entity.Member;
-import com.restaurant.entity.MemberType;
-import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.RestaurantType;
-import com.restaurant.repository.RestaurantRepository;
+import com.restaurant.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,9 +23,6 @@ class RestaurantServiceTest {
 
     @Autowired
     RestaurantService restaurantService;
-
-    @Autowired
-    RestaurantRepository restaurantRepository;
 
     @Autowired
     MemberService memberService;
@@ -53,7 +48,7 @@ class RestaurantServiceTest {
         Long restaurantId = restaurantService.save(restaurantDto);
 
         //then
-        Restaurant findRestaurant = restaurantRepository.findOne(restaurantId);
+        Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertEquals(restaurantDto.getRestaurantName(), findRestaurant.getRestaurantName());
         assertEquals(restaurantDto.getRestaurantType(), findRestaurant.getRestaurantType());
@@ -70,13 +65,49 @@ class RestaurantServiceTest {
         Long restaurantId = restaurantService.save(restaurantDto);
 
         //then
-        Restaurant findRestaurant = restaurantRepository.findOne(restaurantId);
+        Restaurant findRestaurant = restaurantService.findOne(restaurantId);
+
         assertEquals(restaurantDto.getRestaurantName(), findRestaurant.getRestaurantName());
         assertEquals(restaurantDto.getRestaurantType(), findRestaurant.getRestaurantType());
     }
 
+    @Test
+    public void find_restaurant_paging() throws Exception {
+        //given
+        RestaurantDto restaurantDto = createRestaurantWithFile();
+
+        //when
+        for (int i=0; i<15; i++) {
+            restaurantService.save(restaurantDto);
+        }
+
+        //then
+        List<Restaurant> restaurants1 = restaurantService.findByPaging(0L, 10);
+        List<Restaurant> restaurants2 = restaurantService.findByPaging(10L, 20);
+
+        assertEquals(10, restaurants1.size());
+        assertEquals(5, restaurants2.size());
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void delete_restaurant() throws Exception {
+        //given
+        RestaurantDto restaurantDto = createRestaurantWithFile();
+
+        //when
+        Long restaurantId = restaurantService.save(restaurantDto);
+
+        //then
+        restaurantService.delete(restaurantId);
+        Restaurant findRestaurant = restaurantService.findOne(restaurantId);
+
+        assertEquals(UseType.REMOVE, findRestaurant.getUseType());
+        assertEquals(UseType.REMOVE, findRestaurant.getFile().getUseType());
+    }
+
     private Long joinMember() {
-        MemberDto memberDto = memberDto = MemberDto.builder()
+        MemberDto memberDto = MemberDto.builder()
                 .memberName("사용자1")
                 .phoneNum("010-1234-1234")
                 .memberId("member1")

@@ -2,7 +2,6 @@ package com.restaurant.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.restaurant.controller.dto.MenuDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.MenuResponse;
 import com.restaurant.controller.response.RestaurantResponse;
@@ -27,17 +26,17 @@ public class RestaurantController {
     //목록
     @GetMapping("/restaurants")
     public String restaurantList(Model model,
-        @RequestParam(value = "cursor", defaultValue = "0") int cursor,
+        @RequestParam(value = "cursor", defaultValue = "0") Long cursor,
         @RequestParam(value = "limit", defaultValue = "8") int limit,
         @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
-        List<Restaurant> restaurants = restaurantService.getPagingRestaurant(cursor, limit);
+        List<Restaurant> restaurants = restaurantService.findByPaging(cursor, limit);
         List<RestaurantResponse> restaurantResponses = restaurants.stream()
             .map(o -> new RestaurantResponse(o))
             .collect(Collectors.toList());
 
         Map<String, Object> pagingInfo = new HashMap<>();
-        int maxCnt = restaurantService.getRestaurants().size();
+        int maxCnt = restaurantService.count();
         pagingInfo.put("maxCnt", maxCnt);
         pagingInfo.put("limit", limit);
         pagingInfo.put("currPageIdx", currPageIdx);
@@ -75,7 +74,7 @@ public class RestaurantController {
     @GetMapping("/restaurants/{id}/update")
     public String updatePage(Model model, @PathVariable("id") Long restaurantId) {
 
-        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
+        Restaurant restaurant = restaurantService.findOne(restaurantId);
 
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("contents", "restaurant/instRestaurantForm");

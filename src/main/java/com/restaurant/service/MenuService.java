@@ -24,7 +24,7 @@ public class MenuService {
     @Transactional
     public void insertMenu(Long restaurantId, MenuDto menuDto) {
 
-        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
+        Restaurant restaurant = restaurantService.findOne(restaurantId);
         IntroContent introContent = new IntroContent(menuDto.getSimpleContents(), menuDto.getDetailContents());
 
         Menu menu = Menu.builder()

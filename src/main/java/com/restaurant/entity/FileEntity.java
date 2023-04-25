@@ -1,14 +1,6 @@
 package com.restaurant.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -33,12 +25,17 @@ public class FileEntity {
 
     private String extension;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private UseType useType;
+
     @Builder
     public FileEntity(String fileNm, String path, Long size, String extension) {
         this.fileNm = fileNm;
         this.path = path;
         this.size = size;
         this.extension = extension;
+        this.useType = UseType.USE;
     }
 
     public void setFile(String fileNm, String path, Long size, String extension) {
