@@ -1,0 +1,27 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: kslee
+    password: 9156
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace

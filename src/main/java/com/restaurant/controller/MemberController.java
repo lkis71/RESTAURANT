@@ -64,9 +64,9 @@ public class MemberController {
 
     @PostMapping("/users/{id}/update")
     @ResponseBody
-    public String updateUserInfo(HttpServletRequest request, @RequestBody MemberUpdateDto memberUpdateDto) {
+    public String updateUserInfo(HttpServletRequest request, @RequestBody MemberDto memberDto) {
 
-        Member updateMember = memberService.update(memberUpdateDto);
+        Member updateMember = memberService.update(memberDto);
         CommonSession.setSessionUserInfo(request, updateMember);
 
         JsonObject obj = new JsonObject(); 

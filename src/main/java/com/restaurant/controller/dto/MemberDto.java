@@ -1,7 +1,9 @@
 package com.restaurant.controller.dto;
 
+import com.restaurant.entity.Member;
 import com.restaurant.entity.MemberType;
 
+import com.restaurant.entity.common.Address;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,6 +19,20 @@ public class MemberDto {
     private String streetName;
     private String detailAddress;
     private MemberType memberType;
+
+    public Member toEntity() {
+
+        Address address = new Address(zipcode, streetName, detailAddress);
+
+        return Member.builder()
+                .memberName(memberName)
+                .memberId(memberId)
+                .password(password)
+                .phoneNum(phoneNum)
+                .memberType(memberType)
+                .address(address)
+                .build();
+    }
 
     @Builder
     public MemberDto(Long id, String memberId, String password, String memberName, String phoneNum, String zipcode, String streetName, String detailAddress, MemberType memberType) {

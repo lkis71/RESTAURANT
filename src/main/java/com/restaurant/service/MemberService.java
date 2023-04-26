@@ -1,16 +1,11 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.MemberDto;
-import com.restaurant.controller.dto.MemberUpdateDto;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.common.Address;
 import com.restaurant.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,52 +14,54 @@ public class MemberService {
 
     private final MemberRepository userRepository;
 
+    /**
+     * 회원가입
+     *
+     * @param memberDto
+     * @return
+     */
     @Transactional
     public Long join(MemberDto memberDto) {
 
-        Address address = new Address(memberDto.getZipcode(), memberDto.getStreetName(), memberDto.getDetailAddress());
-
-        Member member = Member.builder()
-                .memberName(memberDto.getMemberName())
-                .memberId(memberDto.getMemberId())
-                .password(memberDto.getPassword())
-                .phoneNum(memberDto.getPhoneNum())
-                .memberType(memberDto.getMemberType())
-                .address(address)
-                .build();
-
+        Member member = memberDto.toEntity();
         userRepository.save(member);
 
         return member.getId();
     }
 
+    /**
+     * 회원 조회(단건)
+     * 
+     * @param id 회원 시퀀스
+     * @return
+     */
     public Member findById(Long id) {
         return userRepository.findOne(id);
     }
 
-    public Member findByMemberInfo(String memberId, String password) {
-        return userRepository.findByMemeberInfo(memberId, password);
+    /**
+     * 회원 조회(로그인 정보)
+     * 
+     * @param memberId 회원ID
+     * @param password 비밀번호
+     * @return
+     */
+    public Member findByLoginInfo(String memberId, String password) {
+        return userRepository.findByLoginInfo(memberId, password);
     }
 
+    /**
+     * 회원 수정
+     * 
+     * @param memberDto
+     * @return
+     */
     @Transactional
-    public Member update(MemberUpdateDto memberUpdateDto) {
+    public Member update(MemberDto memberDto) {
 
-        Address address = new Address(
-                memberUpdateDto.getZipcode(),
-                memberUpdateDto.getStreetName(),
-                memberUpdateDto.getDetailAddress());
+        Member member = userRepository.findOne(memberDto.getId());
+        member.update(memberDto);
 
-        Member findMember = userRepository.findOne(memberUpdateDto.getId());
-        findMember.setMemberName(findMember.getMemberName());
-        findMember.setPhoneNum(findMember.getPhoneNum());
-        findMember.setAddress(address);
-        findMember.setMemberType(findMember.getMemberType());
-
-        return findMember;
-    }
-
-    //내 식당 조회
-    public List<Restaurant> getMyRestaurantById(Long userSeq) {
-        return userRepository.findRestaurantById(userSeq);
+        return member;
     }
 }

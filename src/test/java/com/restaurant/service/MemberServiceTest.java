@@ -65,7 +65,7 @@ class MemberServiceTest {
         Member findMember1 = memberService.findById(memberSeq);
 
         //then
-        Member findMember2 = memberService.findByMemberInfo(findMember1.getMemberId(), findMember1.getPassword());
+        Member findMember2 = memberService.findByLoginInfo(findMember1.getMemberId(), findMember1.getPassword());
 
         assertEquals(findMember1.getMemberName(), findMember2.getMemberName());
         assertEquals(findMember1.getPhoneNum(), findMember2.getPhoneNum());

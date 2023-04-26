@@ -1,19 +1,14 @@
 package com.restaurant.repository;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.UseType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Menu;
-import com.restaurant.entity.Restaurant;
-
-import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
+import java.util.List;
 
 import static com.restaurant.entity.QRestaurant.restaurant;
 
@@ -24,12 +19,21 @@ public class RestaurantRepository {
     private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
 
-    //저장
+    /**
+     * 식당 등록
+     * 
+     * @param restaurant
+     */
     public void save(Restaurant restaurant) {
         em.persist(restaurant);
     }
 
-    //단건조회
+    /**
+     * 식당 조회(단건)
+     * 
+     * @param restaurantId 식당 시퀀스
+     * @return
+     */
     public Restaurant findOne(Long restaurantId) {
         return jpaQueryFactory.selectFrom(restaurant)
                 .leftJoin(restaurant.file)
@@ -37,16 +41,28 @@ public class RestaurantRepository {
                 .fetchOne();
     }
 
+    /**
+     * 등록 된 전체 식당 수
+     *
+     * @return
+     */
     public int count() {
         return jpaQueryFactory.selectFrom(restaurant)
                 .fetch().size();
     }
 
-    //페이징 조회
+    /**
+     * 식당목록 페이징 조회
+     *
+     * @param cursor 커서번호
+     * @param limit 한 페이지에 보여질 목록 수
+     * @return
+     */
     public List<Restaurant> findByPaging(Long cursor, int limit) {
         return jpaQueryFactory.selectFrom(restaurant)
                 .leftJoin(restaurant.file)
-                .where(cursorId(cursor))
+                .where(cursorId(cursor)
+                .and(restaurant.useType.eq(UseType.USE)))
                 .orderBy(restaurant.id.asc())
                 .limit(limit)
                 .fetch();
@@ -55,27 +71,4 @@ public class RestaurantRepository {
     private BooleanExpression cursorId(Long cursorId){
         return cursorId == null ? null : restaurant.id.gt(cursorId);
     }
-
-    //썸네일 단건조회
-    public FileEntity findFileById(Long restaurantId) {
-        try{
-            return em.createQuery("select f from FileEntity f" +
-            " join fetch f.restaurant r" +
-            " where r.id = :restaurantId", FileEntity.class)
-                .setParameter("restaurantId", restaurantId)
-                .getSingleResult();
-        }catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    public List<Menu> findMenusById(Long restaurantId) {
-        return em.createQuery("select m from Menu m" +
-            " join fetch m.restaurant r" +
-            " join fetch m.file f" +
-            " where r.id = :restaurantId", Menu.class)
-            .setParameter("restaurantId", restaurantId)
-            .getResultList();
-    }
-
 }

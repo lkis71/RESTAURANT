@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -37,7 +38,7 @@ public class MenuService {
 
         menuRepository.save(menu);
 
-        FileEntity file = fileService.uploadFile(menuDto.getFile());
+        FileEntity file = FileEntity.upload(menuDto.getFile());
         FileEntity fileEntity = FileEntity.builder()
                 .fileNm(file.getFileNm())
                 .extension(file.getExtension())
@@ -62,8 +63,8 @@ public class MenuService {
         menu.update(menuDto.getMenuName(), menuDto.getPrice(), menuDto.getSimpleContents(), menuDto.getDetailContents(), menuDto.getMenuType());
 
         if(!menuDto.getFile().isEmpty()) {
-            FileEntity fileEntity = fileService.uploadFile(menuDto.getFile());
-            menu.getFile().setFile(fileEntity.getFileNm(), fileEntity.getPath(), fileEntity.getSize(), fileEntity.getExtension());
+            FileEntity fileEntity = FileEntity.upload(menuDto.getFile());
+            menu.setFile(fileEntity);
         }
     }
 

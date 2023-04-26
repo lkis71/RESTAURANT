@@ -7,14 +7,11 @@ import com.restaurant.entity.RestaurantType;
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class RestaurantDto {
     
     private Long id;
@@ -28,4 +25,33 @@ public class RestaurantDto {
     private String detailContents;
     private MultipartFile file;
     private Member member;
+
+    public Restaurant toEntity() {
+
+        Address address = new Address(zipcode, streetName, detailAddress);
+        IntroContent introContent = new IntroContent(simpleContents, detailContents);
+
+        return Restaurant.builder()
+                .restaurantName(restaurantName)
+                .address(address)
+                .contact(contact)
+                .restaurantType(restaurantType)
+                .content(introContent)
+                .member(member)
+                .build();
+    }
+
+    @Builder
+    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, MultipartFile file, Member member) {
+        this.restaurantName = restaurantName;
+        this.zipcode = zipcode;
+        this.streetName = streetName;
+        this.detailAddress = detailAddress;
+        this.contact = contact;
+        this.restaurantType = restaurantType;
+        this.simpleContents = simpleContents;
+        this.detailContents = detailContents;
+        this.file = file;
+        this.member = member;
+    }
 }

@@ -2,6 +2,7 @@ package com.restaurant.entity;
 
 import javax.persistence.*;
 
+import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.common.Address;
 import com.restaurant.entity.common.IntroContent;
 
@@ -9,6 +10,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Getter
@@ -36,7 +39,6 @@ public class Restaurant {
     @Setter
     private IntroContent content;
 
-    @Setter
     @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -62,18 +64,16 @@ public class Restaurant {
         this.useType = UseType.USE;
     }
 
-    public void setRestaurant(String restaurantName, String zipcode, String streetNm, String detailAddress, 
-            String contact, RestaurantType restaurantType, String simpleContents, String detailContents, Member member) {
+    public void update(RestaurantDto restaurantDto) {
 
-        this.restaurantName = restaurantName;
-        this.contact = contact;
-        this.restaurantType = restaurantType;
-        this.member = member;
+        this.restaurantName = restaurantDto.getRestaurantName();
+        this.contact = restaurantDto.getContact();
+        this.restaurantType = restaurantDto.getRestaurantType();
 
-        Address address = new Address(zipcode, streetNm, detailAddress);
+        Address address = new Address(restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress());
+        IntroContent content = new IntroContent(restaurantDto.getSimpleContents(), restaurantDto.getDetailContents());
+
         this.address = address;
-
-        IntroContent content = new IntroContent(simpleContents, detailContents);
         this.content = content;
     }
 

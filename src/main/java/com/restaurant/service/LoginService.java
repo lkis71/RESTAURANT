@@ -16,6 +16,6 @@ public class LoginService {
 
     //로그인
     public Member login(LoginDto loginDto) {
-        return userRepository.findByMemeberInfo(loginDto.getMemberId(), loginDto.getPassword());
+        return userRepository.findByLoginInfo(loginDto.getMemberId(), loginDto.getPassword());
     }
 }

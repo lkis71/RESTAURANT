@@ -2,11 +2,7 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Menu;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.UseType;
-import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
 import com.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,68 +17,86 @@ public class RestaurantService {
 
     private final FileService fileService;
     private final RestaurantRepository restaurantRepository;
-    
+
+    /**
+     * 식당 조회(단건)
+     * 
+     * @param restaurantId
+     * @return
+     */
     public Restaurant findOne(Long restaurantId) {
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
         return restaurant;
     }
 
-    public int count() {
-        return restaurantRepository.count();
-    }
-
+    /**
+     * 식당 조회(페이징)
+     *
+     * @param cursor 커서번호
+     * @param limit 한 페이지에 보여질 목록 수
+     * @return
+     */
     public List<Restaurant> findByPaging(Long cursor, int limit) {
         return restaurantRepository.findByPaging(cursor, limit);
     }
 
+    /**
+     * 등록 된 전체 식당 수
+     * 
+     * @return
+     */
+    public int count() {
+        return restaurantRepository.count();
+    }
+
+    /**
+     * 식당 등록
+     * 
+     * @param restaurantDto
+     * @return
+     */
     @Transactional
     public Long save(RestaurantDto restaurantDto) {
 
-        Address address = new Address(restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress());
-        IntroContent introContent = new IntroContent(restaurantDto.getSimpleContents(), restaurantDto.getDetailContents());
+        Restaurant restaurant = restaurantDto.toEntity();
 
-        Restaurant restaurant = Restaurant.builder()
-                .restaurantName(restaurantDto.getRestaurantName())
-                .address(address)
-                .contact(restaurantDto.getContact())
-                .restaurantType(restaurantDto.getRestaurantType())
-                .content(introContent)
-                .member(restaurantDto.getMember())
-                .build();
-
-        if (restaurantDto.getFile() != null) {
-            FileEntity fileEntity = fileService.uploadFile(restaurantDto.getFile());
-            fileService.save(fileEntity);
-
-            restaurant.setFile(fileEntity);
-        }
+        FileEntity fileEntity = FileEntity.upload(restaurantDto.getFile());
+        fileService.save(fileEntity);
+        restaurant.setFile(fileEntity);
 
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
     }
 
+    /**
+     * 식당 수정
+     * 
+     * @param restaurantId
+     * @param restaurantDto
+     * @return
+     */
     @Transactional
-    public void update(Long restaurantId, RestaurantDto restaurantDto) {
+    public Restaurant update(Long restaurantId, RestaurantDto restaurantDto) {
         
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
-        restaurant.setRestaurant(restaurantDto.getRestaurantName(), restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress(), restaurantDto.getContact(),
-                restaurantDto.getRestaurantType(), restaurantDto.getSimpleContents(), restaurantDto.getDetailContents(), restaurant.getMember());
+        restaurant.update(restaurantDto);
 
-        //파일수정
-        if(!restaurantDto.getFile().isEmpty()) {
-            FileEntity fileEntity = fileService.uploadFile(restaurantDto.getFile());
-            restaurant.getFile().setFile(fileEntity.getFileNm(), fileEntity.getPath(), fileEntity.getSize(), fileEntity.getExtension());
-        }
+        FileEntity fileEntity = FileEntity.upload(restaurantDto.getFile());
+        fileService.save(fileEntity);
+        restaurant.setFile(fileEntity);
+
+        return restaurant;
     }
 
+    /**
+     * 식당 삭제
+     * 
+     * @param restaurantId
+     */
     @Transactional
     public void delete(Long restaurantId) {
         Restaurant findRestaurant = restaurantRepository.findOne(restaurantId);
         findRestaurant.delete();
-    }
-
-    public List<Menu> getMenus(Long restaurantId) {
-        return restaurantRepository.findMenusById(restaurantId);
     }
 }

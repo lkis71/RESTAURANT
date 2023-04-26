@@ -2,6 +2,7 @@ package com.restaurant.entity;
 
 import javax.persistence.*;
 
+import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.entity.common.Address;
 
 import lombok.*;
@@ -44,5 +45,14 @@ public class Member {
         this.phoneNum = phoneNum;
         this.address = address;
         this.memberType = memberType;
+    }
+
+    public void update(MemberDto memberDto) {
+        this.memberName = memberDto.getMemberName();
+        this.phoneNum = memberDto.getPhoneNum();
+        this.memberType = memberDto.getMemberType();
+
+        Address address = new Address(memberDto.getZipcode(), memberDto.getStreetName(), memberDto.getDetailAddress());
+        this.address = address;
     }
 }

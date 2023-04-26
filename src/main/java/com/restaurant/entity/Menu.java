@@ -16,6 +16,7 @@ import com.restaurant.entity.common.IntroContent;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -38,6 +39,7 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
+    @Setter
     @JoinColumn(name = "file_id")
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private FileEntity file;

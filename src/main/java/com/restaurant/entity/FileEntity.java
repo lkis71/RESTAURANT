@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Entity
 @Getter
@@ -38,10 +43,32 @@ public class FileEntity {
         this.useType = UseType.USE;
     }
 
-    public void setFile(String fileNm, String path, Long size, String extension) {
-        this.fileNm = fileNm;
-        this.path = path;
-        this.size = size;
-        this.extension = extension;
+    public static FileEntity upload(MultipartFile file) {
+
+        if (file == null) {
+            return new FileEntity();
+        }
+
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.fileNm = file.getOriginalFilename();
+        fileEntity.path = "upload\\";
+        fileEntity.size = file.getSize();
+        fileEntity.extension = fileEntity.fileNm.substring(fileEntity.fileNm.indexOf(".")+1);
+
+        File fileFolder = new File(fileEntity.path);
+
+        if(!fileFolder.exists()) {
+            fileFolder.mkdirs();
+        }
+
+        try {
+            String savePath = "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\";
+            File uploadFile = new File(savePath+fileEntity.fileNm);
+            file.transferTo(uploadFile);
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileEntity;
     }
 }
