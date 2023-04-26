@@ -1,4 +1,4 @@
-package com.restaurant.entity;
+package com.restaurant.entity.type;
 
 public enum RestaurantType {
 

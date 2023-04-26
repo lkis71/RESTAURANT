@@ -2,11 +2,11 @@ package com.restaurant.entity;
 
 import javax.persistence.*;
 
+import com.restaurant.entity.type.UseType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class FileEntity {
 
     private String path;
 
-    private Long size;
+    private long size;
 
     private String extension;
 
@@ -57,7 +57,7 @@ public class FileEntity {
 
         File fileFolder = new File(fileEntity.path);
 
-        if(!fileFolder.exists()) {
+        if (!fileFolder.exists()) {
             fileFolder.mkdirs();
         }
 
@@ -70,5 +70,9 @@ public class FileEntity {
         }
 
         return fileEntity;
+    }
+
+    public boolean isEmpty() {
+        return size > 0 ? true : false;
     }
 }

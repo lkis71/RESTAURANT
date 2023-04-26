@@ -7,7 +7,9 @@ import com.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -60,10 +62,7 @@ public class RestaurantService {
 
         Restaurant restaurant = restaurantDto.toEntity();
 
-        FileEntity fileEntity = FileEntity.upload(restaurantDto.getFile());
-        fileService.save(fileEntity);
-        restaurant.setFile(fileEntity);
-
+        fileUpload(restaurant, restaurantDto.getFile());
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
@@ -80,11 +79,9 @@ public class RestaurantService {
     public Restaurant update(Long restaurantId, RestaurantDto restaurantDto) {
         
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
-        restaurant.update(restaurantDto);
 
-        FileEntity fileEntity = FileEntity.upload(restaurantDto.getFile());
-        fileService.save(fileEntity);
-        restaurant.setFile(fileEntity);
+        fileUpload(restaurant, restaurantDto.getFile());
+        restaurant.update(restaurantDto);
 
         return restaurant;
     }
@@ -98,5 +95,21 @@ public class RestaurantService {
     public void delete(Long restaurantId) {
         Restaurant findRestaurant = restaurantRepository.findOne(restaurantId);
         findRestaurant.delete();
+    }
+
+    /**
+     * 파일업로드
+     *
+     * @param restaurant
+     * @param file
+     */
+    private void fileUpload(Restaurant restaurant, MultipartFile file) {
+
+        FileEntity fileEntity = FileEntity.upload(file);
+
+        if (fileEntity.isEmpty()) {
+            fileService.save(fileEntity);
+            restaurant.setFile(fileEntity);
+        }
     }
 }

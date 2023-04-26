@@ -3,7 +3,7 @@ package com.restaurant.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.UseType;
+import com.restaurant.entity.type.UseType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +31,7 @@ public class RestaurantRepository {
     /**
      * 식당 조회(단건)
      * 
-     * @param restaurantId 식당 시퀀스
+     * @param restaurantId 식당아이디
      * @return
      */
     public Restaurant findOne(Long restaurantId) {

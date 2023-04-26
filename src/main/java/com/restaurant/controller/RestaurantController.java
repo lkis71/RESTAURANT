@@ -100,17 +100,4 @@ public class RestaurantController {
         jsonObject.addProperty("result", "Y");
         return new Gson().toJson(jsonObject);
     }
-
-    @GetMapping("/restaurants/{id}/menus")
-    public String menuList(Model model, @PathVariable("id") Long restaurantId) {
-        
-        List<Menu> menus = restaurantService.getMenus(restaurantId);
-        List<MenuResponse> MenuResponses = menus.stream()
-            .map(o -> new MenuResponse(o))
-            .collect(Collectors.toList());
-
-        model.addAttribute("menus", MenuResponses);
-        model.addAttribute("contents", "restaurant/menu/menuList");
-        return "common/subLayout";
-    }
 }

@@ -78,21 +78,21 @@ public class MemberController {
     @GetMapping("/users/{id}/restaurant")
     public String myRestaurants(Model model, @PathVariable("id") Long userSeq) {
 
-        List<Restaurant> restaurants = memberService.getMyRestaurantById(userSeq);
-        List<MyRestaurantDto> restaurantDtos = restaurants.stream()
-            .map(o -> new MyRestaurantDto(o))
-            .collect(Collectors.toList());
-
-        model.addAttribute("userSeq", userSeq);
-        model.addAttribute("restaurants", restaurantDtos);
-        model.addAttribute("contents", "user/myRestaurant");
+//        List<Restaurant> restaurants = memberService.getMyRestaurantById(userSeq);
+//        List<MyRestaurantDto> restaurantDtos = restaurants.stream()
+//            .map(o -> new MyRestaurantDto(o))
+//            .collect(Collectors.toList());
+//
+//        model.addAttribute("userSeq", userSeq);
+//        model.addAttribute("restaurants", restaurantDtos);
+//        model.addAttribute("contents", "user/myRestaurant");
         return "common/subLayout";
     }
 
     @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/menus")
     public String myRestaurantMenu(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
 
-        List<Menu> menus = menuService.getMenusByrestaurantId(restaurantId);
+        List<Menu> menus = menuService.findByRestaurantId(restaurantId, 0L, 0);
         List<MyMenuDto> menuDtos = menus.stream()
             .map(o -> new MyMenuDto(o))
             .collect(Collectors.toList());
@@ -104,9 +104,9 @@ public class MemberController {
     }
 
     @GetMapping("/users/{userSeq}/restaurants/menus/{menuId}")
-    public String updateMenuPage(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("menuId") Long menuId) {
+    public String updatePage(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("menuId") Long menuId) {
 
-        Menu menu = menuService.getMenuById(menuId);
+        Menu menu = menuService.findById(menuId);
 
         model.addAttribute("userSeq", userSeq);
         model.addAttribute("menu", menu);
@@ -116,18 +116,18 @@ public class MemberController {
 
     @PostMapping("/users/{userSeq}/restaurants/menus/{menuId}")
     @ResponseBody
-    public String updateMenu(Model model, @PathVariable("menuId") Long menuId, @RequestBody MenuDto menuDto) {
+    public String update(Model model, @RequestBody MenuDto menuDto) {
 
-        menuService.updateMenu(menuId, menuDto);
+        menuService.update(menuDto);
 
         return new Gson().toJson("");
     }
     
     @DeleteMapping("/users/{userSeq}/restaurants/menus/{menuId}")
     @ResponseBody
-    public String deleteMenu(Model model, @PathVariable("menuId") Long menuId) {
+    public String delete(Model model, @PathVariable("menuId") Long menuId) {
         
-        menuService.deleteMenu(menuId);
+        menuService.delete(menuId);
         
         return new Gson().toJson("");
     }

@@ -4,14 +4,14 @@ import javax.persistence.*;
 
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
+import com.restaurant.entity.common.Content;
 
+import com.restaurant.entity.type.RestaurantType;
+import com.restaurant.entity.type.UseType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Getter
@@ -37,7 +37,7 @@ public class Restaurant {
     private RestaurantType restaurantType;
 
     @Setter
-    private IntroContent content;
+    private Content content;
 
     @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,7 +45,7 @@ public class Restaurant {
 
     @Setter
     @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     private FileEntity file;
 
     @Setter
@@ -53,14 +53,13 @@ public class Restaurant {
     private UseType useType;
 
     @Builder
-    public Restaurant(String restaurantName, Address address, String contact, RestaurantType restaurantType, IntroContent content, Member member, FileEntity file) {
+    public Restaurant(String restaurantName, Address address, String contact, RestaurantType restaurantType, Content content, Member member) {
         this.restaurantName = restaurantName;
         this.address = address;
         this.contact = contact;
         this.restaurantType = restaurantType;
         this.content = content;
         this.member = member;
-        this.file = file;
         this.useType = UseType.USE;
     }
 
@@ -71,7 +70,7 @@ public class Restaurant {
         this.restaurantType = restaurantDto.getRestaurantType();
 
         Address address = new Address(restaurantDto.getZipcode(), restaurantDto.getStreetName(), restaurantDto.getDetailAddress());
-        IntroContent content = new IntroContent(restaurantDto.getSimpleContents(), restaurantDto.getDetailContents());
+        Content content = new Content(restaurantDto.getSimpleContents(), restaurantDto.getDetailContents());
 
         this.address = address;
         this.content = content;

@@ -1,8 +1,8 @@
 package com.restaurant.controller.dto;
 
 import com.restaurant.entity.Menu;
-import com.restaurant.entity.MenuType;
-import com.restaurant.entity.common.IntroContent;
+import com.restaurant.entity.type.MenuType;
+import com.restaurant.entity.common.Content;
 
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ public class MyMenuDto {
     private Long id;
     private String menuName;
     private Integer price;
-    private IntroContent content;
+    private Content content;
     private MenuType menuType;
 
     public MyMenuDto(Menu menu) {

@@ -2,10 +2,9 @@ package com.restaurant.controller.response;
 
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Menu;
-import com.restaurant.entity.MenuType;
-import com.restaurant.entity.common.IntroContent;
+import com.restaurant.entity.common.Content;
+import com.restaurant.entity.type.MenuType;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class MenuResponse {
@@ -14,7 +13,7 @@ public class MenuResponse {
     private String menuName;
     private Integer price;
     private MenuType menuType;
-    private IntroContent content;
+    private Content content;
     private FileEntity file;
 
     public MenuResponse(Menu menu) {

@@ -1,20 +1,9 @@
 package com.restaurant.repository;
 
-import javax.persistence.EntityManager;
-
+import com.restaurant.entity.FileEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.restaurant.entity.FileEntity;
+public interface FileRepository extends JpaRepository<FileEntity, Long> {
 
-import lombok.AllArgsConstructor;
-
-@Repository
-@AllArgsConstructor
-public class FileRepository {
-    
-    private final EntityManager em;
-
-    public void save(FileEntity fileEntity) {
-        em.persist(fileEntity);
-    }
 }

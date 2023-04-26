@@ -1,7 +1,6 @@
 package com.restaurant.entity.common;
 
 import javax.persistence.Embeddable;
-import javax.persistence.criteria.CriteriaBuilder;
 
 import lombok.*;
 
@@ -9,7 +8,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class IntroContent {
+public class Content {
     
     private String simpleContents;
     private String detailContents;

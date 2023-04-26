@@ -22,7 +22,7 @@
                         <td th:text="${menu.price}"></td>
                         <td>
                             <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/menus/${menu.id}'|">수정</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|deleteMenu(${userSeq}, ${menu.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|delete(${userSeq}, ${menu.id})|">삭제</button>
                         </td>
                     </tr>
                 </tbody>
@@ -31,7 +31,7 @@
     </div>
 </div>
 <script>
-    function deleteMenu(userSeq, menuId){
+    function delete(userSeq, menuId){
         if(confirm("삭제하시겠습니까?")) {
             $.ajax({
                 type : "delete",

@@ -1,22 +1,15 @@
 package com.restaurant.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-import com.restaurant.entity.common.IntroContent;
-
+import com.restaurant.controller.dto.MenuDto;
+import com.restaurant.entity.common.Content;
+import com.restaurant.entity.type.MenuType;
+import com.restaurant.entity.type.UseType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -29,33 +22,44 @@ public class Menu {
 
     private String menuName;
 
-    private Integer price;
+    private int price;
 
-    private IntroContent content;
+    private Content content;
 
     private MenuType menuType;
 
+    @Setter
     @JoinColumn(name = "restaurant_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
     @Setter
     @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     private FileEntity file;
 
+    private UseType useType;
+
     @Builder
-    public Menu(Long id, String menuName, Integer price, IntroContent content, MenuType menuType, Restaurant restaurant, FileEntity file) {
-        this.id = id;
+    public Menu(String menuName, int price, Content content, MenuType menuType) {
         this.menuName = menuName;
         this.price = price;
         this.content = content;
         this.menuType = menuType;
-        this.restaurant = restaurant;
-        this.file = file;
+        this.useType = UseType.USE;
     }
 
-    public void update(String menuName, Integer price, String simpleContext, String detailContent, MenuType menuType) {
+    public void update(MenuDto menuDto) {
 
+        this.menuName = menuDto.getMenuName();
+        this.price = menuDto.getPrice();
+        this.menuType = menuDto.getMenuType();
+
+        Content updateContent = new Content(menuDto.getSimpleContents(), menuDto.getDetailContents());
+        this.content = updateContent;
+    }
+
+    public void delete() {
+        this.useType = UseType.REMOVE;
     }
 }

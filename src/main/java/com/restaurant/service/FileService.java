@@ -1,6 +1,7 @@
 package com.restaurant.service;
 
 import com.restaurant.entity.FileEntity;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.repository.FileRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

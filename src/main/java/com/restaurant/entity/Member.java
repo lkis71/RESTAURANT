@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.entity.common.Address;
 
+import com.restaurant.entity.type.MemberType;
 import lombok.*;
 
 @Entity

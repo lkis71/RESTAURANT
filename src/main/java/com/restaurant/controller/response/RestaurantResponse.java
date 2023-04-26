@@ -2,9 +2,9 @@ package com.restaurant.controller.response;
 
 import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.RestaurantType;
+import com.restaurant.entity.common.Content;
+import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ public class RestaurantResponse {
     private Address address;
     private String contact;
     private RestaurantType restaurantType;
-    private IntroContent content;
+    private Content content;
     private FileEntity file;
 
     public RestaurantResponse(Restaurant restaurant) {

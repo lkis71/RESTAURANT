@@ -1,11 +1,10 @@
 package com.restaurant.controller.dto;
 
-import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.RestaurantType;
+import com.restaurant.entity.common.Content;
+import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
-import com.restaurant.entity.common.IntroContent;
 
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,21 +25,6 @@ public class RestaurantDto {
     private MultipartFile file;
     private Member member;
 
-    public Restaurant toEntity() {
-
-        Address address = new Address(zipcode, streetName, detailAddress);
-        IntroContent introContent = new IntroContent(simpleContents, detailContents);
-
-        return Restaurant.builder()
-                .restaurantName(restaurantName)
-                .address(address)
-                .contact(contact)
-                .restaurantType(restaurantType)
-                .content(introContent)
-                .member(member)
-                .build();
-    }
-
     @Builder
     public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, MultipartFile file, Member member) {
         this.restaurantName = restaurantName;
@@ -53,5 +37,20 @@ public class RestaurantDto {
         this.detailContents = detailContents;
         this.file = file;
         this.member = member;
+    }
+
+    public Restaurant toEntity() {
+
+        Address address = new Address(zipcode, streetName, detailAddress);
+        Content introContent = new Content(simpleContents, detailContents);
+
+        return Restaurant.builder()
+                .restaurantName(restaurantName)
+                .address(address)
+                .contact(contact)
+                .restaurantType(restaurantType)
+                .content(introContent)
+                .member(member)
+                .build();
     }
 }
