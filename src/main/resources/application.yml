@@ -42,3 +42,6 @@ logging:
     org.hibernate.type: trace #쿼리 파라미터를 보여줌
     p6spy: info
 #    org.hibernate.type: trace
+
+image:
+  path: C:\IdeaProject\restaurant\src\main\resources\static\upload\

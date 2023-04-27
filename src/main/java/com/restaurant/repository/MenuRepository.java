@@ -36,7 +36,7 @@ public class MenuRepository {
      */
     public Menu findOne(Long menuId) {
         return jpaQueryFactory.selectFrom(menu)
-                .leftJoin(menu.file)
+                .leftJoin(menu.menuImages)
                 .where(menu.id.eq(menuId))
                 .fetchOne();
     }
@@ -52,7 +52,7 @@ public class MenuRepository {
     public List<Menu> findByPaging(Long restaurantId, Long cursor, int limit) {
         return jpaQueryFactory.selectFrom(menu)
                 .join(menu.restaurant)
-                .leftJoin(menu.file)
+                .leftJoin(menu.menuImages)
                 .where(menu.restaurant.id.eq(restaurantId)
                 .and(cursorId(cursor)))
                 .limit(limit)

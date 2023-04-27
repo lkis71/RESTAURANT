@@ -13,13 +13,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
 public class Restaurant {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "restaurantId")
+    @Column(name = "restaurant_id")
     private Long id;
 
     @Setter
@@ -44,9 +47,8 @@ public class Restaurant {
     private Member member;
 
     @Setter
-    @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY)
-    private FileEntity file;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<RestaurantImage> restaurantImages = new ArrayList<>();
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -78,6 +80,10 @@ public class Restaurant {
 
     public void delete() {
         this.useType = UseType.REMOVE;
-        this.file.setUseType(UseType.REMOVE);
+
+        // 첨부파일 삭제
+        for (RestaurantImage restaurantImage : restaurantImages) {
+            restaurantImage.delete();
+        }
     }
 }

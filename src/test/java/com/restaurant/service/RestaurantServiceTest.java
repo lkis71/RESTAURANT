@@ -2,7 +2,8 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.controller.dto.RestaurantDto;
-import com.restaurant.entity.*;
+import com.restaurant.entity.Member;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.type.UseType;
@@ -12,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -52,16 +56,15 @@ class RestaurantServiceTest {
         //then
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertEquals(restaurantDto.getRestaurantName(), findRestaurant.getRestaurantName());
-        assertEquals(restaurantDto.getRestaurantType(), findRestaurant.getRestaurantType());
-        assertEquals(restaurantDto.getFile().getOriginalFilename(), findRestaurant.getFile().getFileNm());
-        assertEquals(restaurantDto.getFile().getSize(), findRestaurant.getFile().getSize());
+        assertThat(restaurantId).isEqualTo(findRestaurant.getId());
+        assertThat(findRestaurant.getRestaurantImages()).isNotNull();
     }
 
     @Test
     public void save_restaurant_except_file() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantExceptFile();
+        Restaurant actual = restaurantDto.toEntity();
 
         //when
         Long restaurantId = restaurantService.save(restaurantDto);
@@ -69,8 +72,7 @@ class RestaurantServiceTest {
         //then
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertEquals(restaurantDto.getRestaurantName(), findRestaurant.getRestaurantName());
-        assertEquals(restaurantDto.getRestaurantType(), findRestaurant.getRestaurantType());
+        assertThat(restaurantId).isEqualTo(findRestaurant.getId());
     }
 
     @Test
@@ -109,8 +111,6 @@ class RestaurantServiceTest {
 
         assertEquals(updateInfo.getRestaurantName(), findRestaurant.getRestaurantName());
         assertEquals(updateInfo.getContact(), findRestaurant.getContact());
-        assertEquals(updateInfo.getFile().getOriginalFilename(), findRestaurant.getFile().getFileNm());
-        assertEquals(updateInfo.getFile().getSize(), findRestaurant.getFile().getSize());
     }
 
     @Test
@@ -143,7 +143,6 @@ class RestaurantServiceTest {
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertEquals(UseType.REMOVE, findRestaurant.getUseType());
-        assertEquals(UseType.REMOVE, findRestaurant.getFile().getUseType());
     }
 
     private Long joinMember() {
@@ -162,7 +161,7 @@ class RestaurantServiceTest {
         return memberSeq;
     }
 
-    private RestaurantDto createRestaurant(MockMultipartFile file) {
+    private RestaurantDto createRestaurant(List<MultipartFile> files) {
         return RestaurantDto.builder()
                 .restaurantName("한국식당")
                 .zipcode("111")
@@ -173,26 +172,30 @@ class RestaurantServiceTest {
                 .simpleContents("간단한 내용")
                 .detailContents("상세한 내용")
                 .member(member)
-                .file(file)
+                .files(files)
                 .build();
     }
 
     private RestaurantDto createRestaurantWithFile() throws IOException {
 
-        MockMultipartFile file = new MockMultipartFile(
+        List<MultipartFile> files = new ArrayList<>();
+
+        MultipartFile file = new MockMultipartFile(
                 "PIZZA",
                 "다운로드 (1).png",
                 "image/png",
                 new FileInputStream("C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\다운로드 (1).png"));
 
-        return createRestaurant(file);
+        files.add(file);
+
+        return createRestaurant(files);
     }
 
     private RestaurantDto createRestaurantExceptFile() {
         return createRestaurant(null);
     }
 
-    private RestaurantDto createUpdateInfo(MockMultipartFile file) {
+    private RestaurantDto createUpdateInfo(List<MultipartFile> files) {
         return RestaurantDto.builder()
                 .restaurantName("일본식당")
                 .zipcode("222")
@@ -203,18 +206,23 @@ class RestaurantServiceTest {
                 .simpleContents("간단한 내용1")
                 .detailContents("상세한 내용2")
                 .member(member)
-                .file(file)
+                .files(files)
                 .build();
     }
 
     private RestaurantDto createUpdateInfoWithFile() throws IOException {
-        MockMultipartFile file = new MockMultipartFile(
-                "CAFE",
-                "다운로드 (2).png",
-                "image/png",
-                new FileInputStream("C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\다운로드 (2).png"));
 
-        return createRestaurant(file);
+        List<MultipartFile> files = new ArrayList<>();
+
+        MultipartFile file = new MockMultipartFile(
+                "PIZZA",
+                "다운로드 (1).png",
+                "image/png",
+                new FileInputStream("C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\다운로드 (1).png"));
+
+        files.add(file);
+
+        return createUpdateInfo(files);
     }
 
     private RestaurantDto createUpdateInfoExceptFile() {

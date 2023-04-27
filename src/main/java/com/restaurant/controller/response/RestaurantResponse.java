@@ -1,12 +1,15 @@
 package com.restaurant.controller.response;
 
-import com.restaurant.entity.FileEntity;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.RestaurantImage;
 import com.restaurant.entity.common.Content;
 import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +21,7 @@ public class RestaurantResponse {
     private String contact;
     private RestaurantType restaurantType;
     private Content content;
-    private FileEntity file;
+    private List<RestaurantImage> restaurantFiles = new ArrayList<>();
 
     public RestaurantResponse(Restaurant restaurant) {
         this.id = restaurant.getId();
@@ -27,6 +30,6 @@ public class RestaurantResponse {
         this.contact = restaurant.getContact();
         this.restaurantType = restaurant.getRestaurantType();
         this.content = restaurant.getContent();
-        this.file = restaurant.getFile();
+        this.restaurantFiles = restaurant.getRestaurantImages();
     }
 }

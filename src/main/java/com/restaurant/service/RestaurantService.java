@@ -1,15 +1,14 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.RestaurantDto;
-import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.*;
 import com.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,7 +61,9 @@ public class RestaurantService {
 
         Restaurant restaurant = restaurantDto.toEntity();
 
-        fileUpload(restaurant, restaurantDto.getFile());
+        List<RestaurantImage> restaurantImages = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantImages(restaurantImages);
+
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
@@ -80,7 +81,9 @@ public class RestaurantService {
         
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
 
-        fileUpload(restaurant, restaurantDto.getFile());
+        List<RestaurantImage> restaurantImages = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantImages(restaurantImages);
+
         restaurant.update(restaurantDto);
 
         return restaurant;
@@ -101,15 +104,24 @@ public class RestaurantService {
      * 파일업로드
      *
      * @param restaurant
-     * @param file
+     * @param files
      */
-    private void fileUpload(Restaurant restaurant, MultipartFile file) {
+    private List<RestaurantImage> fileUpload(Restaurant restaurant, List<MultipartFile> files) {
 
-        FileEntity fileEntity = FileEntity.upload(file);
-
-        if (fileEntity.isEmpty()) {
-            fileService.save(fileEntity);
-            restaurant.setFile(fileEntity);
+        if (files == null) {
+            return new ArrayList<>();
         }
+
+        List<RestaurantImage> restaurantImages = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            FileMaster fileMaster = FileMaster.transferTo(file);
+            fileService.save(fileMaster);
+
+            RestaurantImage restaurantImage = RestaurantImage.createRestaurantImage(restaurant, fileMaster);
+            restaurantImages.add(restaurantImage);
+        }
+
+        return restaurantImages;
     }
 }

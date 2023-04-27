@@ -1,15 +1,14 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.MenuDto;
-import com.restaurant.entity.FileEntity;
-import com.restaurant.entity.Menu;
-import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.*;
 import com.restaurant.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,15 +47,19 @@ public class MenuService {
      * @param menuDto
      */
     @Transactional
-    public void save(Long restaurantId, MenuDto menuDto) {
+    public Long save(Long restaurantId, MenuDto menuDto) {
 
         Menu menu = menuDto.toEntity();
 
         Restaurant restaurant = restaurantService.findOne(restaurantId);
         menu.setRestaurant(restaurant);
 
-        fileUpload(menu, menuDto.getFile());
+        List<MenuImage> menuImages = fileUpload(menu, menuDto.getFiles());
+        menu.setMenuImages(menuImages);
+
         menuRepository.save(menu);
+
+        return menu.getId();
     }
 
     /**
@@ -65,12 +68,16 @@ public class MenuService {
      * @param menuDto
      */
     @Transactional
-    public void update(MenuDto menuDto) {
+    public Menu update(MenuDto menuDto) {
 
         Menu menu = menuRepository.findOne(menuDto.getId());
 
-        fileUpload(menu, menuDto.getFile());
+        List<MenuImage> menuImages = fileUpload(menu, menuDto.getFiles());
+        menu.setMenuImages(menuImages);
+
         menu.update(menuDto);
+
+        return menu;
     }
 
     /**
@@ -86,17 +93,26 @@ public class MenuService {
 
     /**
      * 파일업로드
-     * 
+     *
      * @param menu
-     * @param file
+     * @param files
      */
-    private void fileUpload(Menu menu, MultipartFile file) {
-        
-        FileEntity fileEntity = FileEntity.upload(file);
-        
-        if (fileEntity.isEmpty()) {
-            fileService.save(fileEntity);
-            menu.setFile(fileEntity);
+    private List<MenuImage> fileUpload(Menu menu, List<MultipartFile> files) {
+
+        if (files == null) {
+            return new ArrayList<>();
         }
+
+        List<MenuImage> menuImages = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            FileMaster fileMaster = FileMaster.transferTo(file);
+            fileService.save(fileMaster);
+
+            MenuImage menuImage = MenuImage.createMenuImage(menu, fileMaster);
+            menuImages.add(menuImage);
+        }
+
+        return menuImages;
     }
 }

@@ -15,11 +15,11 @@ import java.io.IOException;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "file")
-public class FileEntity {
+@Table(name = "file_master")
+public class FileMaster {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fileId")
+    @Column(name = "file_id")
     private Long id;
 
     private String fileNm;
@@ -35,7 +35,7 @@ public class FileEntity {
     private UseType useType;
 
     @Builder
-    public FileEntity(String fileNm, String path, Long size, String extension) {
+    public FileMaster(String fileNm, String path, Long size, String extension) {
         this.fileNm = fileNm;
         this.path = path;
         this.size = size;
@@ -43,19 +43,19 @@ public class FileEntity {
         this.useType = UseType.USE;
     }
 
-    public static FileEntity upload(MultipartFile file) {
+    public static FileMaster transferTo(MultipartFile file) {
 
         if (file == null) {
-            return new FileEntity();
+            return new FileMaster();
         }
 
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.fileNm = file.getOriginalFilename();
-        fileEntity.path = "upload\\";
-        fileEntity.size = file.getSize();
-        fileEntity.extension = fileEntity.fileNm.substring(fileEntity.fileNm.indexOf(".")+1);
+        FileMaster fileMaster = new FileMaster();
+        fileMaster.fileNm = file.getOriginalFilename();
+        fileMaster.path = "upload\\";
+        fileMaster.size = file.getSize();
+        fileMaster.extension = fileMaster.fileNm.substring(fileMaster.fileNm.indexOf(".")+1);
 
-        File fileFolder = new File(fileEntity.path);
+        File fileFolder = new File(fileMaster.path);
 
         if (!fileFolder.exists()) {
             fileFolder.mkdirs();
@@ -63,16 +63,20 @@ public class FileEntity {
 
         try {
             String savePath = "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\";
-            File uploadFile = new File(savePath+fileEntity.fileNm);
+            File uploadFile = new File(savePath+ fileMaster.fileNm);
             file.transferTo(uploadFile);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
 
-        return fileEntity;
+        return fileMaster;
     }
 
     public boolean isEmpty() {
         return size > 0 ? true : false;
+    }
+
+    public void delete() {
+        this.useType = UseType.REMOVE;
     }
 }

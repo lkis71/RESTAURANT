@@ -9,6 +9,9 @@ import com.restaurant.entity.common.Address;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 public class RestaurantDto {
@@ -22,11 +25,11 @@ public class RestaurantDto {
     private RestaurantType restaurantType;
     private String simpleContents;
     private String detailContents;
-    private MultipartFile file;
+    private List<MultipartFile> files = new ArrayList<>();
     private Member member;
 
     @Builder
-    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, MultipartFile file, Member member) {
+    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, List<MultipartFile> files, Member member) {
         this.restaurantName = restaurantName;
         this.zipcode = zipcode;
         this.streetName = streetName;
@@ -35,7 +38,7 @@ public class RestaurantDto {
         this.restaurantType = restaurantType;
         this.simpleContents = simpleContents;
         this.detailContents = detailContents;
-        this.file = file;
+        this.files = files;
         this.member = member;
     }
 

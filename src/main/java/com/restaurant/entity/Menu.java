@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +19,7 @@ import javax.persistence.*;
 public class Menu {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menuId")
+    @Column(name = "menu_id")
     private Long id;
 
     private String menuName;
@@ -34,9 +36,8 @@ public class Menu {
     private Restaurant restaurant;
 
     @Setter
-    @JoinColumn(name = "file_id")
-    @OneToOne(fetch = FetchType.LAZY)
-    private FileEntity file;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    private List<MenuImage> menuImages = new ArrayList<>();
 
     private UseType useType;
 
@@ -61,5 +62,10 @@ public class Menu {
 
     public void delete() {
         this.useType = UseType.REMOVE;
+
+        // 첨부파일 삭제
+        for (MenuImage menuImage : menuImages) {
+            menuImage.delete();
+        }
     }
 }
