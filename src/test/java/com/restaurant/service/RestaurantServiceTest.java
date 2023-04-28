@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -73,6 +73,7 @@ class RestaurantServiceTest {
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertThat(restaurantId).isEqualTo(findRestaurant.getId());
+        assertThat(findRestaurant.getRestaurantImages()).isEmpty();
     }
 
     @Test
@@ -92,8 +93,8 @@ class RestaurantServiceTest {
 
         List<Restaurant> restaurants2 = restaurantService.findByPaging(lastRestaurant.getId(), limit);
 
-        assertEquals(10, restaurants1.size());
-        assertEquals(5, restaurants2.size());
+        assertThat(10).isEqualTo(restaurants1.size());
+        assertThat(5).isEqualTo(restaurants2.size());
     }
 
     @Test
@@ -107,10 +108,11 @@ class RestaurantServiceTest {
         restaurantService.update(restaurantId, updateInfo);
 
         //then
-        Restaurant findRestaurant = restaurantService.findOne(restaurantId);
+        Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
 
-        assertEquals(updateInfo.getRestaurantName(), findRestaurant.getRestaurantName());
-        assertEquals(updateInfo.getContact(), findRestaurant.getContact());
+        assertThat(updateInfo.getRestaurantName()).isEqualTo(updateRestaurant.getRestaurantName());
+        assertThat(updateInfo.getRestaurantType()).isEqualTo(updateRestaurant.getRestaurantType());
+        assertThat(updateInfo.getFiles().get(0).getOriginalFilename()).isEqualTo(updateRestaurant.getRestaurantImages().get(0).getFileMaster().getFileNm());
     }
 
     @Test
@@ -124,10 +126,10 @@ class RestaurantServiceTest {
         restaurantService.update(restaurantId, updateInfo);
 
         //then
-        Restaurant findRestaurant = restaurantService.findOne(restaurantId);
+        Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
 
-        assertEquals(updateInfo.getRestaurantName(), findRestaurant.getRestaurantName());
-        assertEquals(updateInfo.getContact(), findRestaurant.getContact());
+        assertThat(updateInfo.getRestaurantName()).isEqualTo(updateRestaurant.getRestaurantName());
+        assertThat(updateInfo.getRestaurantType()).isEqualTo(updateRestaurant.getRestaurantType());
     }
 
     @Test
@@ -142,7 +144,7 @@ class RestaurantServiceTest {
         restaurantService.delete(restaurantId);
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertEquals(UseType.REMOVE, findRestaurant.getUseType());
+        assertThat(UseType.REMOVE).isEqualTo(findRestaurant.getUseType());
     }
 
     private Long joinMember() {
@@ -215,10 +217,10 @@ class RestaurantServiceTest {
         List<MultipartFile> files = new ArrayList<>();
 
         MultipartFile file = new MockMultipartFile(
-                "PIZZA",
-                "다운로드 (1).png",
+                "HAMBURGER",
+                "다운로드 (2).png",
                 "image/png",
-                new FileInputStream("C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\다운로드 (1).png"));
+                new FileInputStream("C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\다운로드 (2).png"));
 
         files.add(file);
 

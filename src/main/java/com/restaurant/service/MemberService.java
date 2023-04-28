@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepository userRepository;
+    private final MemberRepository memberRespository;
 
     /**
      * 회원가입
@@ -24,7 +27,7 @@ public class MemberService {
     public Long join(MemberDto memberDto) {
 
         Member member = memberDto.toEntity();
-        userRepository.save(member);
+        memberRespository.save(member);
 
         return member.getId();
     }
@@ -36,7 +39,7 @@ public class MemberService {
      * @return
      */
     public Member findById(Long id) {
-        return userRepository.findOne(id);
+        return memberRespository.findOne(id);
     }
 
     /**
@@ -47,7 +50,7 @@ public class MemberService {
      * @return
      */
     public Member findByLoginInfo(String memberId, String password) {
-        return userRepository.findByLoginInfo(memberId, password);
+        return memberRespository.findByLoginInfo(memberId, password);
     }
 
     /**
@@ -59,9 +62,25 @@ public class MemberService {
     @Transactional
     public Member update(MemberDto memberDto) {
 
-        Member member = userRepository.findOne(memberDto.getId());
+        Member member = memberRespository.findOne(memberDto.getId());
         member.update(memberDto);
 
         return member;
+    }
+
+    /**
+     * 로그인
+     *
+     * @param request
+     * @param memberDto
+     */
+    public HttpSession login(HttpServletRequest request, MemberDto memberDto) {
+
+        Member findMember = memberRespository.findByLoginInfo(memberDto.getMemberId(), memberDto.getPassword());
+
+        HttpSession session = request.getSession();
+        session.setAttribute("MEMBER_INFO", findMember);
+
+        return session;
     }
 }

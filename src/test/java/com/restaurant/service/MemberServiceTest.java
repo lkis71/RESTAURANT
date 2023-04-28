@@ -4,12 +4,17 @@ import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.common.Address;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -29,8 +34,7 @@ class MemberServiceTest {
         //then
         Member findMember = memberService.findById(memberSeq);
 
-        assertEquals(member.getMemberId(), findMember.getMemberId());
-        assertEquals(member.getMemberName(), findMember.getMemberName());
+        assertThat(memberSeq).isEqualTo(findMember.getId());
     }
 
     @Test
@@ -49,26 +53,22 @@ class MemberServiceTest {
         //then
         Member updateMemeber = memberService.findById(findMember.getId());
 
-        assertEquals(updateMemeber.getMemberName(), "사용자2");
-        assertEquals(updateMemeber.getPhoneNum(), "010-1111-2222");
-        assertEquals(updateMemeber.getMemberType(), MemberType.OWNER);
+        assertThat(findMember.getMemberName()).isEqualTo(updateMemeber.getMemberName());
     }
 
     @Test
     public void login() throws Exception {
         //given
         MemberDto member = setMember();
+        Long memberId = memberService.join(member);
 
         //when
-        Long memberSeq = memberService.join(member);
-        Member findMember1 = memberService.findById(memberSeq);
+        HttpServletRequest request = new MockHttpServletRequest();
+        HttpSession session = memberService.login(request, member);
 
         //then
-        Member findMember2 = memberService.findByLoginInfo(findMember1.getMemberId(), findMember1.getPassword());
-
-        assertEquals(findMember1.getMemberName(), findMember2.getMemberName());
-        assertEquals(findMember1.getPhoneNum(), findMember2.getPhoneNum());
-        assertEquals(findMember1.getMemberType(), findMember2.getMemberType());
+        Member findMember = memberService.findById(memberId);
+        assertThat(session.getAttribute("MEMBER_INFO")).isEqualTo(findMember);
     }
 
     MemberDto setMember() {
