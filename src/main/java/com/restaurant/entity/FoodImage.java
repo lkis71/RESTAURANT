@@ -9,15 +9,15 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MenuImage {
+public class FoodImage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_file_id")
+    @Column(name = "food_file_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+    @JoinColumn(name = "food_id")
+    private Food food;
 
     @Setter
     @OneToOne(fetch = FetchType.LAZY)
@@ -28,12 +28,12 @@ public class MenuImage {
     @Enumerated(EnumType.STRING)
     private UseType useType;
 
-    public static MenuImage createMenuImage(Menu menu, FileMaster fileMaster) {
-        MenuImage menuImage = new MenuImage();
-        menuImage.menu = menu;
-        menuImage.fileMaster = fileMaster;
-        menuImage.useType = UseType.USE;
-        return menuImage;
+    public static FoodImage createfoodImage(Food food, FileMaster fileMaster) {
+        FoodImage foodImage = new FoodImage();
+        foodImage.food = food;
+        foodImage.fileMaster = fileMaster;
+        foodImage.useType = UseType.USE;
+        return foodImage;
     }
 
     public void delete() {

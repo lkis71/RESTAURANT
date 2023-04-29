@@ -24,7 +24,7 @@ class MemberServiceTest {
     MemberService memberService;
 
     @Test
-    public void join_member() throws Exception {
+    public void joinMember() throws Exception {
         //given
         MemberDto member = setMember();
 
@@ -38,7 +38,7 @@ class MemberServiceTest {
     }
 
     @Test
-    public void update_member() throws Exception {
+    public void updateMember() throws Exception {
         //given
         MemberDto member = setMember();
 

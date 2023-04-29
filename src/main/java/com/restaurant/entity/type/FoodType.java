@@ -1,6 +1,6 @@
 package com.restaurant.entity.type;
 
-public enum MenuType {
+public enum FoodType {
     PIZZA,
     HAMBURGER,
     PASTA,

@@ -4,11 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.*;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.Menu;
-import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.Food;
 import com.restaurant.exception.AlreadyExistMemberIdException;
 import com.restaurant.service.MemberService;
-import com.restaurant.service.MenuService;
+import com.restaurant.service.FoodService;
 import com.restaurant.util.CommonSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MenuService menuService;
+    private final FoodService foodService;
     
     @GetMapping("/users/register")
     public String joinUserForm(Model model) {
@@ -89,45 +88,45 @@ public class MemberController {
         return "common/subLayout";
     }
 
-    @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/menus")
-    public String myRestaurantMenu(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
+    @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/foods")
+    public String myRestaurantfood(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
 
-        List<Menu> menus = menuService.findByRestaurantId(restaurantId, 0L, 0);
-        List<MyMenuDto> menuDtos = menus.stream()
-            .map(o -> new MyMenuDto(o))
+        List<Food> foods = foodService.findByRestaurantId(restaurantId, 0L, 0);
+        List<MyFoodDto> foodDtos = foods.stream()
+            .map(o -> new MyFoodDto(o))
             .collect(Collectors.toList());
 
         model.addAttribute("userSeq", userSeq);
-        model.addAttribute("menus", menuDtos);
-        model.addAttribute("contents", "user/myMenu");
+        model.addAttribute("foods", foodDtos);
+        model.addAttribute("contents", "user/myfood");
         return "common/subLayout";
     }
 
-    @GetMapping("/users/{userSeq}/restaurants/menus/{menuId}")
-    public String updatePage(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("menuId") Long menuId) {
+    @GetMapping("/users/{userSeq}/restaurants/foods/{foodId}")
+    public String updatePage(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("foodId") Long foodId) {
 
-        Menu menu = menuService.findById(menuId);
+        Food food = foodService.findById(foodId);
 
         model.addAttribute("userSeq", userSeq);
-        model.addAttribute("menu", menu);
-        model.addAttribute("contents", "restaurant/menu/instMenuForm");
+        model.addAttribute("food", food);
+        model.addAttribute("contents", "restaurant/food/instfoodForm");
         return "common/subLayout";
     }
 
-    @PostMapping("/users/{userSeq}/restaurants/menus/{menuId}")
+    @PostMapping("/users/{userSeq}/restaurants/foods/{foodId}")
     @ResponseBody
-    public String update(Model model, @RequestBody MenuDto menuDto) {
+    public String update(Model model, @RequestBody FoodDto foodDto) {
 
-        menuService.update(menuDto);
+        foodService.update(foodDto);
 
         return new Gson().toJson("");
     }
     
-    @DeleteMapping("/users/{userSeq}/restaurants/menus/{menuId}")
+    @DeleteMapping("/users/{userSeq}/restaurants/foods/{foodId}")
     @ResponseBody
-    public String delete(Model model, @PathVariable("menuId") Long menuId) {
+    public String delete(Model model, @PathVariable("foodId") Long foodId) {
         
-        menuService.delete(menuId);
+        foodService.delete(foodId);
         
         return new Gson().toJson("");
     }

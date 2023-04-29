@@ -1,8 +1,8 @@
 package com.restaurant.controller.dto;
 
-import com.restaurant.entity.Menu;
+import com.restaurant.entity.Food;
 import com.restaurant.entity.common.Content;
-import com.restaurant.entity.type.MenuType;
+import com.restaurant.entity.type.FoodType;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,37 +11,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class MenuDto {
+public class FoodDto {
     
     private Long id;
-    private String menuName;
-    private Integer price;
-    private MenuType menuType;
+    private String foodName;
+    private int price;
+    private FoodType foodType;
     private String simpleContents;
     private String detailContents;
     private List<MultipartFile> files = new ArrayList<>();
 
     @Builder
-    public MenuDto(String menuName, Integer price, MenuType menuType, String simpleContents, String detailContents, List<MultipartFile> files) {
-        this.menuName = menuName;
+    public FoodDto(String foodName, Integer price, FoodType foodType, String simpleContents, String detailContents, List<MultipartFile> files) {
+        this.foodName = foodName;
         this.price = price;
-        this.menuType = menuType;
+        this.foodType = foodType;
         this.simpleContents = simpleContents;
         this.detailContents = detailContents;
         this.files = files;
     }
 
-    public Menu toEntity() {
+    public Food toEntity() {
 
         Content content = new Content(simpleContents, detailContents);
 
-        Menu menu = Menu.builder()
-                .menuName(menuName)
+        Food food = Food.builder()
+                .foodName(foodName)
                 .price(price)
                 .content(content)
-                .menuType(menuType)
+                .foodType(foodType)
                 .build();
 
-        return menu;
+        return food;
     }
 }

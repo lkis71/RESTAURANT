@@ -1,8 +1,8 @@
 package com.restaurant.entity;
 
-import com.restaurant.controller.dto.MenuDto;
+import com.restaurant.controller.dto.FoodDto;
 import com.restaurant.entity.common.Content;
-import com.restaurant.entity.type.MenuType;
+import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.UseType;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,19 +16,19 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Menu {
+public class Food {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_id")
+    @Column(name = "food_id")
     private Long id;
 
-    private String menuName;
+    private String foodName;
 
     private int price;
 
     private Content content;
 
-    private MenuType menuType;
+    private FoodType foodType;
 
     @Setter
     @JoinColumn(name = "restaurant_id")
@@ -36,27 +36,27 @@ public class Menu {
     private Restaurant restaurant;
 
     @Setter
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
-    private List<MenuImage> menuImages = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
+    private List<FoodImage> foodImages = new ArrayList<>();
 
     private UseType useType;
 
     @Builder
-    public Menu(String menuName, int price, Content content, MenuType menuType) {
-        this.menuName = menuName;
+    public Food(String foodName, int price, Content content, FoodType foodType) {
+        this.foodName = foodName;
         this.price = price;
         this.content = content;
-        this.menuType = menuType;
+        this.foodType = foodType;
         this.useType = UseType.USE;
     }
 
-    public void update(MenuDto menuDto) {
+    public void update(FoodDto foodDto) {
 
-        this.menuName = menuDto.getMenuName();
-        this.price = menuDto.getPrice();
-        this.menuType = menuDto.getMenuType();
+        this.foodName = foodDto.getFoodName();
+        this.price = foodDto.getPrice();
+        this.foodType = foodDto.getFoodType();
 
-        Content updateContent = new Content(menuDto.getSimpleContents(), menuDto.getDetailContents());
+        Content updateContent = new Content(foodDto.getSimpleContents(), foodDto.getDetailContents());
         this.content = updateContent;
     }
 
@@ -64,8 +64,8 @@ public class Menu {
         this.useType = UseType.REMOVE;
 
         // 첨부파일 삭제
-        for (MenuImage menuImage : menuImages) {
-            menuImage.delete();
+        for (FoodImage foodImage : foodImages) {
+            foodImage.delete();
         }
     }
 }

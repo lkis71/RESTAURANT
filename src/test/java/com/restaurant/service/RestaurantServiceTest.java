@@ -46,7 +46,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void save_restaurant_with_file() throws Exception {
+    public void saveRestaurantWithFile() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantWithFile();
 
@@ -61,7 +61,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void save_restaurant_except_file() throws Exception {
+    public void saveRestaurantExceptFile() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantExceptFile();
         Restaurant actual = restaurantDto.toEntity();
@@ -77,7 +77,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void find_restaurant_paging() throws Exception {
+    public void findRestaurantPaging() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantWithFile();
         int limit = 10;
@@ -98,7 +98,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void update_restaurant_with_file() throws Exception {
+    public void updateRestaurantWithFile() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantWithFile();
         Long restaurantId = restaurantService.save(restaurantDto);
@@ -116,7 +116,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void update_restaurant_except_file() throws Exception {
+    public void updateRestaurantExceptFile() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantWithFile();
         Long restaurantId = restaurantService.save(restaurantDto);
@@ -133,7 +133,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void delete_restaurant() throws Exception {
+    public void deleteRestaurant() throws Exception {
         //given
         RestaurantDto restaurantDto = createRestaurantWithFile();
 

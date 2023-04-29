@@ -2,8 +2,8 @@ package com.restaurant.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.restaurant.controller.dto.MenuDto;
-import com.restaurant.service.MenuService;
+import com.restaurant.controller.dto.FoodDto;
+import com.restaurant.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,38 +14,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
-public class MenuController {
+public class FoodController {
 
-    private final MenuService menuService;
+    private final FoodService foodService;
     
-    @GetMapping("/menus")
-    public String menuList(Model model) {
+    @GetMapping("/foods")
+    public String foodList(Model model) {
         
-        model.addAttribute("contents", "restaurant/menu/menuList");
+        model.addAttribute("contents", "restaurant/food/foodList");
         return "common/subLayout";
     }
 
-    @GetMapping("/menus/info")
-    public String menuInfo(Model model) {
+    @GetMapping("/foods/info")
+    public String foodInfo(Model model) {
 
-        model.addAttribute("contents", "restaurant/menu/menuInfo");
+        model.addAttribute("contents", "restaurant/food/foodInfo");
         return "common/subLayout";
     }
 
     //메뉴 등록페이지
-    @GetMapping("/menu/{id}/new")
+    @GetMapping("/food/{id}/new")
     public String savePage(Model model, @PathVariable("id") Long restaurantId) {
 
         model.addAttribute("restaurantId", restaurantId);
-        model.addAttribute("contents", "restaurant/menu/instMenuForm");
+        model.addAttribute("contents", "restaurant/food/instfoodForm");
         return "common/subLayout";
     }
 
-    @PostMapping("/menu/{id}/new")
+    @PostMapping("/food/{id}/new")
     @ResponseBody
-    public String save(Model model, @PathVariable("id") Long restaurantId, MenuDto menuDto) {
+    public String save(Model model, @PathVariable("id") Long restaurantId, FoodDto foodDto) {
 
-        menuService.save(restaurantId, menuDto);
+        foodService.save(restaurantId, foodDto);
         
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");

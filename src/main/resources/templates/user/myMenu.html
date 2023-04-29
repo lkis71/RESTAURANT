@@ -17,12 +17,12 @@
                 </thead>
 
                 <tbody>
-                    <tr th:each="menu : ${menus}">
-                        <td th:text="${menu.menuName}"></td>
-                        <td th:text="${menu.price}"></td>
+                    <tr th:each="food : ${foods}">
+                        <td th:text="${food.foodName}"></td>
+                        <td th:text="${food.price}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/menus/${menu.id}'|">수정</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|delete(${userSeq}, ${menu.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/foods/${food.id}'|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|delete(${userSeq}, ${food.id})|">삭제</button>
                         </td>
                     </tr>
                 </tbody>
@@ -31,11 +31,11 @@
     </div>
 </div>
 <script>
-    function delete(userSeq, menuId){
+    function delete(userSeq, foodId){
         if(confirm("삭제하시겠습니까?")) {
             $.ajax({
                 type : "delete",
-                url : "/users/"+userSeq+"/restaurants/menus/"+menuId,
+                url : "/users/"+userSeq+"/restaurants/foods/"+foodId,
                 data : "",
                 dataType : "json",
                 success : function(data) {
