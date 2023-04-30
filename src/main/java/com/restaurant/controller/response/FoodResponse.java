@@ -21,7 +21,7 @@ public class FoodResponse {
 
     public FoodResponse(Food food) {
         this.id = food.getId();
-        this.foodName = food.getfoodName();
+        this.foodName = food.getFoodName();
         this.price = food.getPrice();
         this.foodType = food.getFoodType();
         this.content = food.getContent();

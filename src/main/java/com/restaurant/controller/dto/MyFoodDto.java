@@ -17,7 +17,7 @@ public class MyFoodDto {
 
     public MyFoodDto(Food food) {
         this.id = food.getId();
-        this.foodName = food.getfoodName();
+        this.foodName = food.getFoodName();
         this.price = food.getPrice();
         this.content = food.getContent();
         this.foodType = food.getFoodType();

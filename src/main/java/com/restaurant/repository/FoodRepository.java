@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.restaurant.entity.Qfood.food;
+import static com.restaurant.entity.QFood.food;
 import static com.restaurant.entity.QRestaurant.restaurant;
 
 @Repository

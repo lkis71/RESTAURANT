@@ -2,12 +2,14 @@ package com.restaurant.entity;
 
 import com.restaurant.entity.type.UseType;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FoodImage {
 
