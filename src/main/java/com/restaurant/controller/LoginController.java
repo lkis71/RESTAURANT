@@ -37,7 +37,7 @@ public class LoginController {
             CommonSession.setSessionUserInfo(request, user);
             return "redirect:/restaurants";
         }else {
-            return "redirect:/users/register";
+            return "redirect:/users/join";
         }
     }
 

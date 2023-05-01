@@ -7,6 +7,7 @@ import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class RestaurantController {
 
