@@ -58,7 +58,7 @@ public class RestaurantController {
 
     //등록
     @PostMapping("/restaurants/{id}/new")
-    public String restaurantForm(Model model, @PathVariable("id") Long userSeq, @RequestBody RestaurantDto restaurantDto) {
+    public String restaurantForm(Model model, @RequestBody RestaurantDto restaurantDto) {
 
         Long restaurantId = restaurantService.save(restaurantDto);
 

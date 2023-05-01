@@ -1,8 +1,11 @@
 package com.restaurant.entity.common;
 
-import javax.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter

@@ -24,22 +24,22 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public Long join(MemberDto memberDto) {
+    public String join(MemberDto memberDto) {
 
         Member member = memberDto.toEntity();
         memberRespository.save(member);
 
-        return member.getId();
+        return member.getMemberId();
     }
 
     /**
      * 회원 조회(단건)
      * 
-     * @param id 회원 시퀀스
+     * @param memberId 회원 아이디
      * @return
      */
-    public Member findById(Long id) {
-        return memberRespository.findOne(id);
+    public Member findById(String memberId) {
+        return memberRespository.findOne(memberId);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MemberService {
     @Transactional
     public Member update(MemberDto memberDto) {
 
-        Member member = memberRespository.findOne(memberDto.getId());
+        Member member = memberRespository.findOne(memberDto.getMemberId());
         member.update(memberDto);
 
         return member;

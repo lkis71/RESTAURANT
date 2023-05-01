@@ -32,9 +32,9 @@ public class Reserve {
 
     private String reserveStatus;
 
-    @JoinColumn(name = "userSeq")
+    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member user;
+    private Member member;
     
     @JoinColumn(name = "restaurantId")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +46,7 @@ public class Reserve {
         this.reserveTime = reserveTime;
         this.reserveUserCnt = reserveUserCnt;
         this.reserveStatus = reserveStatus;
-        this.user = user;
+        this.member = member;
         this.restaurant = restaurant;
     }
 }

@@ -28,12 +28,12 @@ class MemberServiceTest {
         MemberDto member = setMember();
 
         //when
-        Long memberSeq = memberService.join(member);
+        String memberId = memberService.join(member);
 
         //then
-        Member findMember = memberService.findById(memberSeq);
+        Member findMember = memberService.findById(memberId);
 
-        assertThat(memberSeq).isEqualTo(findMember.getId());
+        assertThat(memberId).isEqualTo(findMember.getMemberId());
     }
 
     @Test
@@ -42,15 +42,15 @@ class MemberServiceTest {
         MemberDto member = setMember();
 
         //when
-        Long memberSeq = memberService.join(member);
+        String memberId = memberService.join(member);
 
-        Member findMember = memberService.findById(memberSeq);
+        Member findMember = memberService.findById(memberId);
         findMember.setMemberName("사용자2");
         findMember.setPhoneNum("010-1111-2222");
         findMember.setMemberType(MemberType.OWNER);
 
         //then
-        Member updateMemeber = memberService.findById(findMember.getId());
+        Member updateMemeber = memberService.findById(findMember.getMemberId());
 
         assertThat(findMember.getMemberName()).isEqualTo(updateMemeber.getMemberName());
     }
@@ -59,7 +59,7 @@ class MemberServiceTest {
     public void login() throws Exception {
         //given
         MemberDto member = setMember();
-        Long memberId = memberService.join(member);
+        String memberId = memberService.join(member);
 
         //when
         HttpServletRequest request = new MockHttpServletRequest();

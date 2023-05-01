@@ -42,8 +42,8 @@ class RestaurantServiceTest {
     @BeforeEach
     public void init() {
 
-        Long memberSeq = joinMember();
-        this.member = memberService.findById(memberSeq);
+        String memberId = joinMember();
+        this.member = memberService.findById(memberId);
     }
 
     @Test
@@ -149,7 +149,7 @@ class RestaurantServiceTest {
         assertThat(UseType.REMOVE).isEqualTo(findRestaurant.getUseType());
     }
 
-    private Long joinMember() {
+    private String joinMember() {
         MemberDto memberDto = MemberDto.builder()
                 .memberName("사용자1")
                 .phoneNum("010-1234-1234")
@@ -161,8 +161,8 @@ class RestaurantServiceTest {
                 .detailAddress("333")
                 .build();
 
-        Long memberSeq = memberService.join(memberDto);
-        return memberSeq;
+        String memberId = memberService.join(memberDto);
+        return memberId;
     }
 
     private RestaurantDto createRestaurantDto(List<MultipartFile> files) {
