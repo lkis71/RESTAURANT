@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FoodImage {
+public class FoodFile {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "food_file_id")
@@ -30,12 +30,12 @@ public class FoodImage {
     @Enumerated(EnumType.STRING)
     private UseType useType;
 
-    public static FoodImage createfoodImage(Food food, FileMaster fileMaster) {
-        FoodImage foodImage = new FoodImage();
-        foodImage.food = food;
-        foodImage.fileMaster = fileMaster;
-        foodImage.useType = UseType.USE;
-        return foodImage;
+    public static FoodFile createFoodFile(Food food, FileMaster fileMaster) {
+        FoodFile foodFile = new FoodFile();
+        foodFile.food = food;
+        foodFile.fileMaster = fileMaster;
+        foodFile.useType = UseType.USE;
+        return foodFile;
     }
 
     public void delete() {

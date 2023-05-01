@@ -37,7 +37,7 @@ public class Food {
 
     @Setter
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
-    private List<FoodImage> foodImages = new ArrayList<>();
+    private List<FoodFile> foodFiles = new ArrayList<>();
 
     private UseType useType;
 
@@ -64,8 +64,8 @@ public class Food {
         this.useType = UseType.REMOVE;
 
         // 첨부파일 삭제
-        for (FoodImage foodImage : foodImages) {
-            foodImage.delete();
+        for (FoodFile foodFile : foodFiles) {
+            foodFile.delete();
         }
     }
 }

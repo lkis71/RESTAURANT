@@ -36,7 +36,7 @@ public class FoodRepository {
      */
     public Food findOne(Long foodId) {
         return jpaQueryFactory.selectFrom(food)
-                .leftJoin(food.foodImages)
+                .leftJoin(food.foodFiles)
                 .where(food.id.eq(foodId))
                 .fetchOne();
     }
@@ -52,7 +52,7 @@ public class FoodRepository {
     public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
         return jpaQueryFactory.selectFrom(food)
                 .join(food.restaurant)
-                .leftJoin(food.foodImages)
+                .leftJoin(food.foodFiles)
                 .where(food.restaurant.id.eq(restaurantId)
                 .and(cursorId(cursor)))
                 .limit(limit)

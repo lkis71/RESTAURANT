@@ -54,8 +54,8 @@ public class FoodService {
         Restaurant restaurant = restaurantService.findOne(restaurantId);
         food.setRestaurant(restaurant);
 
-        List<FoodImage> foodImages = fileUpload(food, foodDto.getFiles());
-        food.setFoodImages(foodImages);
+        List<FoodFile> foodFiles = fileUpload(food, foodDto.getFiles());
+        food.setFoodFiles(foodFiles);
 
         foodRepository.save(food);
 
@@ -72,8 +72,8 @@ public class FoodService {
 
         Food food = foodRepository.findOne(foodDto.getId());
 
-        List<FoodImage> foodImages = fileUpload(food, foodDto.getFiles());
-        food.setFoodImages(foodImages);
+        List<FoodFile> foodFiles = fileUpload(food, foodDto.getFiles());
+        food.setFoodFiles(foodFiles);
 
         food.update(foodDto);
 
@@ -97,22 +97,22 @@ public class FoodService {
      * @param food
      * @param files
      */
-    private List<FoodImage> fileUpload(Food food, List<MultipartFile> files) {
+    private List<FoodFile> fileUpload(Food food, List<MultipartFile> files) {
 
         if (files == null) {
             return new ArrayList<>();
         }
 
-        List<FoodImage> foodImages = new ArrayList<>();
+        List<FoodFile> foodFiles = new ArrayList<>();
 
         for (MultipartFile file : files) {
             FileMaster fileMaster = FileMaster.transferTo(file);
             fileService.save(fileMaster);
 
-            FoodImage foodImage = FoodImage.createfoodImage(food, fileMaster);
-            foodImages.add(foodImage);
+            FoodFile foodImage = FoodFile.createFoodFile(food, fileMaster);
+            foodFiles.add(foodImage);
         }
 
-        return foodImages;
+        return foodFiles;
     }
 }

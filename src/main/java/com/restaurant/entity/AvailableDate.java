@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class AvailableDate {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "availableId")
+    @Column(name = "available_id")
     private Long id;
 
     private LocalDateTime availableDate;
@@ -29,7 +29,7 @@ public class AvailableDate {
 
     private String reserveStatus;
 
-    @JoinColumn(name = "restaurantId")
+    @JoinColumn(name = "restaurant_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 }

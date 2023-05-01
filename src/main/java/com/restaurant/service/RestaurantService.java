@@ -61,8 +61,8 @@ public class RestaurantService {
 
         Restaurant restaurant = restaurantDto.toEntity();
 
-        List<RestaurantImage> restaurantImages = fileUpload(restaurant, restaurantDto.getFiles());
-        restaurant.setRestaurantImages(restaurantImages);
+        List<RestaurantFile> restaurantFiles = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantFiles(restaurantFiles);
 
         restaurantRepository.save(restaurant);
 
@@ -81,8 +81,8 @@ public class RestaurantService {
         
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
 
-        List<RestaurantImage> restaurantImages = fileUpload(restaurant, restaurantDto.getFiles());
-        restaurant.setRestaurantImages(restaurantImages);
+        List<RestaurantFile> restaurantFiles = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantFiles(restaurantFiles);
 
         restaurant.update(restaurantDto);
 
@@ -106,22 +106,22 @@ public class RestaurantService {
      * @param restaurant
      * @param files
      */
-    private List<RestaurantImage> fileUpload(Restaurant restaurant, List<MultipartFile> files) {
+    private List<RestaurantFile> fileUpload(Restaurant restaurant, List<MultipartFile> files) {
 
         if (files == null) {
             return new ArrayList<>();
         }
 
-        List<RestaurantImage> restaurantImages = new ArrayList<>();
+        List<RestaurantFile> restaurantFiles = new ArrayList<>();
 
         for (MultipartFile file : files) {
             FileMaster fileMaster = FileMaster.transferTo(file);
             fileService.save(fileMaster);
 
-            RestaurantImage restaurantImage = RestaurantImage.createRestaurantImage(restaurant, fileMaster);
-            restaurantImages.add(restaurantImage);
+            RestaurantFile restaurantFile = RestaurantFile.createRestaurantFile(restaurant, fileMaster);
+            restaurantFiles.add(restaurantFile);
         }
 
-        return restaurantImages;
+        return restaurantFiles;
     }
 }

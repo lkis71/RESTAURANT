@@ -48,7 +48,7 @@ public class Restaurant {
 
     @Setter
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    private List<RestaurantImage> restaurantImages = new ArrayList<>();
+    private List<RestaurantFile> restaurantFiles = new ArrayList<>();
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -82,8 +82,8 @@ public class Restaurant {
         this.useType = UseType.REMOVE;
 
         // 첨부파일 삭제
-        for (RestaurantImage restaurantImage : restaurantImages) {
-            restaurantImage.delete();
+        for (RestaurantFile restaurantFile : restaurantFiles) {
+            restaurantFile.delete();
         }
     }
 }

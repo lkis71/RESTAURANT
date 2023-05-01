@@ -1,7 +1,7 @@
 package com.restaurant.controller.response;
 
 import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.RestaurantImage;
+import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.common.Content;
 import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
@@ -21,7 +21,7 @@ public class RestaurantResponse {
     private String contact;
     private RestaurantType restaurantType;
     private Content content;
-    private List<RestaurantImage> restaurantFiles = new ArrayList<>();
+    private List<RestaurantFile> restaurantFiles = new ArrayList<>();
 
     public RestaurantResponse(Restaurant restaurant) {
         this.id = restaurant.getId();
@@ -30,6 +30,6 @@ public class RestaurantResponse {
         this.contact = restaurant.getContact();
         this.restaurantType = restaurant.getRestaurantType();
         this.content = restaurant.getContent();
-        this.restaurantFiles = restaurant.getRestaurantImages();
+        this.restaurantFiles = restaurant.getRestaurantFiles();
     }
 }

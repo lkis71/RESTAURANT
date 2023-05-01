@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RestaurantImage {
+public class RestaurantFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +32,14 @@ public class RestaurantImage {
     @Enumerated(EnumType.STRING)
     private UseType useType;
 
-    public static RestaurantImage createRestaurantImage(Restaurant restaurant, FileMaster fileMaster) {
+    public static RestaurantFile createRestaurantFile(Restaurant restaurant, FileMaster fileMaster) {
 
-        RestaurantImage restaurantImage = new RestaurantImage();
-        restaurantImage.restaurant = restaurant;
-        restaurantImage.fileMaster = fileMaster;
-        restaurantImage.useType = UseType.USE;
+        RestaurantFile restaurantFile = new RestaurantFile();
+        restaurantFile.restaurant = restaurant;
+        restaurantFile.fileMaster = fileMaster;
+        restaurantFile.useType = UseType.USE;
 
-        return restaurantImage;
+        return restaurantFile;
     }
 
     public void delete() {

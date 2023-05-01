@@ -2,9 +2,8 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.entity.Member;
-import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.common.Address;
-import org.assertj.core.api.Assertions;
+import com.restaurant.entity.type.MemberType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
