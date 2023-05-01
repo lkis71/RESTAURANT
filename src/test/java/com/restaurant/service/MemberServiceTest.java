@@ -33,7 +33,7 @@ class MemberServiceTest {
         //then
         Member findMember = memberService.findById(memberSeq);
 
-        assertThat(findMember.getId()).isEqualTo(memberSeq);
+        assertThat(memberSeq).isEqualTo(findMember.getId());
     }
 
     @Test
@@ -52,7 +52,7 @@ class MemberServiceTest {
         //then
         Member updateMemeber = memberService.findById(findMember.getId());
 
-        assertThat(updateMemeber.getMemberName()).isEqualTo(findMember.getMemberName());
+        assertThat(findMember.getMemberName()).isEqualTo(updateMemeber.getMemberName());
     }
 
     @Test
@@ -67,7 +67,7 @@ class MemberServiceTest {
 
         //then
         Member findMember = memberService.findById(memberId);
-        assertThat(findMember).isEqualTo(session.getAttribute("MEMBER_INFO"));
+        assertThat(session.getAttribute("MEMBER_INFO")).isEqualTo(findMember);
     }
 
     MemberDto setMember() {

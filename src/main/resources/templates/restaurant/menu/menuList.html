@@ -4,7 +4,7 @@
             <th:block th:each="food : ${foods}">
                 <div class="mb-5">
                     <div class="card h-100">
-                        <img class="card-img-top" th:src="|\${food?.file?.path}${food?.file?.fileNm}|" alt="..." />
+                        <img class="card-img-top" th:src="|\${food?.file?.path}${food?.file?.fileName}|" alt="..." />
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h5 class="fw-bolder" th:text="${food?.foodName}"></h5>

@@ -6,6 +6,7 @@ import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.Food;
 import com.restaurant.entity.FoodFile;
 import com.restaurant.entity.Member;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.type.RestaurantType;
@@ -15,9 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,22 +51,24 @@ class FoodServiceTest {
         Long memberSeq = joinMember();
         this.member = memberService.findById(memberSeq);
 
-        RestaurantDto restaurantDto = createRestaurant();
+        RestaurantDto restaurantDto = createRestaurantDto();
         this.restaurantId = restaurantService.save(restaurantDto);
     }
 
     @Test
     public void saveFoodWithFile() throws Exception {
         //given
-        List<MultipartFile> files = createMenuFile();
+        List<MultipartFile> files = createFoodFile();
         FoodDto foodDto = createFood(files);
 
         //when
         Long foodId = foodService.save(restaurantId, foodDto);
-        Food food = foodService.findById(foodId);
 
         //then
+        Food food = foodService.findById(foodId);
+
         assertThat(foodId).isEqualTo(food.getId());
+        assertThat(food.getFoodFiles()).isNotEmpty();
     }
 
     @Test
@@ -76,13 +81,33 @@ class FoodServiceTest {
         Food food = foodService.findById(foodId);
 
         //then
-        assertThat(foodId).isEqualTo(food.getId());
+        assertThat(food.getId()).isEqualTo(foodId);
+    }
+
+    @Test
+    public void findMenuPaging() throws Exception {
+        //given
+        FoodDto foodDto = createFood(null);
+        int limit = 10;
+
+        //when
+        for (int i=0; i<15; i++) {
+            foodService.save(restaurantId, foodDto);
+        }
+
+        //then
+        List<Food> foods1 = foodService.findByPaging(restaurantId, 0L, limit);
+        assertThat(10).isEqualTo(foods1.size());
+
+        Food lastMenu = foods1.get(foods1.size()-1);
+        List<Food> foods2 = foodService.findByPaging(restaurantId, lastMenu.getId(), limit);
+        assertThat(5).isEqualTo(foods2.size());
     }
 
     @Test
     public void updateFood() throws Exception {
         //given
-        List<MultipartFile> menuFile = createMenuFile();
+        List<MultipartFile> menuFile = createFoodFile();
         FoodDto foodDto = createFood(menuFile);
 
         //when
@@ -96,14 +121,14 @@ class FoodServiceTest {
         //then
         Food findFood = foodService.findById(foodId);
 
-        assertThat(findFood.getFoodName()).isEqualTo("햄버거");
-        assertThat(findFood.getFoodType()).isEqualTo(FoodType.HAMBURGER);
+        assertThat("햄버거").isEqualTo(findFood.getFoodName());
+        assertThat(FoodType.HAMBURGER).isEqualTo(findFood.getFoodType());
     }
 
     @Test
     public void deleteFood() throws Exception {
         //given
-        List<MultipartFile> files = createMenuFile();
+        List<MultipartFile> files = createFoodFile();
 
         FoodDto foodDto = createFood(files);
 
@@ -113,11 +138,12 @@ class FoodServiceTest {
 
         //then
         Food findFood = foodService.findById(foodId);
-        assertThat(findFood.getUseType()).isEqualTo(UseType.REMOVE);
+        assertThat(UseType.REMOVE).isEqualTo(findFood.getUseType());
 
         List<FoodFile> images = findFood.getFoodFiles();
         for (FoodFile image : images) {
-            assertThat(image.getUseType()).isEqualTo(UseType.REMOVE);
+            assertThat(UseType.REMOVE).isEqualTo(image.getUseType());
+            assertThat(UseType.REMOVE).isEqualTo(image.getFileMaster().getUseType());
         }
     }
 
@@ -133,7 +159,7 @@ class FoodServiceTest {
         return foodDto;
     }
 
-    private static List<MultipartFile> createMenuFile() throws IOException {
+    private static List<MultipartFile> createFoodFile() throws IOException {
 
         List<MultipartFile> files = new ArrayList<>();
 
@@ -169,7 +195,7 @@ class FoodServiceTest {
         return memberSeq;
     }
 
-    private RestaurantDto createRestaurant() {
+    private RestaurantDto createRestaurantDto() {
         return RestaurantDto.builder()
                 .restaurantName("한국식당")
                 .zipcode("111")

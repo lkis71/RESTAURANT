@@ -28,6 +28,7 @@ public class Food {
 
     private Content content;
 
+    @Enumerated(EnumType.STRING)
     private FoodType foodType;
 
     @Setter
@@ -36,9 +37,10 @@ public class Food {
     private Restaurant restaurant;
 
     @Setter
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "food")
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<FoodFile> foodFiles = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private UseType useType;
 
     @Builder

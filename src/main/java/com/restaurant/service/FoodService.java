@@ -36,7 +36,7 @@ public class FoodService {
      * @param restaurantId
      * @return
      */
-    public List<Food> findByRestaurantId(Long restaurantId, Long cursor, int limit) {
+    public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
         return foodRepository.findByPaging(restaurantId, cursor, limit);
     }
     

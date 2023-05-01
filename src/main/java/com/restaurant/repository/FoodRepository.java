@@ -3,6 +3,7 @@ package com.restaurant.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.entity.Food;
+import com.restaurant.entity.QFoodFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.restaurant.entity.QFood.food;
+import static com.restaurant.entity.QFoodFile.foodFile;
 import static com.restaurant.entity.QRestaurant.restaurant;
 
 @Repository
@@ -51,15 +53,15 @@ public class FoodRepository {
      */
     public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
         return jpaQueryFactory.selectFrom(food)
-                .join(food.restaurant)
-                .leftJoin(food.foodFiles)
+                .leftJoin(food.foodFiles, foodFile)
                 .where(food.restaurant.id.eq(restaurantId)
                 .and(cursorId(cursor)))
                 .limit(limit)
+                .fetchJoin()
                 .fetch();
     }
 
     private BooleanExpression cursorId(Long cursorId){
-        return cursorId == null ? null : restaurant.id.gt(cursorId);
+        return cursorId == null ? null : food.id.gt(cursorId);
     }
 }

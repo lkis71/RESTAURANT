@@ -4,6 +4,7 @@ import com.restaurant.controller.dto.MemberDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.type.UseType;
@@ -56,7 +57,7 @@ class RestaurantServiceTest {
         //then
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertThat(findRestaurant.getId()).isEqualTo(restaurantId);
+        assertThat(restaurantId).isEqualTo(findRestaurant.getId());
         assertThat(findRestaurant.getRestaurantFiles()).isNotNull();
     }
 
@@ -71,7 +72,7 @@ class RestaurantServiceTest {
         //then
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertThat(findRestaurant.getId()).isEqualTo(restaurantId);
+        assertThat(restaurantId).isEqualTo(findRestaurant.getId());
         assertThat(findRestaurant.getRestaurantFiles()).isEmpty();
     }
 
@@ -88,12 +89,11 @@ class RestaurantServiceTest {
 
         //then
         List<Restaurant> restaurants1 = restaurantService.findByPaging(0L, limit);
+        assertThat(10).isEqualTo(restaurants1.size());
+
         Restaurant lastRestaurant = restaurants1.get(restaurants1.size()-1);
-
         List<Restaurant> restaurants2 = restaurantService.findByPaging(lastRestaurant.getId(), limit);
-
-        assertThat(restaurants1.size()).isEqualTo(10);
-        assertThat(restaurants2.size()).isEqualTo(5);
+        assertThat(5).isEqualTo(restaurants2.size());
     }
 
     @Test
@@ -109,9 +109,12 @@ class RestaurantServiceTest {
         //then
         Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
 
-        assertThat(updateRestaurant.getRestaurantName()).isEqualTo(updateInfo.getRestaurantName());
-        assertThat(updateRestaurant.getRestaurantType()).isEqualTo(updateInfo.getRestaurantType());
-        assertThat(updateRestaurant.getRestaurantFiles().get(0).getFileMaster().getFileNm()).isEqualTo(updateInfo.getFiles().get(0).getOriginalFilename());
+        assertThat(updateInfo.getRestaurantName()).isEqualTo(updateRestaurant.getRestaurantName());
+        assertThat(updateInfo.getRestaurantType()).isEqualTo(updateRestaurant.getRestaurantType());
+
+        String fileName = updateInfo.getFiles().get(0).getOriginalFilename();
+        String saveName = updateRestaurant.getRestaurantFiles().get(0).getFileMaster().getFileName();
+        assertThat(fileName).isEqualTo(saveName);
     }
 
     @Test
@@ -127,8 +130,8 @@ class RestaurantServiceTest {
         //then
         Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
 
-        assertThat(updateRestaurant.getRestaurantName()).isEqualTo(updateInfo.getRestaurantName());
-        assertThat(updateRestaurant.getRestaurantType()).isEqualTo(updateInfo.getRestaurantType());
+        assertThat(updateInfo.getRestaurantName()).isEqualTo(updateRestaurant.getRestaurantName());
+        assertThat(updateInfo.getRestaurantType()).isEqualTo(updateRestaurant.getRestaurantType());
     }
 
     @Test
@@ -143,7 +146,7 @@ class RestaurantServiceTest {
         restaurantService.delete(restaurantId);
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
-        assertThat(findRestaurant.getUseType()).isEqualTo(UseType.REMOVE);
+        assertThat(UseType.REMOVE).isEqualTo(findRestaurant.getUseType());
     }
 
     private Long joinMember() {

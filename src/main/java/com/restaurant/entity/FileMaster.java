@@ -22,7 +22,7 @@ public class FileMaster {
     @Column(name = "file_id")
     private Long id;
 
-    private String fileNm;
+    private String fileName;
 
     private String path;
 
@@ -35,8 +35,8 @@ public class FileMaster {
     private UseType useType;
 
     @Builder
-    public FileMaster(String fileNm, String path, Long size, String extension) {
-        this.fileNm = fileNm;
+    public FileMaster(String fileName, String path, Long size, String extension) {
+        this.fileName = fileName;
         this.path = path;
         this.size = size;
         this.extension = extension;
@@ -50,10 +50,10 @@ public class FileMaster {
         }
 
         FileMaster fileMaster = new FileMaster();
-        fileMaster.fileNm = file.getOriginalFilename();
+        fileMaster.fileName = file.getOriginalFilename();
         fileMaster.path = "upload\\";
         fileMaster.size = file.getSize();
-        fileMaster.extension = fileMaster.fileNm.substring(fileMaster.fileNm.indexOf(".")+1);
+        fileMaster.extension = fileMaster.fileName.substring(fileMaster.fileName.indexOf(".")+1);
 
         File fileFolder = new File(fileMaster.path);
 
@@ -63,7 +63,7 @@ public class FileMaster {
 
         try {
             String savePath = "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\";
-            File uploadFile = new File(savePath+ fileMaster.fileNm);
+            File uploadFile = new File(savePath+ fileMaster.fileName);
             file.transferTo(uploadFile);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();

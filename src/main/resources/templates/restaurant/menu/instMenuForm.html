@@ -54,7 +54,7 @@
                     <table>
                         <tr>
                             <td><input type="button" class="form-control" value="파일선택" onclick="javascript:$('#file').click();" /></td>
-                            <td><input type="text" class="form-control" id="fileNm" th:value="${food?.file?.fileNm}" readonly/></td>
+                            <td><input type="text" class="form-control" id="fileName" th:value="${food?.file?.fileName}" readonly/></td>
                         </tr>
                     </table>
                 </div>
@@ -109,7 +109,7 @@
     function changeFile() {
         const fileUpload = $("#file");
         const file = fileUpload.val();
-        const fileNm = file.substring(file.lastIndexOf("\\")+1);
-        $("#fileNm").val(fileNm);
+        const fileName = file.substring(file.lastIndexOf("\\")+1);
+        $("#fileName").val(fileName);
     }
 </script>

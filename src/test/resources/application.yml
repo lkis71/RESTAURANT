@@ -3,14 +3,14 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:test
-    username: kslee
-    password: 9156
-    driver-class-name: org.h2.Driver
-#    url: jdbc:mysql://192.168.56.1:3306/springbatch?serverTimezone=Asia/Seoul
+#    url: jdbc:h2:mem:test
 #    username: kslee
 #    password: 9156
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://192.168.56.1:3306/springbatch?serverTimezone=Asia/Seoul
+    username: kslee
+    password: 9156
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

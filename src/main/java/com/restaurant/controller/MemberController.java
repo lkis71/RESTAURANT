@@ -91,7 +91,7 @@ public class MemberController {
     @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/foods")
     public String myRestaurantfood(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
 
-        List<Food> foods = foodService.findByRestaurantId(restaurantId, 0L, 0);
+        List<Food> foods = foodService.findByPaging(restaurantId, 0L, 0);
         List<MyFoodDto> foodDtos = foods.stream()
             .map(o -> new MyFoodDto(o))
             .collect(Collectors.toList());

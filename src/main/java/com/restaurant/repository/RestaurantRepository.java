@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.restaurant.entity.QRestaurant.restaurant;
+import static com.restaurant.entity.QRestaurantFile.restaurantFile;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,7 +37,6 @@ public class RestaurantRepository {
      */
     public Restaurant findOne(Long restaurantId) {
         return jpaQueryFactory.selectFrom(restaurant)
-                .leftJoin(restaurant.restaurantFiles)
                 .where(restaurant.id.eq(restaurantId))
                 .fetchOne();
     }
@@ -60,11 +60,12 @@ public class RestaurantRepository {
      */
     public List<Restaurant> findByPaging(Long cursor, int limit) {
         return jpaQueryFactory.selectFrom(restaurant)
-                .leftJoin(restaurant.restaurantFiles)
+                .leftJoin(restaurant.restaurantFiles, restaurantFile)
                 .where(cursorId(cursor)
                 .and(restaurant.useType.eq(UseType.USE)))
                 .orderBy(restaurant.id.asc())
                 .limit(limit)
+                .fetchJoin()
                 .fetch();
     }
 
