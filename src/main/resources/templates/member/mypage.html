@@ -2,50 +2,45 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">마이페이지</h4>
-            <form class="validation-form" id="userForm" novalidate>
+            <form class="validation-form" id="memberForm" novalidate>
 
                 <div class="mb-3">
                     <label for="memberName">이름</label>
-                    <input type="text" class="form-control" id="memberName" name="memberName" th:value="${user.memberName}" readonly>
-                </div>
-
-                <div class="mb-3">
-                    <label for="registNum">주민등록번호</label>
-                    <input type="registNum1" class="form-control" id="registNum" name="registNum" th:value="${user.registNum}" maxlength="14" readonly>
+                    <input type="text" class="form-control" id="memberName" name="memberName" th:value="${member.memberName}" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="phoneNum">휴대폰번호</label>
-                    <input type="registNum1" class="form-control" id="phoneNum" name="phoneNum" th:value="${user.phoneNum}" maxlength="13" readonly>
+                    <input type="registNum1" class="form-control" id="phoneNum" name="phoneNum" th:value="${member.phoneNum}" maxlength="13" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="memberId">아이디</label>
-                    <input type="text" class="form-control" id="memberId" name="memberId" th:value="${user.memberId}" readonly>
+                    <input type="text" class="form-control" id="memberId" name="memberId" th:value="${member.memberId}" readonly>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="zipcode">우편번호</label>
-                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${user.address.zipcode}" readonly>
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${member.address.zipcode}" readonly>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="streetNm">주소</label>
-                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${user.address.streetNm}" readonly>
+                        <label for="streetName">주소</label>
+                        <input type="text" class="form-control" id="streetName" name="streetName" th:value="${member.address.streetName}" readonly>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${user.address.detailAddress}" readonly>
+                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${member.address.detailAddress}" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="memberType">회원 유형</label>
                     <select class="custom-select d-block w-100" id="memberType" name="memberType">
                         <option value="">선택해주세요.</option>
-                        <option value="b" th:selected="${user.memberType} == b">일반회원</option>
-                        <option value="o" th:selected="${user.memberType} == o">업주</option>
+                        <option value="b" th:selected="${member.memberType} == b">일반회원</option>
+                        <option value="o" th:selected="${member.memberType} == o">업주</option>
                     </select>
                 </div>
 
@@ -55,13 +50,13 @@
                     <button class="btn btn-primary btn-lg btn-block" onclick="updateUserPage()">수정하기</button>
                 </div>
                 <div class="col-md-4 mb-3" id="update" style="display:none">
-                    <button class="btn btn-primary btn-lg btn-block" th:onclick="'updateUserInfo('+${user.id}+')'">수정완료</button>
+                    <button class="btn btn-primary btn-lg btn-block" th:onclick="updateUserInfo([[${member.memberId}]])">수정완료</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button th:if="${user.memberType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="'instRestaurantPage('+${user.id}+')'">식당 등록</button>
+                    <button th:if="${member.memberType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="instRestaurantPage([[${member.memberId}]])">식당 등록</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button th:if="${user.memberType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="'myRestaurantsPage('+${user.id}+')'">내 식당</button>
+                    <button th:if="${member.memberType} == o" class="btn btn-primary btn-lg btn-block" th:onclick="myRestaurantsPage([[${member.memberId}]])">내 식당</button>
                 </div>
             </div>
         </div>
@@ -69,17 +64,6 @@
 </div>
 <script>
     $(document).ready(function(){
-
-        /* setting auto hyphen */
-        const registNum = $("#registNum");
-        registNum.on("keydown", function(e){
-            const keycode = e.keyCode;
-            if(keycode !== 8 && keycode !== 46){
-                if(registNum.val().length === 6) {
-                    registNum.val(registNum.val()+"-");
-                }
-            }
-        })
 
         const phoneNum = $("#phoneNum");
         phoneNum.on("keydown", function(e){
@@ -104,9 +88,9 @@
     //회원수정
     function updateUserInfo(id) {
         $.ajax({
-            url : "/users/"+id+"/update",
+            url : "/members/"+id+"/update",
             type : "post",
-            data :  $("#userForm").serialize(),
+            data :  $("#memberForm").serialize(),
             dataType : "json",
             success : function(data) {
                 if(confirm("회원 수정이 완료되었습니다.")) {
@@ -117,7 +101,7 @@
                 console.log("error", data);
             }
         })
-        $("#userForm").submit;
+        $("#memberForm").submit;
     }
 
     function instRestaurantPage(id) {
@@ -125,6 +109,6 @@
     }
 
     function myRestaurantsPage(id) {
-        location.href="users/"+id+"/restaurant";
+        location.href="members/"+id+"/restaurant";
     }
 </script>

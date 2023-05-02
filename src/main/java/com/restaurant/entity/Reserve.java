@@ -41,7 +41,7 @@ public class Reserve {
     private Restaurant restaurant;
 
     @Builder
-    public Reserve(LocalDateTime reserveDate, LocalDateTime reserveTime, Integer reserveUserCnt, String reserveStatus, Member user, Restaurant restaurant) {
+    public Reserve(LocalDateTime reserveDate, LocalDateTime reserveTime, Integer reserveUserCnt, String reserveStatus, Member member, Restaurant restaurant) {
         this.reserveDate = reserveDate;
         this.reserveTime = reserveTime;
         this.reserveUserCnt = reserveUserCnt;

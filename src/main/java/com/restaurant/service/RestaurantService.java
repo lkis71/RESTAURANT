@@ -1,6 +1,7 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.RestaurantDto;
+import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.*;
 import com.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class RestaurantService {
      * @param limit 한 페이지에 보여질 목록 수
      * @return
      */
-    public List<Restaurant> findByPaging(Long cursor, int limit) {
+    public List<RestaurantDto> findByPaging(Long cursor, int limit) {
         return restaurantRepository.findByPaging(cursor, limit);
     }
 

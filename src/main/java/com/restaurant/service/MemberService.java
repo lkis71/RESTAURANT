@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepository memberRespository;
+    private final MemberRepository memberRepository;
 
     /**
      * 회원가입
@@ -27,7 +27,7 @@ public class MemberService {
     public String join(MemberDto memberDto) {
 
         Member member = memberDto.toEntity();
-        memberRespository.save(member);
+        memberRepository.save(member);
 
         return member.getMemberId();
     }
@@ -39,7 +39,7 @@ public class MemberService {
      * @return
      */
     public Member findById(String memberId) {
-        return memberRespository.findOne(memberId);
+        return memberRepository.findOne(memberId);
     }
 
     /**
@@ -50,7 +50,7 @@ public class MemberService {
      * @return
      */
     public Member findByLoginInfo(String memberId, String password) {
-        return memberRespository.findByLoginInfo(memberId, password);
+        return memberRepository.findByLoginInfo(memberId, password);
     }
 
     /**
@@ -62,7 +62,7 @@ public class MemberService {
     @Transactional
     public Member update(MemberDto memberDto) {
 
-        Member member = memberRespository.findOne(memberDto.getMemberId());
+        Member member = memberRepository.findOne(memberDto.getMemberId());
         member.update(memberDto);
 
         return member;
@@ -76,7 +76,7 @@ public class MemberService {
      */
     public HttpSession login(HttpServletRequest request, MemberDto memberDto) {
 
-        Member findMember = memberRespository.findByLoginInfo(memberDto.getMemberId(), memberDto.getPassword());
+        Member findMember = memberRepository.findByLoginInfo(memberDto.getMemberId(), memberDto.getPassword());
 
         HttpSession session = request.getSession();
         session.setAttribute("MEMBER_INFO", findMember);

@@ -79,14 +79,14 @@
 
     function submitfood(id, btnType) {
 
-        const userSeq = [[${userSeq}]];
+        const memberSeq = [[${memberSeq}]];
 
         const form = $("#foodForm")[0];
         const formData = new FormData(form);
 
         $.ajax({
             type : "post",
-            url : btnType == "insert" ? "/food/"+id+"/new" : "/users/"+userSeq+"/restaurants/foods/"+id,
+            url : btnType == "insert" ? "/food/"+id+"/new" : "/members/"+memberSeq+"/restaurants/foods/"+id,
             enctype : "multipart/form-data",
             data : formData,
             dataType : "json",
@@ -95,9 +95,9 @@
             success : function(data) {
                 alert("성공");
                 if(btnType === "insert"){
-                    location.href = "/users/"+id+"/restaurant";
+                    location.href = "/members/"+id+"/restaurant";
                 }else if(btnType === "update") {
-                    location.href = "/users/"+userSeq+"/restaurant";
+                    location.href = "/members/"+memberSeq+"/restaurant";
                 }
             },
             error : function(data) {
