@@ -14,10 +14,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
 
   batch:
     jdbc:

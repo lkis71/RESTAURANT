@@ -29,10 +29,7 @@ public class RestaurantController {
         @RequestParam(value = "limit", defaultValue = "8") int limit,
         @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
-        List<RestaurantDto> restaurantResponses = restaurantService.findByPaging(cursor, limit);
-//        List<RestaurantResponse> restaurantResponses = restaurants.stream()
-//            .map(o -> new RestaurantResponse(o))
-//            .collect(Collectors.toList());
+        List<RestaurantResponse> restaurantResponses = restaurantService.findByPaging(cursor, limit);
 
         Map<String, Object> pagingInfo = new HashMap<>();
         int maxCnt = restaurantService.count();

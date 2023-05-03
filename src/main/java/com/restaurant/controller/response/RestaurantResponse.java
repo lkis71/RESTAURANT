@@ -1,18 +1,27 @@
 package com.restaurant.controller.response;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.ListPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.restaurant.entity.QRestaurantFile;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.common.Content;
+import com.restaurant.entity.common.QAddress;
+import com.restaurant.entity.common.QContent;
 import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class RestaurantResponse {
 
     private Long id;
