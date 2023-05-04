@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class MemberDto {
     
+    private Long id;
     private String memberId;
     private String password;
     private String memberName;
@@ -20,7 +21,8 @@ public class MemberDto {
     private MemberType memberType;
 
     @Builder
-    public MemberDto(String memberId, String password, String memberName, String phoneNum, String zipcode, String streetName, String detailAddress, MemberType memberType) {
+    public MemberDto(Long id, String memberId, String password, String memberName, String phoneNum, String zipcode, String streetName, String detailAddress, MemberType memberType) {
+        this.id = id;
         this.memberId = memberId;
         this.password = password;
         this.memberName = memberName;

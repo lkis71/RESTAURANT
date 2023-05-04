@@ -1,7 +1,7 @@
 package com.restaurant.controller.response;
 
 import com.restaurant.entity.Food;
-import com.restaurant.entity.FoodFile;
+import com.restaurant.entity.FoodFile;import com.restaurant.entity.FoodFile;
 import com.restaurant.entity.common.Content;
 import com.restaurant.entity.type.FoodType;
 import lombok.Getter;

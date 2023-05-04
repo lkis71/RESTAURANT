@@ -28,11 +28,11 @@ public class MemberRepository {
     /**
      * 회원 조회(단건)
      * 
-     * @param memberId 회원 아이디
+     * @param id 회원 시퀀스
      * @return
      */
-    public Member findOne(String memberId) {
-        return em.find(Member.class, memberId);
+    public Member findOne(Long id) {
+        return em.find(Member.class, id);
     }
 
     /**

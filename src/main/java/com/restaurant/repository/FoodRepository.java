@@ -3,6 +3,7 @@ package com.restaurant.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.entity.Food;
+import com.restaurant.entity.QFoodFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static com.restaurant.entity.QFood.food;
 import static com.restaurant.entity.QFoodFile.foodFile;
+import static com.restaurant.entity.QRestaurant.restaurant;
 
 @Repository
 @RequiredArgsConstructor

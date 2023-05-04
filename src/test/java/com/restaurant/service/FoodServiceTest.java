@@ -6,6 +6,7 @@ import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.Food;
 import com.restaurant.entity.FoodFile;
 import com.restaurant.entity.Member;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.entity.type.RestaurantType;
@@ -15,9 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,8 +48,8 @@ class FoodServiceTest {
     @BeforeEach
     public void init() {
 
-        String memberId = joinMember();
-        this.member = memberService.findById(memberId);
+        Long memberSeq = joinMember();
+        this.member = memberService.findById(memberSeq);
 
         RestaurantDto restaurantDto = createRestaurantDto();
         this.restaurantId = restaurantService.save(restaurantDto);
@@ -176,7 +179,7 @@ class FoodServiceTest {
         return files;
     }
 
-    private String joinMember() {
+    private Long joinMember() {
         MemberDto memberDto = MemberDto.builder()
                 .memberName("사용자1")
                 .phoneNum("010-1234-1234")
@@ -188,8 +191,8 @@ class FoodServiceTest {
                 .detailAddress("333")
                 .build();
 
-        String memberId = memberService.join(memberDto);
-        return memberId;
+        Long memberSeq = memberService.join(memberDto);
+        return memberSeq;
     }
 
     private RestaurantDto createRestaurantDto() {

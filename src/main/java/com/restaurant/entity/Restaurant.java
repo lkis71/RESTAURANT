@@ -42,7 +42,7 @@ public class Restaurant {
     @Setter
     private Content content;
 
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_seq")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 

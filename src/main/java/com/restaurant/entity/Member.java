@@ -13,8 +13,11 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+    
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_seq")
+    private Long id;
 
-    @Id
     @Column(nullable = false, unique = true)
     private String memberId;
 
