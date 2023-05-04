@@ -21,8 +21,8 @@
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="streetName">주소</label>
-                        <input type="text" class="form-control" id="streetName" name="streetName" th:value="${restaurant?.address?.streetName}" placeholder="주소를 입력 해 주세요." required>
+                        <label for="streetNm">주소</label>
+                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${restaurant?.address?.streetNm}" placeholder="주소를 입력 해 주세요." required>
                         <div class="invalid-feedback">
                             주소를 입력 해 주세요.
                         </div>
@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${memberSeq}, 'insert')|">식당 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${userSeq}, 'insert')|">식당 등록</button>
                 <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} != null" th:onclick="|submitRestaurant(${restaurant.id}, 'update')|">식당 수정</button>
             </form>
         </div>

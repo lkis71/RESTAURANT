@@ -1,10 +1,9 @@
 package com.restaurant.controller.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
-@Data
+@Getter
 public class LoginDto {
 
     private String memberId;

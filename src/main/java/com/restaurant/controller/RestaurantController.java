@@ -29,10 +29,10 @@ public class RestaurantController {
         @RequestParam(value = "limit", defaultValue = "8") int limit,
         @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
-        List<RestaurantDto> restaurantResponses = restaurantService.findByPaging(cursor, limit);
-//        List<RestaurantResponse> restaurantResponses = restaurants.stream()
-//            .map(o -> new RestaurantResponse(o))
-//            .collect(Collectors.toList());
+        List<Restaurant> restaurants = restaurantService.findByPaging(cursor, limit);
+        List<RestaurantResponse> restaurantResponses = restaurants.stream()
+            .map(o -> new RestaurantResponse(o))
+            .collect(Collectors.toList());
 
         Map<String, Object> pagingInfo = new HashMap<>();
         int maxCnt = restaurantService.count();
@@ -49,9 +49,9 @@ public class RestaurantController {
     
     //등록페이지
     @GetMapping("/restaurants/{id}/new")
-    public String restaurantPage(Model model, @PathVariable("id") Long memberSeq) {
+    public String restaurantPage(Model model, @PathVariable("id") Long userSeq) {
         
-        model.addAttribute("memberSeq", memberSeq);
+        model.addAttribute("userSeq", userSeq);
         model.addAttribute("restaurant", new Restaurant());
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";

@@ -88,11 +88,11 @@ class RestaurantServiceTest {
         }
 
         //then
-        List<RestaurantDto> restaurants1 = restaurantService.findByPaging(0L, limit);
+        List<Restaurant> restaurants1 = restaurantService.findByPaging(0L, limit);
         assertThat(10).isEqualTo(restaurants1.size());
 
-        RestaurantDto lastRestaurant = restaurants1.get(restaurants1.size()-1);
-        List<RestaurantDto> restaurants2 = restaurantService.findByPaging(lastRestaurant.getId(), limit);
+        Restaurant lastRestaurant = restaurants1.get(restaurants1.size()-1);
+        List<Restaurant> restaurants2 = restaurantService.findByPaging(lastRestaurant.getId(), limit);
         assertThat(5).isEqualTo(restaurants2.size());
     }
 

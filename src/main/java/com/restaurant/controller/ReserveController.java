@@ -19,7 +19,7 @@ public class ReserveController {
     @GetMapping("/reserve")
     public String reserveForm(Model model) {
 
-        return "member/reserve/reserveForm";
+        return "user/reserve/reserveForm";
     }
 
     @PostMapping("/reserve")

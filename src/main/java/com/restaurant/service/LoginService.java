@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional (readOnly = true)
 public class LoginService {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepository memberRespository;
 
     //로그인
     public Member login(LoginDto loginDto) {
-        return memberRepository.findByLoginInfo(loginDto.getMemberId(), loginDto.getPassword());
+        return memberRespository.findByLoginInfo(loginDto.getMemberId(), loginDto.getPassword());
     }
 }

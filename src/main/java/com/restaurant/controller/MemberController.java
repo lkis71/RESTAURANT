@@ -27,17 +27,17 @@ public class MemberController {
     private final MemberService memberService;
     private final FoodService foodService;
     
-    @GetMapping("/members/join")
+    @GetMapping("/users/join")
     public String joinUserForm(Model model) {
 
         model.addAttribute("memberTypes", MemberType.values());
-        model.addAttribute("member", new Object());
-        model.addAttribute("contents", "member/joinForm");
+        model.addAttribute("user", new Object());
+        model.addAttribute("contents", "user/joinForm");
 
         return "common/subLayout";
     }
 
-    @PostMapping("/members/join")
+    @PostMapping("/users/join")
     public String joinUser(MemberDto memberDto) {
 
         memberService.join(memberDto);
@@ -49,25 +49,23 @@ public class MemberController {
     public String mypage(HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
-        Member member = (Member) session.getAttribute("MEMBER_INFO");
+        Member user = (Member) session.getAttribute("SESSION_INFO");
 
-        model.addAttribute("member", member);
-        model.addAttribute("contents", "member/mypage");
-
+        model.addAttribute("user", user);
+        model.addAttribute("contents", "user/mypage");
         return "common/subLayout";
     }
 
-    @GetMapping("/members/reserve")
+    @GetMapping("/users/reserve")
     public String myReserve(Model model) {
 
-        model.addAttribute("contents", "member/reserve/myReserveList");
-
+        model.addAttribute("contents", "user/reserve/myReserveList");
         return "common/subLayout";
     }
 
-    @PostMapping("/members/{id}/update")
+    @PostMapping("/users/{id}/update")
     @ResponseBody
-    public String updateUserInfo(HttpServletRequest request, MemberDto memberDto) {
+    public String updateUserInfo(HttpServletRequest request, @RequestBody MemberDto memberDto) {
 
         Member updateMember = memberService.update(memberDto);
         CommonSession.setSessionUserInfo(request, updateMember);
@@ -78,46 +76,46 @@ public class MemberController {
         return new Gson().toJson(obj);
     }
 
-    @GetMapping("/members/{id}/restaurant")
-    public String myRestaurants(Model model, @PathVariable("id") Long memberSeq) {
+    @GetMapping("/users/{id}/restaurant")
+    public String myRestaurants(Model model, @PathVariable("id") Long userSeq) {
 
-//        List<Restaurant> restaurants = memberService.getMyRestaurantById(memberSeq);
+//        List<Restaurant> restaurants = memberService.getMyRestaurantById(userSeq);
 //        List<MyRestaurantDto> restaurantDtos = restaurants.stream()
 //            .map(o -> new MyRestaurantDto(o))
 //            .collect(Collectors.toList());
 //
-//        model.addAttribute("memberSeq", memberSeq);
+//        model.addAttribute("userSeq", userSeq);
 //        model.addAttribute("restaurants", restaurantDtos);
-//        model.addAttribute("contents", "member/myRestaurant");
+//        model.addAttribute("contents", "user/myRestaurant");
         return "common/subLayout";
     }
 
-    @GetMapping("/members/{memberSeq}/restaurants/{restaurantId}/foods")
-    public String myRestaurantFood(Model model, @PathVariable("memberSeq") Long memberSeq, @PathVariable("restaurantId") Long restaurantId) {
+    @GetMapping("/users/{userSeq}/restaurants/{restaurantId}/foods")
+    public String myRestaurantfood(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("restaurantId") Long restaurantId) {
 
         List<Food> foods = foodService.findByPaging(restaurantId, 0L, 0);
         List<MyFoodDto> foodDtos = foods.stream()
             .map(o -> new MyFoodDto(o))
             .collect(Collectors.toList());
 
-        model.addAttribute("memberSeq", memberSeq);
+        model.addAttribute("userSeq", userSeq);
         model.addAttribute("foods", foodDtos);
-        model.addAttribute("contents", "member/myfood");
+        model.addAttribute("contents", "user/myfood");
         return "common/subLayout";
     }
 
-    @GetMapping("/members/{memberSeq}/restaurants/foods/{foodId}")
-    public String updatePage(Model model, @PathVariable("memberSeq") Long memberSeq, @PathVariable("foodId") Long foodId) {
+    @GetMapping("/users/{userSeq}/restaurants/foods/{foodId}")
+    public String updatePage(Model model, @PathVariable("userSeq") Long userSeq, @PathVariable("foodId") Long foodId) {
 
         Food food = foodService.findById(foodId);
 
-        model.addAttribute("memberSeq", memberSeq);
+        model.addAttribute("userSeq", userSeq);
         model.addAttribute("food", food);
         model.addAttribute("contents", "restaurant/food/instfoodForm");
         return "common/subLayout";
     }
 
-    @PostMapping("/members/{memberSeq}/restaurants/foods/{foodId}")
+    @PostMapping("/users/{userSeq}/restaurants/foods/{foodId}")
     @ResponseBody
     public String update(Model model, @RequestBody FoodDto foodDto) {
 
@@ -126,39 +124,12 @@ public class MemberController {
         return new Gson().toJson("");
     }
     
-    @DeleteMapping("/members/{memberSeq}/restaurants/foods/{foodId}")
+    @DeleteMapping("/users/{userSeq}/restaurants/foods/{foodId}")
     @ResponseBody
     public String delete(Model model, @PathVariable("foodId") Long foodId) {
         
         foodService.delete(foodId);
         
         return new Gson().toJson("");
-    }
-
-    @GetMapping("/login")
-    public String loginFrom(Model model) {
-
-        model.addAttribute("contents", "login/login");
-        return "common/subLayout";
-    }
-
-    @PostMapping("/login")
-    public String login(HttpServletRequest request, MemberDto memberDto) {
-
-        HttpSession login = memberService.login(request, memberDto);
-
-        if (login.getAttribute("MEMBER_INFO") != null) {
-            return "redirect:/restaurants";
-        }else {
-            return "redirect:/members/join";
-        }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.invalidate();
-
-        return "redirect:/restaurants";
     }
 }
