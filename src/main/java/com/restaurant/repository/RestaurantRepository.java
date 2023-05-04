@@ -1,9 +1,9 @@
 package com.restaurant.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.restaurant.controller.response.RestaurantResponse;
-import com.restaurant.entity.FileMaster;
+import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.entity.QFileMaster;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.RestaurantFile;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.restaurant.entity.QFileMaster.fileMaster;
 import static com.restaurant.entity.QRestaurant.restaurant;
@@ -33,10 +32,6 @@ public class RestaurantRepository {
      */
     public void save(Restaurant restaurant) {
         em.persist(restaurant);
-    }
-
-    public void saveFile(RestaurantFile restaurantFile) {
-        em.persist(restaurantFile);
     }
 
     /**
@@ -68,19 +63,24 @@ public class RestaurantRepository {
      * @param limit 한 페이지에 보여질 목록 수
      * @return
      */
-    public List<RestaurantResponse> findByPaging(Long cursor, int limit) {
-
-        List<Restaurant> restaurants = jpaQueryFactory.selectFrom(restaurant)
-                .innerJoin(restaurant.restaurantFiles, restaurantFile)
+    public List<RestaurantDto> findByPaging(Long cursor, int limit) {
+        return jpaQueryFactory.select(Projections.bean(RestaurantDto.class,
+                    restaurant.id,
+                    restaurant.restaurantName,
+                    restaurant.address,
+                    restaurant.contact,
+                    restaurant.restaurantType,
+                    restaurant.content,
+                    restaurantFile.fileMaster)
+                )
+                .from(restaurantFile)
+                .innerJoin(restaurantFile.restaurant, restaurant)
+                .innerJoin(restaurantFile.fileMaster, fileMaster)
                 .where(cursorId(cursor)
-                .and(restaurant.useType.eq(UseType.USE)))
+                        .and(restaurant.useType.eq(UseType.USE)))
                 .orderBy(restaurant.id.asc())
                 .limit(limit)
                 .fetch();
-
-        return restaurants.stream()
-                .map(o -> new RestaurantResponse(o))
-                .collect(Collectors.toList());
     }
 
     private BooleanExpression cursorId(Long cursorId){

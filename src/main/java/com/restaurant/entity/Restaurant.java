@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class Restaurant {
     private Member member;
 
     @Setter
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<RestaurantFile> restaurantFiles = new ArrayList<>();
 
     @Setter

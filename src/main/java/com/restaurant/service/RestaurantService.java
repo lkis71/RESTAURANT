@@ -2,15 +2,14 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
-import com.restaurant.entity.FileMaster;
-import com.restaurant.entity.Restaurant;
-import com.restaurant.entity.RestaurantFile;
+import com.restaurant.entity.*;
 import com.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,7 +38,7 @@ public class RestaurantService {
      * @param limit 한 페이지에 보여질 목록 수
      * @return
      */
-    public List<RestaurantResponse> findByPaging(Long cursor, int limit) {
+    public List<RestaurantDto> findByPaging(Long cursor, int limit) {
         return restaurantRepository.findByPaging(cursor, limit);
     }
 
@@ -63,7 +62,9 @@ public class RestaurantService {
 
         Restaurant restaurant = restaurantDto.toEntity();
 
-        fileUpload(restaurant, restaurantDto.getFiles());
+        List<RestaurantFile> restaurantFiles = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantFiles(restaurantFiles);
+
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
@@ -81,7 +82,9 @@ public class RestaurantService {
         
         Restaurant restaurant = restaurantRepository.findOne(restaurantId);
 
-        fileUpload(restaurant, restaurantDto.getFiles());
+        List<RestaurantFile> restaurantFiles = fileUpload(restaurant, restaurantDto.getFiles());
+        restaurant.setRestaurantFiles(restaurantFiles);
+
         restaurant.update(restaurantDto);
 
         return restaurant;
@@ -104,20 +107,22 @@ public class RestaurantService {
      * @param restaurant
      * @param files
      */
-    private void fileUpload(Restaurant restaurant, List<MultipartFile> files) {
+    private List<RestaurantFile> fileUpload(Restaurant restaurant, List<MultipartFile> files) {
 
         if (files == null) {
-            return;
+            return new ArrayList<>();
         }
+
+        List<RestaurantFile> restaurantFiles = new ArrayList<>();
 
         for (MultipartFile file : files) {
             FileMaster fileMaster = FileMaster.transferTo(file);
             fileService.save(fileMaster);
 
             RestaurantFile restaurantFile = RestaurantFile.createRestaurantFile(restaurant, fileMaster);
-            restaurantRepository.saveFile(restaurantFile);
-
-            restaurant.getRestaurantFiles().add(restaurantFile);
+            restaurantFiles.add(restaurantFile);
         }
+
+        return restaurantFiles;
     }
 }
