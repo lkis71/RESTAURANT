@@ -5,10 +5,10 @@ import javax.servlet.http.HttpSession;
 
 public class CommonSession {
     
-    private static final String SESSION_INFO = "SESSION_INFO";
+    private static final String MEMBER_INFO = "MEMBER_INFO";
 
     public static void setSessionUserInfo(HttpServletRequest request, Object entity) {
         HttpSession session = request.getSession();
-        session.setAttribute(SESSION_INFO, entity);
+        session.setAttribute(MEMBER_INFO, entity);
     }
 }

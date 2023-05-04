@@ -32,21 +32,21 @@ public class Reserve {
 
     private String reserveStatus;
 
-    @JoinColumn(name = "userSeq")
+    @JoinColumn(name = "memberId")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member user;
+    private Member member;
     
     @JoinColumn(name = "restaurantId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Restaurant restaurant;
 
     @Builder
-    public Reserve(LocalDateTime reserveDate, LocalDateTime reserveTime, Integer reserveUserCnt, String reserveStatus, Member user, Restaurant restaurant) {
+    public Reserve(LocalDateTime reserveDate, LocalDateTime reserveTime, Integer reserveUserCnt, String reserveStatus, Member member, Restaurant restaurant) {
         this.reserveDate = reserveDate;
         this.reserveTime = reserveTime;
         this.reserveUserCnt = reserveUserCnt;
         this.reserveStatus = reserveStatus;
-        this.user = user;
+        this.member = member;
         this.restaurant = restaurant;
     }
 }

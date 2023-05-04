@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class RestaurantController {
 
@@ -24,33 +26,31 @@ public class RestaurantController {
     //목록
     @GetMapping("/restaurants")
     public String restaurantList(Model model,
-        @RequestParam(value = "cursor", defaultValue = "0") Long cursor,
-        @RequestParam(value = "limit", defaultValue = "8") int limit,
-        @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
+                                 @RequestParam(value = "cursor", defaultValue = "0") Long cursor,
+                                 @RequestParam(value = "limit", defaultValue = "8") int limit,
+                                 @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
 
-        List<Restaurant> restaurants = restaurantService.findByPaging(cursor, limit);
-        List<RestaurantResponse> restaurantResponses = restaurants.stream()
-            .map(o -> new RestaurantResponse(o))
-            .collect(Collectors.toList());
+        List<RestaurantResponse> restaurantResponses = restaurantService.findByPaging(cursor, limit);
 
         Map<String, Object> pagingInfo = new HashMap<>();
         int maxCnt = restaurantService.count();
         pagingInfo.put("maxCnt", maxCnt);
         pagingInfo.put("limit", limit);
         pagingInfo.put("currPageIdx", currPageIdx);
-        
+
         model.addAttribute("pagingInfo", pagingInfo);
         model.addAttribute("restaurants", restaurantResponses);
         model.addAttribute("contents", "restaurant/restaurantList");
 
         return "common/subLayout";
     }
-    
+
     //등록페이지
     @GetMapping("/restaurants/{id}/new")
-    public String restaurantPage(Model model, @PathVariable("id") Long userSeq) {
-        
-        model.addAttribute("userSeq", userSeq);
+    public String restaurantPage(Model model, @PathVariable("id") String memberId) {
+
+        model.addAttribute("restaurantTypes", RestaurantType.values());
+        model.addAttribute("memberId", memberId);
         model.addAttribute("restaurant", new Restaurant());
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";
@@ -58,13 +58,13 @@ public class RestaurantController {
 
     //등록
     @PostMapping("/restaurants/{id}/new")
-    public String restaurantForm(Model model, @PathVariable("id") Long userSeq, @RequestBody RestaurantDto restaurantDto) {
+    public String restaurantForm(RestaurantDto restaurantDto) {
 
-        Long restaurantId = restaurantService.save(restaurantDto);
+        restaurantService.save(restaurantDto);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
-        
+
         return new Gson().toJson(jsonObject);
     }
 
@@ -81,7 +81,7 @@ public class RestaurantController {
 
     //수정
     @PostMapping("/restaurants/{id}/update")
-    public String update(Model model, @PathVariable("id") Long restaurantId, @RequestBody RestaurantDto restaurantDto) {
+    public String update(Model model, @PathVariable("id") Long restaurantId, RestaurantDto restaurantDto) {
 
         restaurantService.update(restaurantId, restaurantDto);
 

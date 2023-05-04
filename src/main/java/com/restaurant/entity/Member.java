@@ -13,27 +13,24 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
-    
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_seq")
-    private Long id;
 
+    @Id
     @Column(nullable = false, unique = true)
     private String memberId;
 
     @Column(nullable = false)
     private String password;
-    
+
     @Setter
     private String memberName;
-    
+
     @Setter
     private String phoneNum;
-    
+
     @Setter
     @Embedded
     private Address address;
-    
+
     @Setter
     @Enumerated(EnumType.STRING)
     private MemberType memberType;

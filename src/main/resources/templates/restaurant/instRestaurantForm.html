@@ -21,19 +21,19 @@
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
-                        <label for="streetNm">주소</label>
-                        <input type="text" class="form-control" id="streetNm" name="streetNm" th:value="${restaurant?.address?.streetNm}" placeholder="주소를 입력 해 주세요." required>
+                        <label for="streetName">주소</label>
+                        <input type="text" class="form-control" id="streetName" name="streetName" th:value="${restaurant?.address?.streetName}" placeholder="주소를 입력 해 주세요." required>
                         <div class="invalid-feedback">
                             주소를 입력 해 주세요.
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
                     <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${restaurant?.address?.detailAddress}" placeholder="상세주소를 입력 해 주세요.">
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="contact">연락처</label>
                     <input type="text" class="form-control" id="contact" name="contact" th:value="${restaurant.contact}" placeholder="연락처를 입력 해 주세요." maxlength="13" required>
@@ -41,21 +41,22 @@
                         연락처를 입력 해 주세요.
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
-                    <label for="category">식당 유형</label>
-                    <select class="custom-select d-block w-100" id="category" name="category" required>
+                    <label for="restaurantType">식당 유형</label>
+                    <select class="custom-select d-block w-100" id="restaurantType" name="restaurantType" required>
                         <option value="">선택해주세요.</option>
-                        <option value="k" th:selected="${restaurant.category} == k">한식</option>
-                        <option value="c" th:selected="${restaurant.category} == c">중식</option>
-                        <option value="j" th:selected="${restaurant.category} == j">일식</option>
-                        <option value="i" th:selected="${restaurant.category} == i">양식</option>
+                        <option th:each="type : ${restaurantTypes}"
+                                th:selected="${restaurant.restaurantType eq type}"
+                                th:value="${type}"
+                                th:test="${type.getName()}">
+                        </option>
                     </select>
                     <div class="invalid-feedback">
                         식당 유형을 선택해주세요.
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="simpleContents">간략소개</label>
                     <input type="text" class="form-control" id="simpleContents" name="simpleContents" th:value="${restaurant?.content?.simpleContents}" placeholder="간략소개를 입력 해 주세요.">
@@ -78,14 +79,14 @@
                     <table>
                         <tr>
                             <td><input type="button" class="form-control" value="파일선택" onclick="javascript:$('#file').click();" /></td>
-                            <td><input type="text" class="form-control" id="fileName" th:value="${restaurant?.file?.fileName}" readonly/></td>
+                            <td><input type="text" class="form-control" id="fileName" th:value="${restaurant?.restaurantFiles}" readonly/></td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="|submitRestaurant(${userSeq}, 'insert')|">식당 등록</button>
-                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} != null" th:onclick="|submitRestaurant(${restaurant.id}, 'update')|">식당 수정</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} == null" th:onclick="submitRestaurant([[${memberId}]], 'insert')">식당 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" type="button" th:if="${restaurant?.id} != null" th:onclick="submitRestaurant([[${restaurant.id}]], 'update')">식당 수정</button>
             </form>
         </div>
     </div>
@@ -115,7 +116,7 @@
 
         const form = $("#restaurantForm")[0];
         const formData = new FormData(form);
-        
+
         $.ajax({
             type : "post",
             url : btnType=="insert"?"/restaurants/"+id+"/new":"/restaurants/"+id+"/update",

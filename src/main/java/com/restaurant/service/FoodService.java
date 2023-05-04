@@ -32,17 +32,17 @@ public class FoodService {
 
     /**
      * 메뉴 조회(페이징)
-     * 
+     *
      * @param restaurantId
      * @return
      */
     public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
         return foodRepository.findByPaging(restaurantId, cursor, limit);
     }
-    
+
     /**
      * 메뉴 등록
-     * 
+     *
      * @param restaurantId
      * @param foodDto
      */
@@ -64,7 +64,7 @@ public class FoodService {
 
     /**
      * 메뉴 수정
-     * 
+     *
      * @param foodDto
      */
     @Transactional
@@ -82,7 +82,7 @@ public class FoodService {
 
     /**
      * 메뉴 삭제
-     * 
+     *
      * @param foodId
      */
     @Transactional

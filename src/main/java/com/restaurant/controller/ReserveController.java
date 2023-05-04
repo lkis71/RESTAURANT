@@ -19,12 +19,12 @@ public class ReserveController {
     @GetMapping("/reserve")
     public String reserveForm(Model model) {
 
-        return "user/reserve/reserveForm";
+        return "member/reserve/reserveForm";
     }
 
     @PostMapping("/reserve")
     @ResponseBody
-    public String reserve(Model model, @RequestBody ReserveDto reserveDto) {
+    public String reserve(Model model, ReserveDto reserveDto) {
 
         reserveService.reserve(reserveDto);
 

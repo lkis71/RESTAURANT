@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepository memberRespository;
+    private final MemberRepository memberRepository;
 
     /**
      * 회원가입
@@ -24,45 +24,45 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public Long join(MemberDto memberDto) {
+    public String join(MemberDto memberDto) {
 
         Member member = memberDto.toEntity();
-        memberRespository.save(member);
+        memberRepository.save(member);
 
-        return member.getId();
+        return member.getMemberId();
     }
 
     /**
      * 회원 조회(단건)
-     * 
-     * @param id 회원 시퀀스
+     *
+     * @param memberId 회원 아이디
      * @return
      */
-    public Member findById(Long id) {
-        return memberRespository.findOne(id);
+    public Member findById(String memberId) {
+        return memberRepository.findOne(memberId);
     }
 
     /**
      * 회원 조회(로그인 정보)
-     * 
+     *
      * @param memberId 회원ID
      * @param password 비밀번호
      * @return
      */
     public Member findByLoginInfo(String memberId, String password) {
-        return memberRespository.findByLoginInfo(memberId, password);
+        return memberRepository.findByLoginInfo(memberId, password);
     }
 
     /**
      * 회원 수정
-     * 
+     *
      * @param memberDto
      * @return
      */
     @Transactional
     public Member update(MemberDto memberDto) {
 
-        Member member = memberRespository.findOne(memberDto.getId());
+        Member member = memberRepository.findOne(memberDto.getMemberId());
         member.update(memberDto);
 
         return member;
@@ -76,7 +76,7 @@ public class MemberService {
      */
     public HttpSession login(HttpServletRequest request, MemberDto memberDto) {
 
-        Member findMember = memberRespository.findByLoginInfo(memberDto.getMemberId(), memberDto.getPassword());
+        Member findMember = memberRepository.findByLoginInfo(memberDto.getMemberId(), memberDto.getPassword());
 
         HttpSession session = request.getSession();
         session.setAttribute("MEMBER_INFO", findMember);

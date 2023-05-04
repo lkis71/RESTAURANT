@@ -3,7 +3,6 @@ package com.restaurant.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.entity.Food;
-import com.restaurant.entity.QFoodFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,12 +11,11 @@ import java.util.List;
 
 import static com.restaurant.entity.QFood.food;
 import static com.restaurant.entity.QFoodFile.foodFile;
-import static com.restaurant.entity.QRestaurant.restaurant;
 
 @Repository
 @RequiredArgsConstructor
 public class FoodRepository {
-    
+
     private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -55,7 +53,7 @@ public class FoodRepository {
         return jpaQueryFactory.selectFrom(food)
                 .leftJoin(food.foodFiles, foodFile)
                 .where(food.restaurant.id.eq(restaurantId)
-                .and(cursorId(cursor)))
+                        .and(cursorId(cursor)))
                 .limit(limit)
                 .fetchJoin()
                 .fetch();

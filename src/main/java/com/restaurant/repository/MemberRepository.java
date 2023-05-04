@@ -27,12 +27,12 @@ public class MemberRepository {
 
     /**
      * 회원 조회(단건)
-     * 
-     * @param id 회원 시퀀스
+     *
+     * @param memberId 회원 아이디
      * @return
      */
-    public Member findOne(Long id) {
-        return em.find(Member.class, id);
+    public Member findOne(String memberId) {
+        return em.find(Member.class, memberId);
     }
 
     /**
@@ -45,7 +45,7 @@ public class MemberRepository {
     public Member findByLoginInfo(String memberId, String password) {
         return jpaQueryFactory.selectFrom(member)
                 .where(member.memberId.eq(memberId)
-                .and(member.password.eq(password)))
+                        .and(member.password.eq(password)))
                 .fetchOne();
     }
 }

@@ -26,10 +26,10 @@ public class RestaurantDto {
     private String simpleContents;
     private String detailContents;
     private List<MultipartFile> files = new ArrayList<>();
-    private Member member;
+    private String memberId;
 
     @Builder
-    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, List<MultipartFile> files, Member member) {
+    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, List<MultipartFile> files, String memberId) {
         this.restaurantName = restaurantName;
         this.zipcode = zipcode;
         this.streetName = streetName;
@@ -39,7 +39,7 @@ public class RestaurantDto {
         this.simpleContents = simpleContents;
         this.detailContents = detailContents;
         this.files = files;
-        this.member = member;
+        this.memberId = memberId;
     }
 
     public Restaurant toEntity() {
@@ -53,7 +53,6 @@ public class RestaurantDto {
                 .contact(contact)
                 .restaurantType(restaurantType)
                 .content(introContent)
-                .member(member)
                 .build();
     }
 }
