@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -24,9 +24,6 @@ spring:
       initialize-schema: always
     job:
       enabled: true
-
-  thymeleaf:
-    cache: false
 
 logging:
   level:

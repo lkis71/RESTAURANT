@@ -1,8 +1,9 @@
 package com.restaurant.controller.dto;
 
 import com.restaurant.entity.Member;
-import com.restaurant.entity.common.Address;
 import com.restaurant.entity.type.MemberType;
+
+import com.restaurant.entity.common.Address;
 import lombok.Builder;
 import lombok.Getter;
 

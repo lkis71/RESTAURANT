@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.*;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Food;
-import com.restaurant.entity.type.MemberType;
 import com.restaurant.exception.AlreadyExistMemberIdException;
 import com.restaurant.service.MemberService;
 import com.restaurant.service.FoodService;
@@ -27,18 +26,17 @@ public class MemberController {
     private final MemberService memberService;
     private final FoodService foodService;
     
-    @GetMapping("/users/join")
+    @GetMapping("/users/register")
     public String joinUserForm(Model model) {
 
-        model.addAttribute("memberTypes", MemberType.values());
         model.addAttribute("user", new Object());
-        model.addAttribute("contents", "user/joinForm");
+        model.addAttribute("contents", "user/registUserForm");
 
         return "common/subLayout";
     }
 
-    @PostMapping("/users/join")
-    public String joinUser(MemberDto memberDto) {
+    @PostMapping("/users/register")
+    public String joinUser(@RequestBody MemberDto memberDto) throws AlreadyExistMemberIdException {
 
         memberService.join(memberDto);
 
