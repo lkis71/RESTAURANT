@@ -46,8 +46,8 @@ public class RestaurantController {
     }
 
     //등록페이지
-    @GetMapping("/restaurants/{id}/new")
-    public String restaurantPage(Model model, @PathVariable("id") String memberId) {
+    @GetMapping("/restaurants/{memberId}/new")
+    public String restaurantPage(Model model, @PathVariable("memberId") String memberId) {
 
         model.addAttribute("restaurantTypes", RestaurantType.values());
         model.addAttribute("memberId", memberId);
@@ -57,7 +57,8 @@ public class RestaurantController {
     }
 
     //등록
-    @PostMapping("/restaurants/{id}/new")
+    @PostMapping("/restaurants/{memberId}/new")
+    @ResponseBody
     public String restaurantForm(RestaurantDto restaurantDto) {
 
         restaurantService.save(restaurantDto);
@@ -81,6 +82,7 @@ public class RestaurantController {
 
     //수정
     @PostMapping("/restaurants/{id}/update")
+    @ResponseBody
     public String update(Model model, @PathVariable("id") Long restaurantId, RestaurantDto restaurantDto) {
 
         restaurantService.update(restaurantId, restaurantDto);
@@ -90,6 +92,7 @@ public class RestaurantController {
 
     //삭제
     @PostMapping("/restaurants/{id}/delete")
+    @ResponseBody
     public String delete(Model model, @PathVariable("id") Long restaurantId) {
 
         restaurantService.delete(restaurantId);

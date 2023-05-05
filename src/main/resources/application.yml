@@ -10,31 +10,34 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
-      
         #true : System.out으로 로그를 출력함 (쿼리가 한 번더 실행되는 것 처럼 보임)
         #false : 로그를 출력하지 않음
         show_sql: false
-        
+
         format_sql: true
-        
+
         #★중요★
         #값에 따라 in쿼리의 수행 수가 달라짐
         #예) 값이 1일 때 인 쿼리 없이 데이터 수만큼 쿼리를 수행함
         #예) 값이 2일 때 인 쿼리를 총 데이터 수/2만큼 쿼리를 수행함
         default_batch_fetch_size: 100
-    
+
     #true: 영속성 컨텍스트가 트랜잭션 범위를 넘어선다.
     #false: 트랜잭션을 종료할 때 영속성 컨텍스트 또한 닫힌다.
     open-in-view: false
 
-#  batch:
-#    jdbc:
-#      initialize-schema: always
-#    job:
-#      enabled: true
+  #  batch:
+  #    jdbc:
+  #      initialize-schema: always
+  #    job:
+  #      enabled: true
+
+  # thymeleaf 새로고침
+  thymeleaf:
+    cache: false
 
 logging:
   level:

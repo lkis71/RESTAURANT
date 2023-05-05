@@ -6,39 +6,39 @@
             <form class="validation-form" id="restaurantForm" novalidate>
                 <div class="mb-3">
                     <label for="restaurantName">식당명</label>
-                    <input type="text" class="form-control" id="restaurantName" name="restaurantName" th:value="${restaurant.restaurantName}" placeholder="식당명을 입력 해 주세요." required>
+                    <input type="text" class="form-control" id="restaurantName" name="restaurantName" th:value="${restaurant.restaurantName}" placeholder="식당명을 입력해 주세요." required>
                     <div class="invalid-feedback">
-                        식당명을 입력 해 주세요.
+                        식당명을 입력해 주세요.
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="zipcode">우편번호</label>
-                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${restaurant?.address?.zipcode}" placeholder="우편번호를 입력 해 주세요." required>
+                        <input type="text" class="form-control" id="zipcode" name="zipcode" th:value="${restaurant?.address?.zipcode}" placeholder="우편번호를 입력해 주세요." required>
                         <div class="invalid-feedback">
-                            우편번호를 입력 해 주세요.
+                            우편번호를 입력해 주세요.
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label for="streetName">주소</label>
-                        <input type="text" class="form-control" id="streetName" name="streetName" th:value="${restaurant?.address?.streetName}" placeholder="주소를 입력 해 주세요." required>
+                        <input type="text" class="form-control" id="streetName" name="streetName" th:value="${restaurant?.address?.streetName}" placeholder="주소를 입력해 주세요." required>
                         <div class="invalid-feedback">
-                            주소를 입력 해 주세요.
+                            주소를 입력해 주세요.
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${restaurant?.address?.detailAddress}" placeholder="상세주소를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="detailAddress" name="detailAddress" th:value="${restaurant?.address?.detailAddress}" placeholder="상세주소를 입력해 주세요.">
                 </div>
 
                 <div class="mb-3">
                     <label for="contact">연락처</label>
-                    <input type="text" class="form-control" id="contact" name="contact" th:value="${restaurant.contact}" placeholder="연락처를 입력 해 주세요." maxlength="13" required>
+                    <input type="text" class="form-control" id="contact" name="contact" th:value="${restaurant.contact}" placeholder="연락처를 입력해 주세요." maxlength="13" required>
                     <div class="invalid-feedback">
-                        연락처를 입력 해 주세요.
+                        연락처를 입력해 주세요.
                     </div>
                 </div>
 
@@ -47,9 +47,8 @@
                     <select class="custom-select d-block w-100" id="restaurantType" name="restaurantType" required>
                         <option value="">선택해주세요.</option>
                         <option th:each="type : ${restaurantTypes}"
-                                th:selected="${restaurant.restaurantType eq type}"
                                 th:value="${type}"
-                                th:test="${type.getName()}">
+                                th:text="${type.getName()}">
                         </option>
                     </select>
                     <div class="invalid-feedback">
@@ -59,17 +58,17 @@
 
                 <div class="mb-3">
                     <label for="simpleContents">간략소개</label>
-                    <input type="text" class="form-control" id="simpleContents" name="simpleContents" th:value="${restaurant?.content?.simpleContents}" placeholder="간략소개를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="simpleContents" name="simpleContents" th:value="${restaurant?.content?.simpleContents}" placeholder="간략소개를 입력해 주세요.">
                     <div class="invalid-feedback">
-                        간략소개를 입력 해 주세요.
+                        간략소개를 입력해 주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="detailContents">상세소개</label>
-                    <input type="text" class="form-control" id="detailContents" name="detailContents" th:value="${restaurant?.content?.detailContents}" placeholder="상세소개를 입력 해 주세요.">
+                    <input type="text" class="form-control" id="detailContents" name="detailContents" th:value="${restaurant?.content?.detailContents}" placeholder="상세소개를 입력해 주세요.">
                     <div class="invalid-feedback">
-                        상세소개를 입력 해 주세요.
+                        상세소개를 입력해 주세요.
                     </div>
                 </div>
 
