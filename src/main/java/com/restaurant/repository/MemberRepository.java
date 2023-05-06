@@ -1,11 +1,14 @@
 package com.restaurant.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.restaurant.controller.dto.MyRestaurantDto;
 import com.restaurant.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
+import java.util.List;
 
 import static com.restaurant.entity.QMember.member;
 

@@ -75,6 +75,7 @@ public class RestaurantController {
 
         Restaurant restaurant = restaurantService.findOne(restaurantId);
 
+        model.addAttribute("restaurantTypes", RestaurantType.values());
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";

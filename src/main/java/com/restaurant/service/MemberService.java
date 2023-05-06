@@ -83,4 +83,9 @@ public class MemberService {
 
         return session;
     }
+
+    public void findRestaurantsByMemberId(String memberId) {
+
+
+    }
 }

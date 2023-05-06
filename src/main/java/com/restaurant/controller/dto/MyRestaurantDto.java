@@ -1,10 +1,14 @@
 package com.restaurant.controller.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.restaurant.entity.Restaurant;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class MyRestaurantDto {
     
     private Long id;

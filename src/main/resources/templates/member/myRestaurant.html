@@ -17,15 +17,15 @@
                 </thead>
 
                 <tbody>
-                    <tr th:each="restaurant : ${restaurants}">
-                        <td th:text="${restaurant.restaurantName}"></td>
+                    <tr th:each="myRestaurant : ${myRestaurants}">
+                        <td th:text="${myRestaurant.restaurantName}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/food/${restaurant.id}/new'|">메뉴등록</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/${restaurant.id}/foods'|">메뉴목록</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/food/${myRestaurant.id}/new'|">메뉴등록</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/${myRestaurant.id}/foods'|">메뉴목록</button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurants/${restaurant.id}/update'|">수정</button>
-                            <button type="button" class="btn btn-primary" th:onclick="|delete(${restaurant.id})|">삭제</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurants/${myRestaurant.id}/update'|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="delete([[${myRestaurant.id}]])">삭제</button>
                         </td>
                     </tr>
                 </tbody>

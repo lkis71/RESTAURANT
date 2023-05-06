@@ -1,5 +1,6 @@
 package com.restaurant.service;
 
+import com.restaurant.controller.dto.MyRestaurantDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.FileMaster;
@@ -126,5 +127,15 @@ public class RestaurantService {
 
             restaurant.getRestaurantFiles().add(restaurantFile);
         }
+    }
+
+    /**
+     * 내 식당
+     * 
+     * @param memberId
+     * @return
+     */
+    public List<MyRestaurantDto> findRestaurantByMemberId(String memberId) {
+        return restaurantRepository.findRestaurantByMemberId(memberId);
     }
 }

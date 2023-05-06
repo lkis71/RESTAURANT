@@ -1,10 +1,10 @@
 package com.restaurant.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.restaurant.controller.dto.MyRestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
-import com.restaurant.entity.FileMaster;
-import com.restaurant.entity.QFileMaster;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.type.UseType;
@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.restaurant.entity.QFileMaster.fileMaster;
 import static com.restaurant.entity.QRestaurant.restaurant;
 import static com.restaurant.entity.QRestaurantFile.restaurantFile;
 
@@ -85,5 +84,17 @@ public class RestaurantRepository {
 
     private BooleanExpression cursorId(Long cursorId){
         return cursorId == null ? null : restaurant.id.gt(cursorId);
+    }
+
+    public List<MyRestaurantDto> findRestaurantByMemberId(String memberId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(MyRestaurantDto.class,
+                    restaurant.id,
+                    restaurant.restaurantName,
+                    restaurant.contact)
+                )
+                .from(restaurant)
+                .where(restaurant.member.memberId.eq(memberId))
+                .fetch();
     }
 }

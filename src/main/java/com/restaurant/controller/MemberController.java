@@ -5,10 +5,12 @@ import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.*;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Food;
+import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.exception.AlreadyExistMemberIdException;
 import com.restaurant.service.MemberService;
 import com.restaurant.service.FoodService;
+import com.restaurant.service.RestaurantService;
 import com.restaurant.util.CommonSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RestaurantService restaurantService;
     private final FoodService foodService;
 
     @GetMapping("/members/join")
@@ -82,14 +85,11 @@ public class MemberController {
     @GetMapping("/members/{id}/restaurant")
     public String myRestaurants(Model model, @PathVariable("id") String memberId) {
 
-//        List<Restaurant> restaurants = memberService.getMyRestaurantById(memberId);
-//        List<MyRestaurantDto> restaurantDtos = restaurants.stream()
-//            .map(o -> new MyRestaurantDto(o))
-//            .collect(Collectors.toList());
-//
-//        model.addAttribute("memberId", memberId);
-//        model.addAttribute("restaurants", restaurantDtos);
-//        model.addAttribute("contents", "member/myRestaurant");
+        List<MyRestaurantDto> myRestaurantDtos = restaurantService.findRestaurantByMemberId(memberId);
+
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("myRestaurants", myRestaurantDtos);
+        model.addAttribute("contents", "member/myRestaurant");
         return "common/subLayout";
     }
 

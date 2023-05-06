@@ -1,6 +1,7 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.MemberDto;
+import com.restaurant.controller.dto.MyRestaurantDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.Member;
@@ -150,6 +151,20 @@ class RestaurantServiceTest {
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertThat(UseType.REMOVE).isEqualTo(findRestaurant.getUseType());
+    }
+
+    @Test
+    public void findMyRestaurants() throws Exception {
+        //given
+        RestaurantDto restaurantDto = createRestaurantDto(null);
+
+        //when
+        Long restaurantId = restaurantService.save(restaurantDto);
+
+        //then
+        List<MyRestaurantDto> myRestaurantDtos = restaurantService.findRestaurantByMemberId(member.getMemberId());
+
+        assertThat(myRestaurantDtos.size()).isEqualTo(1);
     }
 
     private String joinMember() {
