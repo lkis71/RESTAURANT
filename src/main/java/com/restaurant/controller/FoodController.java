@@ -37,7 +37,7 @@ public class FoodController {
     public String savePage(Model model, @PathVariable("id") Long restaurantId) {
 
         model.addAttribute("restaurantId", restaurantId);
-        model.addAttribute("contents", "restaurant/food/instfoodForm");
+        model.addAttribute("contents", "restaurant/food/instFoodForm");
         return "common/subLayout";
     }
 

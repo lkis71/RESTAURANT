@@ -114,7 +114,7 @@ public class MemberController {
 
         model.addAttribute("memberId", memberId);
         model.addAttribute("food", food);
-        model.addAttribute("contents", "restaurant/food/instfoodForm");
+        model.addAttribute("contents", "restaurant/food/instFoodForm");
         return "common/subLayout";
     }
 
