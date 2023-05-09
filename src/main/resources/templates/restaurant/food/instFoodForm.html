@@ -3,18 +3,21 @@
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3" th:if="${food?.id} == null">메뉴 등록</h4>
             <h4 class="mb-3" th:if="${food?.id} != null">메뉴 수정</h4>
-            <form class="validation-form" id="foodForm" novalidate>
+            <form class="validation-form" id="foodForm" type="post" novalidate>
+
+                <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
+
                 <div class="mb-3">
-                    <label for="name">메뉴명</label>
-                    <input type="text" class="form-control" name="foodName" th:value="${food?.foodName}" placeholder="메뉴명을 입력해주세요." required>
+                    <label for="foodName">메뉴명</label>
+                    <input type="text" class="form-control" id="foodName" name="foodName" th:value="${food?.foodName}" placeholder="메뉴명을 입력해주세요." required>
                     <div class="invalid-feedback">
                         메뉴명을 입력해주세요.
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="registNum1">가격</label>
-                    <input type="registNum1" class="form-control" name="price" th:value="${food?.price}" placeholder="가격을 입력해주세요." required>
+                    <label for="price">가격</label>
+                    <input type="registNum1" class="form-control" id="price" name="price" th:value="${food?.price}" placeholder="가격을 입력해주세요." required>
                     <div class="invalid-feedback">
                         가격을 입력해주세요.
                     </div>
@@ -24,8 +27,10 @@
                     <label for="root">메뉴 유형</label>
                     <select class="custom-select d-block w-100" name="category" th:value="${food?.category}" id="root" required>
                         <option value="">선택해주세요.</option>
-                        <option value="noodle" th:selected="${food?.category} == noodle">면</option>
-                        <option value="rice" th:selected="${food?.category} == rice">밥</option>
+                        <option th:each="type : ${foodTypes}"
+                                th:value="${type}"
+                                th:text="${type.getName()}">
+                        </option>
                     </select>
                     <div class="invalid-feedback">
                         메뉴 유형을 선택해주세요.
@@ -33,16 +38,16 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="registNum1">간략소개</label>
-                    <input type="registNum1" class="form-control" name="simpleContents" th:value="${food?.content?.simpleContents}" placeholder="간략소개를 입력해주세요.">
+                    <label for="simpleContents">간략소개</label>
+                    <input type="registNum1" class="form-control" id="simpleContents" name="simpleContents" th:value="${food?.content?.simpleContents}" placeholder="간략소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         간략소개를 입력해주세요.
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="registNum1">상세소개</label>
-                    <input type="registNum1" class="form-control" name="detailContents" th:value="${food?.content?.detailContents}" placeholder="상세소개를 입력해주세요.">
+                    <label for="detailContents">상세소개</label>
+                    <input type="registNum1" class="form-control" id="detailContents" name="detailContents" th:value="${food?.content?.detailContents}" placeholder="상세소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         상세소개를 입력해주세요.
                     </div>
@@ -54,14 +59,14 @@
                     <table>
                         <tr>
                             <td><input type="button" class="form-control" value="파일선택" onclick="javascript:$('#file').click();" /></td>
-                            <td><input type="text" class="form-control" id="fileName" th:value="${food?.file?.fileName}" readonly/></td>
+                            <td><input type="text" class="form-control" id="fileName" readonly/></td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} == null" type="button" th:onclick="|submitfood(${restaurantId}, 'insert')|">메뉴 등록</button>
-                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} != null" type="button" th:onclick="|submitfood(${food?.id}, 'update')|">메뉴 수정</button>
+                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} == null" type="button" th:onclick="insertFood([[${restaurantId}]])">메뉴 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} != null" type="button" th:onclick="|submitFood(${food?.id}, 'update')|">메뉴 수정</button>
             </form>
         </div>
     </div>
@@ -76,6 +81,29 @@
         });
 
     });
+
+    function insertFood(id) {
+
+        const form = $("#foodForm")[0];
+        const formData = new FormData(form);
+
+        $.ajax({
+            type : "post",
+            url : "/restaurant/"+id+"/food/new",
+            enctype : "multipart/form-data",
+            data : formData,
+            dataType : "json",
+            processData : false,
+            contentType : false,
+            success : function(data) {
+                alert("성공");
+                location.href = "/users/"+id+"/restaurant";
+            },
+            error : function(data) {
+                alert("실패");
+            }
+        })
+    }
 
     function submitfood(id, btnType) {
 

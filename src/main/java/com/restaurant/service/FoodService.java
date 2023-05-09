@@ -43,15 +43,14 @@ public class FoodService {
     /**
      * 메뉴 등록
      *
-     * @param restaurantId
      * @param foodDto
      */
     @Transactional
-    public Long save(Long restaurantId, FoodDto foodDto) {
+    public Long save(FoodDto foodDto) {
 
         Food food = foodDto.toEntity();
 
-        Restaurant restaurant = restaurantService.findOne(restaurantId);
+        Restaurant restaurant = restaurantService.findOne(foodDto.getRestaurantId());
         food.setRestaurant(restaurant);
 
         List<FoodFile> foodFiles = fileUpload(food, foodDto.getFiles());

@@ -20,6 +20,7 @@ public class FoodDto {
     private String simpleContents;
     private String detailContents;
     private List<MultipartFile> files = new ArrayList<>();
+    private Long restaurantId;
 
     @Builder
     public FoodDto(String foodName, Integer price, FoodType foodType, String simpleContents, String detailContents, List<MultipartFile> files) {

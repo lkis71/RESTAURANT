@@ -6,6 +6,7 @@ import com.restaurant.controller.dto.*;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Food;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.MemberType;
 import com.restaurant.exception.AlreadyExistMemberIdException;
 import com.restaurant.service.MemberService;

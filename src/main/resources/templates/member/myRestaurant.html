@@ -20,7 +20,7 @@
                     <tr th:each="myRestaurant : ${myRestaurants}">
                         <td th:text="${myRestaurant.restaurantName}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/food/${myRestaurant.id}/new'|">메뉴등록</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/restaurant/${myRestaurant.id}/food/new'|">메뉴등록</button>
                             <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/${myRestaurant.id}/foods'|">메뉴목록</button>
                         </td>
                         <td>

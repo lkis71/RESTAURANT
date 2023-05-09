@@ -3,6 +3,7 @@ package com.restaurant.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.FoodDto;
+import com.restaurant.entity.type.FoodType;
 import com.restaurant.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -30,26 +31,5 @@ public class FoodController {
 
         model.addAttribute("contents", "restaurant/food/foodInfo");
         return "common/subLayout";
-    }
-
-    //메뉴 등록페이지
-    @GetMapping("/food/{id}/new")
-    public String savePage(Model model, @PathVariable("id") Long restaurantId) {
-
-        model.addAttribute("restaurantId", restaurantId);
-        model.addAttribute("contents", "restaurant/food/instFoodForm");
-        return "common/subLayout";
-    }
-
-    @PostMapping("/food/{id}/new")
-    @ResponseBody
-    public String save(Model model, @PathVariable("id") Long restaurantId, FoodDto foodDto) {
-
-        foodService.save(restaurantId, foodDto);
-        
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("result", "Y");
-        
-        return new Gson().toJson(jsonObject);
     }
 }

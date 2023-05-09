@@ -2,10 +2,13 @@ package com.restaurant.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.restaurant.controller.dto.FoodDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
 import com.restaurant.entity.Restaurant;
+import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.RestaurantType;
+import com.restaurant.service.FoodService;
 import com.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final FoodService foodService;
 
     //목록
     @GetMapping("/restaurants")
@@ -84,7 +88,7 @@ public class RestaurantController {
     //수정
     @PostMapping("/restaurants/{id}/update")
     @ResponseBody
-    public String update(Model model, @PathVariable("id") Long restaurantId, RestaurantDto restaurantDto) {
+    public String update(@PathVariable("id") Long restaurantId, RestaurantDto restaurantDto) {
 
         restaurantService.update(restaurantId, restaurantDto);
 
@@ -94,12 +98,33 @@ public class RestaurantController {
     //삭제
     @PostMapping("/restaurants/{id}/delete")
     @ResponseBody
-    public String delete(Model model, @PathVariable("id") Long restaurantId) {
+    public String delete(@PathVariable("id") Long restaurantId) {
 
         restaurantService.delete(restaurantId);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
+        return new Gson().toJson(jsonObject);
+    }
+
+    @GetMapping("/restaurant/{id}/food/new")
+    public String savePage(Model model, @PathVariable("id") Long restaurantId) {
+
+        model.addAttribute("foodTypes", FoodType.values());
+        model.addAttribute("restaurantId", restaurantId);
+        model.addAttribute("contents", "restaurant/food/instFoodForm");
+        return "common/subLayout";
+    }
+
+    @PostMapping("/restaurant/{id}/food/new")
+    @ResponseBody
+    public String save(FoodDto foodDto) {
+
+        foodService.save(foodDto);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("result", "Y");
+
         return new Gson().toJson(jsonObject);
     }
 }
