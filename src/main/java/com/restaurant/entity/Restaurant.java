@@ -49,8 +49,8 @@ public class Restaurant {
     private Member member;
 
     @Setter
-    @OneToMany(mappedBy = "restaurant")
-    private List<RestaurantFile> restaurantFiles = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    private RestaurantFile restaurantFile;
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -84,8 +84,6 @@ public class Restaurant {
         this.useType = UseType.REMOVE;
 
         // 첨부파일 삭제
-        for (RestaurantFile restaurantFile : restaurantFiles) {
-            restaurantFile.delete();
-        }
+        restaurantFile.delete();
     }
 }

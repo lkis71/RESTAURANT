@@ -19,7 +19,7 @@ public class RestaurantFile {
     private Long id;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 

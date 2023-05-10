@@ -1,6 +1,8 @@
 package com.restaurant.service;
 
 import com.restaurant.controller.dto.FoodDto;
+import com.restaurant.controller.dto.MyFoodDto;
+import com.restaurant.controller.response.FoodResponse;
 import com.restaurant.entity.*;
 import com.restaurant.repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ public class FoodService {
      * @param restaurantId
      * @return
      */
-    public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
+    public List<FoodResponse> findByPaging(Long restaurantId, Long cursor, int limit) {
         return foodRepository.findByPaging(restaurantId, cursor, limit);
     }
 

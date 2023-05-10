@@ -23,13 +23,14 @@ public class FoodDto {
     private Long restaurantId;
 
     @Builder
-    public FoodDto(String foodName, Integer price, FoodType foodType, String simpleContents, String detailContents, List<MultipartFile> files) {
+    public FoodDto(String foodName, Integer price, FoodType foodType, String simpleContents, String detailContents, List<MultipartFile> files, Long restaurantId) {
         this.foodName = foodName;
         this.price = price;
         this.foodType = foodType;
         this.simpleContents = simpleContents;
         this.detailContents = detailContents;
         this.files = files;
+        this.restaurantId = restaurantId;
     }
 
     public Food toEntity() {

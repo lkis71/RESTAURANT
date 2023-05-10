@@ -21,7 +21,7 @@
                         <td th:text="${food.foodName}"></td>
                         <td th:text="${food.price}"></td>
                         <td>
-                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/users/${userSeq}/restaurants/foods/${food.id}'|">수정</button>
+                            <button type="button" class="btn btn-primary" th:onclick="|location.href='/food/${food.id}/update'|">수정</button>
                             <button type="button" class="btn btn-primary" th:onclick="|delete(${userSeq}, ${food.id})|">삭제</button>
                         </td>
                     </tr>

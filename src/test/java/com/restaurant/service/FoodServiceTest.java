@@ -2,7 +2,9 @@ package com.restaurant.service;
 
 import com.restaurant.controller.dto.FoodDto;
 import com.restaurant.controller.dto.MemberDto;
+import com.restaurant.controller.dto.MyFoodDto;
 import com.restaurant.controller.dto.RestaurantDto;
+import com.restaurant.controller.response.FoodResponse;
 import com.restaurant.entity.Food;
 import com.restaurant.entity.FoodFile;
 import com.restaurant.entity.Member;
@@ -59,7 +61,7 @@ class FoodServiceTest {
         FoodDto foodDto = createFood(files);
 
         //when
-        Long foodId = foodService.save(restaurantId, foodDto);
+        Long foodId = foodService.save(foodDto);
 
         //then
         Food food = foodService.findById(foodId);
@@ -74,7 +76,7 @@ class FoodServiceTest {
         FoodDto foodDto = createFood(null);
 
         //when
-        Long foodId = foodService.save(restaurantId, foodDto);
+        Long foodId = foodService.save(foodDto);
         Food food = foodService.findById(foodId);
 
         //then
@@ -89,15 +91,15 @@ class FoodServiceTest {
 
         //when
         for (int i=0; i<15; i++) {
-            foodService.save(restaurantId, foodDto);
+            foodService.save(foodDto);
         }
 
         //then
-        List<Food> foods1 = foodService.findByPaging(restaurantId, 0L, limit);
+        List<FoodResponse> foods1 = foodService.findByPaging(restaurantId, 0L, limit);
         assertThat(10).isEqualTo(foods1.size());
 
-        Food lastMenu = foods1.get(foods1.size()-1);
-        List<Food> foods2 = foodService.findByPaging(restaurantId, lastMenu.getId(), limit);
+        FoodResponse lastMenu = foods1.get(foods1.size()-1);
+        List<FoodResponse> foods2 = foodService.findByPaging(restaurantId, lastMenu.getId(), limit);
         assertThat(5).isEqualTo(foods2.size());
     }
 
@@ -108,7 +110,7 @@ class FoodServiceTest {
         FoodDto foodDto = createFood(menuFile);
 
         //when
-        Long foodId = foodService.save(restaurantId, foodDto);
+        Long foodId = foodService.save(foodDto);
 
         foodDto.setId(foodId);
         foodDto.setFoodName("햄버거");
@@ -130,7 +132,7 @@ class FoodServiceTest {
         FoodDto foodDto = createFood(files);
 
         //when
-        Long foodId = foodService.save(restaurantId, foodDto);
+        Long foodId = foodService.save(foodDto);
         foodService.delete(foodId);
 
         //then
@@ -152,6 +154,7 @@ class FoodServiceTest {
                 .detailContents("피자맛있어")
                 .foodType(FoodType.PIZZA)
                 .files(files)
+                .restaurantId(restaurantId)
                 .build();
         return foodDto;
     }

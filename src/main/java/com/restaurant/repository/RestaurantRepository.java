@@ -4,7 +4,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.restaurant.controller.dto.MyRestaurantDto;
+import com.restaurant.controller.response.QRestaurantResponse;
 import com.restaurant.controller.response.RestaurantResponse;
+import com.restaurant.entity.QFileMaster;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.type.UseType;
@@ -15,6 +17,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.restaurant.entity.QFileMaster.fileMaster;
 import static com.restaurant.entity.QRestaurant.restaurant;
 import static com.restaurant.entity.QRestaurantFile.restaurantFile;
 
@@ -46,6 +49,10 @@ public class RestaurantRepository {
      */
     public Restaurant findOne(Long restaurantId) {
         return jpaQueryFactory.selectFrom(restaurant)
+                .leftJoin(restaurant.restaurantFile, restaurantFile)
+                .fetchJoin()
+                .leftJoin(restaurantFile.fileMaster, fileMaster)
+                .fetchJoin()
                 .where(restaurant.id.eq(restaurantId))
                 .fetchOne();
     }
@@ -57,6 +64,10 @@ public class RestaurantRepository {
      */
     public int count() {
         return jpaQueryFactory.selectFrom(restaurant)
+                .leftJoin(restaurant.restaurantFile, restaurantFile)
+                .fetchJoin()
+                .where(restaurant.useType.eq(UseType.USE)
+                .and(restaurant.restaurantFile.useType.eq(UseType.USE)))
                 .fetch().size();
     }
 
@@ -69,17 +80,38 @@ public class RestaurantRepository {
      */
     public List<RestaurantResponse> findByPaging(Long cursor, int limit) {
 
-        List<Restaurant> restaurants = jpaQueryFactory.selectFrom(restaurant)
-                .innerJoin(restaurant.restaurantFiles, restaurantFile)
+        return jpaQueryFactory.select(new QRestaurantResponse(
+                        restaurant.id,
+                        restaurant.restaurantName,
+                        restaurant.address,
+                        restaurant.contact,
+                        restaurant.content,
+                        restaurant.restaurantType,
+                        fileMaster.id,
+                        fileMaster.fileName)
+                )
+                .from(restaurant)
+                .leftJoin(restaurant.restaurantFile, restaurantFile).on(restaurantFile.useType.eq(UseType.USE))
+                .leftJoin(restaurantFile.fileMaster, fileMaster).on(fileMaster.useType.eq(UseType.USE))
                 .where(cursorId(cursor)
-                        .and(restaurant.useType.eq(UseType.USE)))
+                .and(restaurant.useType.eq(UseType.USE)))
                 .orderBy(restaurant.id.asc())
                 .limit(limit)
                 .fetch();
 
-        return restaurants.stream()
-                .map(o -> new RestaurantResponse(o))
-                .collect(Collectors.toList());
+//        List<Restaurant> restaurants = jpaQueryFactory.selectFrom(restaurant)
+//                .leftJoin(restaurant.restaurantFile, restaurantFile)
+//                .on(restaurantFile.useType.eq(UseType.USE))
+//                .fetchJoin()
+//                .where(cursorId(cursor)
+//                .and(restaurant.useType.eq(UseType.USE)))
+//                .orderBy(restaurant.id.asc())
+//                .limit(limit)
+//                .fetch();
+
+//        return restaurants.stream()
+//                .map(o -> new RestaurantResponse(o))
+//                .collect(Collectors.toList());
     }
 
     private BooleanExpression cursorId(Long cursorId){

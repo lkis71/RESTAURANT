@@ -61,7 +61,7 @@ class RestaurantServiceTest {
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertThat(restaurantId).isEqualTo(findRestaurant.getId());
-        assertThat(findRestaurant.getRestaurantFiles()).isNotNull();
+        assertThat(findRestaurant.getRestaurantFile()).isNotNull();
     }
 
     @Test
@@ -76,7 +76,7 @@ class RestaurantServiceTest {
         Restaurant findRestaurant = restaurantService.findOne(restaurantId);
 
         assertThat(restaurantId).isEqualTo(findRestaurant.getId());
-        assertThat(findRestaurant.getRestaurantFiles()).isEmpty();
+        assertThat(findRestaurant.getRestaurantFile()).isNull();
     }
 
     @Test
@@ -107,7 +107,8 @@ class RestaurantServiceTest {
 
         //when
         RestaurantDto updateInfo = createUpdateInfoWithFile();
-        restaurantService.update(restaurantId, updateInfo);
+        updateInfo.setId(restaurantId);
+        restaurantService.update(updateInfo);
 
         //then
         Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
@@ -129,7 +130,8 @@ class RestaurantServiceTest {
 
         //when
         RestaurantDto updateInfo = createUpdateRestaurantDto(null);
-        restaurantService.update(restaurantId, updateInfo);
+        updateInfo.setId(restaurantId);
+        restaurantService.update(updateInfo);
 
         //then
         Restaurant updateRestaurant = restaurantService.findOne(restaurantId);
@@ -183,7 +185,7 @@ class RestaurantServiceTest {
         return memberId;
     }
 
-    private RestaurantDto createRestaurantDto(List<MultipartFile> files) {
+    private RestaurantDto createRestaurantDto(MultipartFile file) {
         return RestaurantDto.builder()
                 .restaurantName("한국식당")
                 .zipcode("111")
@@ -193,23 +195,23 @@ class RestaurantServiceTest {
                 .restaurantType(RestaurantType.KOREAN_FOOD)
                 .simpleContents("간단한 내용")
                 .detailContents("상세한 내용")
-                .files(files)
+                .file(file)
                 .memberId(member.getMemberId())
                 .build();
     }
 
     private RestaurantDto createRestaurantDtoWithFile() throws IOException {
 
-        List<MultipartFile> files = createFile(
+        MultipartFile file = createFile(
                 "피자집",
                 "피자집.png",
                 "image/png",
                 "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\피자집.png");
 
-        return createRestaurantDto(files);
+        return createRestaurantDto(file);
     }
 
-    private RestaurantDto createUpdateRestaurantDto(List<MultipartFile> files) {
+    private RestaurantDto createUpdateRestaurantDto(MultipartFile file) {
         return RestaurantDto.builder()
                 .restaurantName("일본식당")
                 .zipcode("222")
@@ -219,33 +221,27 @@ class RestaurantServiceTest {
                 .restaurantType(RestaurantType.JAPAN_FOOD)
                 .simpleContents("간단한 내용1")
                 .detailContents("상세한 내용2")
-                .files(files)
+                .file(file)
                 .memberId(member.getMemberId())
                 .build();
     }
 
     private RestaurantDto createUpdateInfoWithFile() throws IOException {
 
-        List<MultipartFile> files = createFile(
+        MultipartFile file = createFile(
                 "레스토랑",
                 "레스토랑.png",
                 "image/png",
                 "C:\\IdeaProject\\restaurant\\src\\main\\resources\\static\\upload\\레스토랑.png");
 
-        return createUpdateRestaurantDto(files);
+        return createUpdateRestaurantDto(file);
     }
 
-    private static List<MultipartFile> createFile(String fileName, String originFileName, String contentType, String filePath) throws IOException {
-
-        List<MultipartFile> files = new ArrayList<>();
-
-        MultipartFile file = new MockMultipartFile(
+    private static MultipartFile createFile(String fileName, String originFileName, String contentType, String filePath) throws IOException {
+        return new MockMultipartFile(
                 fileName,
                 originFileName,
                 contentType,
                 new FileInputStream(filePath));
-
-        files.add(file);
-        return files;
     }
 }

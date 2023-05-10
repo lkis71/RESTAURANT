@@ -71,7 +71,7 @@ public class RestaurantService {
         Restaurant restaurant = restaurantDto.toEntity();
         restaurant.setMember(findMember);
 
-        fileUpload(restaurant, restaurantDto.getFiles());
+        fileUpload(restaurant, restaurantDto.getFile());
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
@@ -80,16 +80,15 @@ public class RestaurantService {
     /**
      * 식당 수정
      *
-     * @param restaurantId
      * @param restaurantDto
      * @return
      */
     @Transactional
-    public Restaurant update(Long restaurantId, RestaurantDto restaurantDto) {
+    public Restaurant update(RestaurantDto restaurantDto) {
 
-        Restaurant restaurant = restaurantRepository.findOne(restaurantId);
+        Restaurant restaurant = restaurantRepository.findOne(restaurantDto.getId());
 
-        fileUpload(restaurant, restaurantDto.getFiles());
+        fileUpload(restaurant, restaurantDto.getFile());
         restaurant.update(restaurantDto);
 
         return restaurant;
@@ -110,23 +109,21 @@ public class RestaurantService {
      * 파일업로드
      *
      * @param restaurant
-     * @param files
+     * @param file
      */
-    private void fileUpload(Restaurant restaurant, List<MultipartFile> files) {
+    private void fileUpload(Restaurant restaurant, MultipartFile file) {
 
-        if (files == null) {
+        if (file == null) {
             return;
         }
 
-        for (MultipartFile file : files) {
-            FileMaster fileMaster = FileMaster.transferTo(file);
-            fileService.save(fileMaster);
+        FileMaster fileMaster = FileMaster.transferTo(file);
+        fileService.save(fileMaster);
 
-            RestaurantFile restaurantFile = RestaurantFile.createRestaurantFile(restaurant, fileMaster);
-            restaurantRepository.saveFile(restaurantFile);
+        RestaurantFile restaurantFile = RestaurantFile.createRestaurantFile(restaurant, fileMaster);
+        restaurantRepository.saveFile(restaurantFile);
 
-            restaurant.getRestaurantFiles().add(restaurantFile);
-        }
+        restaurant.setRestaurantFile(restaurantFile);
     }
 
     /**

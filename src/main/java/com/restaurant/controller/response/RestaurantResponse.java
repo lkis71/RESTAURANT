@@ -1,5 +1,6 @@
 package com.restaurant.controller.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.RestaurantFile;
 import com.restaurant.entity.common.Content;
@@ -7,29 +8,46 @@ import com.restaurant.entity.type.RestaurantType;
 import com.restaurant.entity.common.Address;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 public class RestaurantResponse {
 
     private Long id;
     private String restaurantName;
     private Address address;
     private String contact;
-    private RestaurantType restaurantType;
     private Content content;
-    private List<RestaurantFile> restaurantFiles = new ArrayList<>();
+    private RestaurantType restaurantType;
+
+    private Long fileId;
+    private String fileName;
+
+    @QueryProjection
+    public RestaurantResponse(Long id, String restaurantName, Address address, String contact,
+                              Content content, RestaurantType restaurantType, Long fileId, String fileName) {
+        this.id = id;
+        this.restaurantName = restaurantName;
+        this.address = address;
+        this.contact = contact;
+        this.content = content;
+        this.restaurantType = restaurantType;
+        this.fileId = fileId;
+        this.fileName = fileName;
+    }
 
     public RestaurantResponse(Restaurant restaurant) {
         this.id = restaurant.getId();
         this.restaurantName = restaurant.getRestaurantName();
         this.address = restaurant.getAddress();
         this.contact = restaurant.getContact();
-        this.restaurantType = restaurant.getRestaurantType();
         this.content = restaurant.getContent();
-        this.restaurantFiles = restaurant.getRestaurantFiles();
+        this.restaurantType = restaurant.getRestaurantType();
+
+        this.fileId = restaurant.getRestaurantFile().getFileMaster().getId();
+        this.fileName = restaurant.getRestaurantFile().getFileMaster().getFileName();
     }
 }

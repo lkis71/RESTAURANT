@@ -56,7 +56,7 @@
                     <button class="btn btn-primary btn-lg btn-block" th:onclick="updateUserInfo([[${member.memberId}]])">수정완료</button>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <button th:if="${member.memberType.name() eq 'OWNER' }" class="btn btn-primary btn-lg btn-block" th:onclick="instRestaurantPage([[${member.memberId}]])">식당 등록</button>
+                    <button th:if="${member.memberType.name() eq 'OWNER' }" class="btn btn-primary btn-lg btn-block" th:onclick="instRestaurantPage()">식당 등록</button>
                 </div>
                 <div class="col-md-4 mb-3">
                     <button th:if="${member.memberType.name() eq 'OWNER' }" class="btn btn-primary btn-lg btn-block" th:onclick="myRestaurantsPage([[${member.memberId}]])">내 식당</button>
@@ -108,8 +108,8 @@
         $("#memberForm").submit;
     }
 
-    function instRestaurantPage(id) {
-        location.href="restaurants/"+id+"/new";
+    function instRestaurantPage() {
+        location.href="restaurants/new";
     }
 
     function myRestaurantsPage(id) {

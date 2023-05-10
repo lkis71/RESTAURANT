@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.FoodDto;
 import com.restaurant.controller.dto.RestaurantDto;
 import com.restaurant.controller.response.RestaurantResponse;
+import com.restaurant.entity.Member;
 import com.restaurant.entity.Restaurant;
 import com.restaurant.entity.type.FoodType;
 import com.restaurant.entity.type.RestaurantType;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,18 +53,20 @@ public class RestaurantController {
     }
 
     //등록페이지
-    @GetMapping("/restaurants/{memberId}/new")
-    public String restaurantPage(Model model, @PathVariable("memberId") String memberId) {
+    @GetMapping("/restaurants/new")
+    public String restaurantPage(HttpServletRequest request, Model model) {
+
+        HttpSession session = request.getSession();
+        Member memberInfo = (Member) session.getAttribute("MEMBER_INFO");
 
         model.addAttribute("restaurantTypes", RestaurantType.values());
-        model.addAttribute("memberId", memberId);
-        model.addAttribute("restaurant", new Restaurant());
+        model.addAttribute("memberId", memberInfo.getMemberId());
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";
     }
 
     //등록
-    @PostMapping("/restaurants/{memberId}/new")
+    @PostMapping("/restaurants/new")
     @ResponseBody
     public String restaurantForm(RestaurantDto restaurantDto) {
 
@@ -78,9 +83,10 @@ public class RestaurantController {
     public String updatePage(Model model, @PathVariable("id") Long restaurantId) {
 
         Restaurant restaurant = restaurantService.findOne(restaurantId);
+        RestaurantResponse response = new RestaurantResponse(restaurant);
 
         model.addAttribute("restaurantTypes", RestaurantType.values());
-        model.addAttribute("restaurant", restaurant);
+        model.addAttribute("restaurant", response);
         model.addAttribute("contents", "restaurant/instRestaurantForm");
         return "common/subLayout";
     }
@@ -88,9 +94,9 @@ public class RestaurantController {
     //수정
     @PostMapping("/restaurants/{id}/update")
     @ResponseBody
-    public String update(@PathVariable("id") Long restaurantId, RestaurantDto restaurantDto) {
+    public String update(RestaurantDto restaurantDto) {
 
-        restaurantService.update(restaurantId, restaurantDto);
+        restaurantService.update(restaurantDto);
 
         return new Gson().toJson("");
     }
@@ -104,27 +110,6 @@ public class RestaurantController {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("result", "Y");
-        return new Gson().toJson(jsonObject);
-    }
-
-    @GetMapping("/restaurant/{id}/food/new")
-    public String savePage(Model model, @PathVariable("id") Long restaurantId) {
-
-        model.addAttribute("foodTypes", FoodType.values());
-        model.addAttribute("restaurantId", restaurantId);
-        model.addAttribute("contents", "restaurant/food/instFoodForm");
-        return "common/subLayout";
-    }
-
-    @PostMapping("/restaurant/{id}/food/new")
-    @ResponseBody
-    public String save(FoodDto foodDto) {
-
-        foodService.save(foodDto);
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("result", "Y");
-
         return new Gson().toJson(jsonObject);
     }
 }

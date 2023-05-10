@@ -3,6 +3,7 @@ package com.restaurant.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.restaurant.controller.dto.*;
+import com.restaurant.controller.response.FoodResponse;
 import com.restaurant.entity.Member;
 import com.restaurant.entity.Food;
 import com.restaurant.entity.Restaurant;
@@ -91,20 +92,6 @@ public class MemberController {
         model.addAttribute("memberId", memberId);
         model.addAttribute("myRestaurants", myRestaurantDtos);
         model.addAttribute("contents", "member/myRestaurant");
-        return "common/subLayout";
-    }
-
-    @GetMapping("/members/{memberId}/restaurants/{restaurantId}/foods")
-    public String myRestaurantFood(Model model, @PathVariable("memberId") String memberId, @PathVariable("restaurantId") Long restaurantId) {
-
-        List<Food> foods = foodService.findByPaging(restaurantId, 0L, 0);
-        List<MyFoodDto> foodDtos = foods.stream()
-                .map(o -> new MyFoodDto(o))
-                .collect(Collectors.toList());
-
-        model.addAttribute("memberId", memberId);
-        model.addAttribute("foods", foodDtos);
-        model.addAttribute("contents", "member/myfood");
         return "common/subLayout";
     }
 

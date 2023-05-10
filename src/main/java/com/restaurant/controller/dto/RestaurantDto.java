@@ -18,18 +18,23 @@ public class RestaurantDto {
     
     private Long id;
     private String restaurantName;
+
     private String zipcode;
     private String streetName;
     private String detailAddress;
+
     private String contact;
     private RestaurantType restaurantType;
+
     private String simpleContents;
     private String detailContents;
-    private List<MultipartFile> files = new ArrayList<>();
+
+    private MultipartFile file;
     private String memberId;
 
     @Builder
-    public RestaurantDto(String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, List<MultipartFile> files, String memberId) {
+    public RestaurantDto(Long id, String restaurantName, String zipcode, String streetName, String detailAddress, String contact, RestaurantType restaurantType, String simpleContents, String detailContents, MultipartFile file, String memberId) {
+        this.id = id;
         this.restaurantName = restaurantName;
         this.zipcode = zipcode;
         this.streetName = streetName;
@@ -38,7 +43,7 @@ public class RestaurantDto {
         this.restaurantType = restaurantType;
         this.simpleContents = simpleContents;
         this.detailContents = detailContents;
-        this.files = files;
+        this.file = file;
         this.memberId = memberId;
     }
 

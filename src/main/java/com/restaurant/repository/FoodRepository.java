@@ -2,12 +2,15 @@ package com.restaurant.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.restaurant.controller.dto.MyFoodDto;
+import com.restaurant.controller.response.FoodResponse;
 import com.restaurant.entity.Food;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.restaurant.entity.QFood.food;
 import static com.restaurant.entity.QFoodFile.foodFile;
@@ -49,14 +52,19 @@ public class FoodRepository {
      * @param limit 한 페이지에 보여질 목록 수
      * @return
      */
-    public List<Food> findByPaging(Long restaurantId, Long cursor, int limit) {
-        return jpaQueryFactory.selectFrom(food)
+    public List<FoodResponse> findByPaging(Long restaurantId, Long cursor, int limit) {
+
+        List<Food> foods = jpaQueryFactory.selectFrom(food)
                 .leftJoin(food.foodFiles, foodFile)
-                .where(food.restaurant.id.eq(restaurantId)
-                        .and(cursorId(cursor)))
-                .limit(limit)
                 .fetchJoin()
+                .where(food.restaurant.id.eq(restaurantId)
+                .and(cursorId(cursor)))
+                .limit(limit)
                 .fetch();
+
+        return foods.stream()
+                .map(o -> new FoodResponse(o))
+                .collect(Collectors.toList());
     }
 
     private BooleanExpression cursorId(Long cursorId){

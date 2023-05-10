@@ -9,7 +9,7 @@
 
                 <div class="mb-3">
                     <label for="foodName">메뉴명</label>
-                    <input type="text" class="form-control" id="foodName" name="foodName" th:value="${food?.foodName}" placeholder="메뉴명을 입력해주세요." required>
+                    <input type="text" class="form-control" id="foodName" name="foodName" th:value="${food.foodName}" placeholder="메뉴명을 입력해주세요." required>
                     <div class="invalid-feedback">
                         메뉴명을 입력해주세요.
                     </div>
@@ -17,17 +17,18 @@
                 
                 <div class="mb-3">
                     <label for="price">가격</label>
-                    <input type="registNum1" class="form-control" id="price" name="price" th:value="${food?.price}" placeholder="가격을 입력해주세요." required>
+                    <input type="registNum1" class="form-control" id="price" name="price" th:value="${food.price}" placeholder="가격을 입력해주세요." required>
                     <div class="invalid-feedback">
                         가격을 입력해주세요.
                     </div>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="root">메뉴 유형</label>
-                    <select class="custom-select d-block w-100" name="category" th:value="${food?.category}" id="root" required>
+                    <label for="foodType">메뉴 유형</label>
+                    <select class="custom-select d-block w-100" id="foodType" name="foodType" th:value="${food.foodType}" required>
                         <option value="">선택해주세요.</option>
                         <option th:each="type : ${foodTypes}"
+                                th:selected="${food.foodType eq type}"
                                 th:value="${type}"
                                 th:text="${type.getName()}">
                         </option>
@@ -39,7 +40,7 @@
                 
                 <div class="mb-3">
                     <label for="simpleContents">간략소개</label>
-                    <input type="registNum1" class="form-control" id="simpleContents" name="simpleContents" th:value="${food?.content?.simpleContents}" placeholder="간략소개를 입력해주세요.">
+                    <input type="registNum1" class="form-control" id="simpleContents" name="simpleContents" th:value="${food.content?.simpleContents}" placeholder="간략소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         간략소개를 입력해주세요.
                     </div>
@@ -47,7 +48,7 @@
 
                 <div class="mb-3">
                     <label for="detailContents">상세소개</label>
-                    <input type="registNum1" class="form-control" id="detailContents" name="detailContents" th:value="${food?.content?.detailContents}" placeholder="상세소개를 입력해주세요.">
+                    <input type="registNum1" class="form-control" id="detailContents" name="detailContents" th:value="${food.content?.detailContents}" placeholder="상세소개를 입력해주세요.">
                     <div class="invalid-feedback">
                         상세소개를 입력해주세요.
                     </div>
@@ -65,8 +66,8 @@
                 </div>
 
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} == null" type="button" th:onclick="insertFood([[${restaurantId}]])">메뉴 등록</button>
-                <button class="btn btn-primary btn-lg btn-block" th:if="${food?.id} != null" type="button" th:onclick="|submitFood(${food?.id}, 'update')|">메뉴 수정</button>
+                <button class="btn btn-primary btn-lg btn-block" th:if="${food.id} == null" type="button" th:onclick="insertFood([[${restaurantId}]])">메뉴 등록</button>
+                <button class="btn btn-primary btn-lg btn-block" th:if="${food.id} != null" type="button" th:onclick="|submitFood(${food.id}, 'update')|">메뉴 수정</button>
             </form>
         </div>
     </div>
@@ -97,7 +98,7 @@
             contentType : false,
             success : function(data) {
                 alert("성공");
-                location.href = "/users/"+id+"/restaurant";
+                location.href = "/restaurant/"+id+"/foods";
             },
             error : function(data) {
                 alert("실패");
