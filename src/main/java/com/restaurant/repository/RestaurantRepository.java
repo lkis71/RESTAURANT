@@ -79,7 +79,6 @@ public class RestaurantRepository {
      * @return
      */
     public List<RestaurantResponse> findByPaging(Long cursor, int limit) {
-
         return jpaQueryFactory.select(new QRestaurantResponse(
                         restaurant.id,
                         restaurant.restaurantName,
@@ -98,20 +97,6 @@ public class RestaurantRepository {
                 .orderBy(restaurant.id.asc())
                 .limit(limit)
                 .fetch();
-
-//        List<Restaurant> restaurants = jpaQueryFactory.selectFrom(restaurant)
-//                .leftJoin(restaurant.restaurantFile, restaurantFile)
-//                .on(restaurantFile.useType.eq(UseType.USE))
-//                .fetchJoin()
-//                .where(cursorId(cursor)
-//                .and(restaurant.useType.eq(UseType.USE)))
-//                .orderBy(restaurant.id.asc())
-//                .limit(limit)
-//                .fetch();
-
-//        return restaurants.stream()
-//                .map(o -> new RestaurantResponse(o))
-//                .collect(Collectors.toList());
     }
 
     private BooleanExpression cursorId(Long cursorId){

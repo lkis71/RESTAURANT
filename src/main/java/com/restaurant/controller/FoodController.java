@@ -74,4 +74,15 @@ public class FoodController {
         model.addAttribute("contents", "restaurant/food/instFoodForm");
         return "common/subLayout";
     }
+
+    @PostMapping("/food/{id}/update")
+    public String updateFood(FoodDto foodDto) {
+
+        foodService.update(foodDto);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("result", "Y");
+
+        return new Gson().toJson(jsonObject);
+    }
 }

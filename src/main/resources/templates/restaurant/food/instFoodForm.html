@@ -67,7 +67,7 @@
 
                 <div class="mb-4"></div>
                 <button class="btn btn-primary btn-lg btn-block" th:if="${food.id} == null" type="button" th:onclick="insertFood([[${restaurantId}]])">메뉴 등록</button>
-                <button class="btn btn-primary btn-lg btn-block" th:if="${food.id} != null" type="button" th:onclick="|submitFood(${food.id}, 'update')|">메뉴 수정</button>
+                <button class="btn btn-primary btn-lg btn-block" th:if="${food.id} != null" type="button" th:onclick="updateFood([[${food.id}]])">메뉴 수정</button>
             </form>
         </div>
     </div>
@@ -103,19 +103,17 @@
             error : function(data) {
                 alert("실패");
             }
-        })
+        });
     }
 
-    function submitfood(id, btnType) {
-
-        const userSeq = [[${userSeq}]];
+    function updateFood(id) {
 
         const form = $("#foodForm")[0];
         const formData = new FormData(form);
 
         $.ajax({
             type : "post",
-            url : btnType == "insert" ? "/food/"+id+"/new" : "/users/"+userSeq+"/restaurants/foods/"+id,
+            url : "/food/"+id+"/update",
             enctype : "multipart/form-data",
             data : formData,
             dataType : "json",
@@ -123,16 +121,12 @@
             contentType : false,
             success : function(data) {
                 alert("성공");
-                if(btnType === "insert"){
-                    location.href = "/users/"+id+"/restaurant";
-                }else if(btnType === "update") {
-                    location.href = "/users/"+userSeq+"/restaurant";
-                }
+                location.href = "/restaurant/"+id+"/foods";
             },
             error : function(data) {
                 alert("실패");
             }
-        })
+        });
     }
 
     function changeFile() {

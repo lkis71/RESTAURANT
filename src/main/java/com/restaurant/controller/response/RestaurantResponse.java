@@ -47,7 +47,9 @@ public class RestaurantResponse {
         this.content = restaurant.getContent();
         this.restaurantType = restaurant.getRestaurantType();
 
-        this.fileId = restaurant.getRestaurantFile().getFileMaster().getId();
-        this.fileName = restaurant.getRestaurantFile().getFileMaster().getFileName();
+        if (restaurant.getRestaurantFile() != null) {
+            this.fileId = restaurant.getRestaurantFile().getFileMaster().getId();
+            this.fileName = restaurant.getRestaurantFile().getFileMaster().getFileName();
+        }
     }
 }
