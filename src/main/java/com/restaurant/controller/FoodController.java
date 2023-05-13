@@ -25,8 +25,7 @@ public class FoodController {
     public String foodList(Model model,
                            @PathVariable("id") Long id,
                            @RequestParam(value = "cursor", defaultValue = "0") Long cursor,
-                           @RequestParam(value = "limit", defaultValue = "8") int limit,
-                           @RequestParam(value = "currPageIdx", defaultValue = "1") int currPageIdx) {
+                           @RequestParam(value = "limit", defaultValue = "8") int limit) {
 
         List<FoodResponse> foods = foodService.findByPaging(id, cursor, limit);
 
