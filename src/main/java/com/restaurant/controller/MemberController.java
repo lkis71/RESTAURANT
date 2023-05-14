@@ -108,7 +108,7 @@ public class MemberController {
 
     @PostMapping("/members/{memberId}/restaurants/foods/{foodId}")
     @ResponseBody
-    public String update(Model model, FoodDto foodDto) {
+    public String update(FoodDto foodDto) {
 
         foodService.update(foodDto);
 
@@ -117,7 +117,7 @@ public class MemberController {
 
     @DeleteMapping("/members/{memberId}/restaurants/foods/{foodId}")
     @ResponseBody
-    public String delete(Model model, @PathVariable("foodId") Long foodId) {
+    public String delete(@PathVariable("foodId") Long foodId) {
 
         foodService.delete(foodId);
 
